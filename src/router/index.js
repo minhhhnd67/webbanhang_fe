@@ -5,67 +5,113 @@ import store from './../store'
 Vue.use(VueRouter)
 
 const routes = [
+    // Route Guest, User
     {
         path: '/',
         name: 'c-home',
-        component: () => import('../components/HelloWorld.vue')
+        component: () => import('../components/HelloWorld.vue'),
+        meta: {
+          role: ["guest", "user"],
+        }
     },
     {
         path: '/user/login',
         name: 'c-login',
-        component: () => import('../views/customer/login/Login.vue')
+        component: () => import('../views/customer/login/Login.vue'),
+        meta: {
+          role: "guest",
+          title: "Đăng nhập",
+        }
+    },
+
+
+
+    // Route Admin, Manager
+    {
+      path: '/close-window',
+      name: 'm-close-window',
+      component: () => import('../views/manager/login/CloseWindow.vue'),
+      meta: {
+        role: ["guest"],
+        title: "Đăng nhập",
+      }
+    },
+    {
+      path: '/manager/login',
+      name: 'm-login',
+      component: () => import('../views/manager/login/Login.vue'),
+      meta: {
+        role: ["guest"],
+        title: "Đăng nhập",
+      }
     },
     {
         path: '/manager/home',
         name: 'm-home',
         component: () => import('./../components/manager/Home.vue'),
         meta: {
+          role: ["admin", "manger-branch", "manager-store", "manager-warehouse"],
           title: "Trang chủ",
-          breadcrumb: "Trang chủ"
         }
     },
     {
-      path: '/manager/home/one',
-      name: 'm-home1',
+      path: '/manager/categories',
       component: () => import('./../components/manager/Home.vue'),
       meta: {
-        breadcrumb: "Trang chủ 1"
-      }
-  },
-    {
-        path: '/manager/login',
-        name: 'm-login',
-        component: () => import('../views/manager/login/Login.vue')
-    },
-    {
-        path: '/close-window',
-        name: 'm-close-window',
-        component: () => import('../views/manager/login/CloseWindow.vue')
-    },
-    {
-      path: '/manager/products',
-      component: () => import('./../components/manager/Home.vue'),
-      meta: {
-        breadcrumb: 'Danh mục sản phẩm',
+        role: ["admin"],
+        title: 'Danh mục sản phẩm',
       },
       children: [
         {
-          path: '/manager/products/apple',
+          path: '/manager/categories/apple',
           component: () => import('./../components/manager/Home.vue'),
           meta: {
-            breadcrumb: 'Apple',
+            role: ["admin"],
+            title: 'Apple',
           },
         },
         {
-          path: '/manager/products/banana',
+          path: '/manager/categories/banana',
           component: () => import('./../components/manager/Home.vue'),
           meta: {
-            breadcrumb: 'Banana',
+            role: ["admin"],
+            title: 'Banana',
+          },
+        },
+      ],
+    },
+
+
+    // manger-branch
+    {
+      path: '/manager/product',
+      component: () => import('./../components/manager/Home.vue'),
+      meta: {
+        role: ["manager-branch"],
+        title: 'Sản phẩm',
+      },
+      children: [
+        {
+          path: '/manager/product/apple',
+          component: () => import('./../components/manager/Home.vue'),
+          meta: {
+            role: ["manager-branch"],
+            title: 'Apple',
+          },
+        },
+        {
+          path: '/manager/product/banana',
+          component: () => import('./../components/manager/Home.vue'),
+          meta: {
+            role: ["manager-branch"],
+            title: 'Banana',
           },
         },
       ],
     },
 ]
+
+export {routes}
 
 const router = new VueRouter({
     mode: 'history',
@@ -83,7 +129,7 @@ router.beforeEach((to, from, next) => {
             },
           }).then((response) => {
             if (response.status === 200) {
-              store.state.permission = 1
+              store.state.role = 'admin'
               store.state.is_login_manager = false
               next();
               console.log("Da xac thuc")

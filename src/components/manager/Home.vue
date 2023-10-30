@@ -7,16 +7,6 @@
           <el-dropdown placement="right-start">
             <i class="el-icon-setting" style="margin-right: 15px"></i>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>
-                <!-- <div class="bg-blue-800 p-4">
-                  <span v-for="(matched, idx) in routeMatched()" :key="idx">
-                    <a :href="matched.path">
-                      {{ matched.name }}
-                    </a>
-                    <span v-if="idx != Object.keys(routeMatched()).length - 1"> / </span>
-                  </span>
-                </div> -->
-              </el-dropdown-item>
               <el-dropdown-item>Add</el-dropdown-item>
               <el-dropdown-item>Delete</el-dropdown-item>
             </el-dropdown-menu>
@@ -68,10 +58,6 @@ export default {
     console.log(this.$route.name);
   },
   methods: {
-    routeMatched() {
-      console.log(123, this.$route.matched);
-      return this.$route.matched;
-    },
   },
 };
 </script>

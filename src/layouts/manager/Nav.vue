@@ -10,43 +10,46 @@
       text-color="#fff"
       active-text-color="#ffd04b"
     >
-      <el-submenu index="1">
+    <div :key="index" v-for="(route, index) in routes">
+      <el-submenu v-if="route.meta.role.includes('admin') && route.children !== undefined">
         <template slot="title">
           <i class="el-icon-location"></i>
-          <span>Navigator One</span>
+          <span>{{ route.meta.title }}</span>
         </template>
-        <el-menu-item-group title="Group One">
-          <el-menu-item index="1-1">item one</el-menu-item>
-          <el-menu-item index="1-2">item one</el-menu-item>
+        <el-menu-item-group>
+          <el-menu-item :to="routeChild.path" v-for="(routeChild, idx) of route.children" :key="idx">{{ routeChild.meta.title }}</el-menu-item>
+          <!-- <el-menu-item index="1-2">item one</el-menu-item> -->
         </el-menu-item-group>
-        <el-menu-item-group title="Group Two">
-          <el-menu-item index="1-3">item three</el-menu-item>
-        </el-menu-item-group>
-        <el-submenu index="1-4">
-          <template slot="title">item four</template>
-          <el-menu-item index="1-4-1">item one</el-menu-item>
-        </el-submenu>
       </el-submenu>
-      <el-menu-item index="2">
-        <i class="el-icon-menu"></i>
-        <span>Navigator Two</span>
-      </el-menu-item>
-      <el-menu-item index="3" disabled>
-        <i class="el-icon-document"></i>
-        <span>Navigator Three</span>
-      </el-menu-item>
-      <el-menu-item index="4">
+      <el-menu-item index="4" v-if="route.meta.role.includes('admin') && route.children === undefined">
         <i class="el-icon-setting"></i>
-        <span>Navigator Four</span>
+        <span>{{ route.meta.title }}</span>
       </el-menu-item>
+    </div>
+      
     </el-menu>
   </el-col>
 </template>
 <script>
+import router from './../../router'
+import { routes } from './../../router'
 
 export default {
   name: "ManagerNav",
+  data() {
+    return {
+      routes: routes,
+    }
+  },
+  computed: {
+    listRoutes () {
+      return router.getRoutes
+    }
+  }, 
   components: {  },
+  mounted() {
+    console.log(123, this.routes)
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
