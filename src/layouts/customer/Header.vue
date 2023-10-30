@@ -31,7 +31,7 @@
 
 <script>
 export default {
-  name: "M-Helloword",
+  name: "CustomerHeader",
   data() {
       return {
         activeIndex: '1',
