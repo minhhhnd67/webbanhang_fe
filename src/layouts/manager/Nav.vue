@@ -17,8 +17,12 @@
           <span>{{ route.meta.title }}</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item :to="routeChild.path" v-for="(routeChild, idx) of route.children" :key="idx">{{ routeChild.meta.title }}</el-menu-item>
-          <!-- <el-menu-item index="1-2">item one</el-menu-item> -->
+          <!-- <el-menu-item :index="routeChild.path" v-for="(routeChild, idx) of route.children" :key="idx"><a :href="routeChild.path">{{ routeChild.meta.title }}</a></el-menu-item> -->
+          <el-menu-item :index="routeChild.path" v-for="(routeChild, idx) of route.children" :key="idx">
+            <router-link :to="routeChild.path" style="width: 100%;">
+              {{ routeChild.meta.title }}
+            </router-link>
+          </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-menu-item index="4" v-if="route.meta.role.includes('admin') && route.children === undefined">
@@ -61,7 +65,7 @@ export default {
 };
 </script>
 <style scoped>
-.el-menu-item {
-  min-width: none;
+.el-submenu .el-menu-item {
+  min-width: 100px!important;
 }
 </style>
