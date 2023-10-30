@@ -57,4 +57,8 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.el-menu-item {
+  min-width: none;
+}
+</style>
