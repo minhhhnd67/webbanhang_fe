@@ -5,13 +5,16 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state () {
       return {
-        token: '',
+        tokenBE: '',
         is_login_manager: true
       }
     },
     getters: {
       getIsLoginManager (state) {
         return state.is_login_manager
+      },
+      getTokenBE (state) {
+        return state.tokenBE
       }
     },
     mutations: {

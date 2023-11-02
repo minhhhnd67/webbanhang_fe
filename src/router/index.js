@@ -37,6 +37,15 @@ const routes = [
       }
     },
     {
+      path: '/manager/register',
+      name: 'm-register',
+      component: () => import('../views/manager/login/Register.vue'),
+      meta: {
+        role: ["guest"],
+        title: "Đăng ký",
+      }
+    },
+    {
       path: '/manager/login',
       name: 'm-login',
       component: () => import('../views/manager/login/Login.vue'),
@@ -121,11 +130,12 @@ const router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
-    if (to.path.includes("manager") && !to.path.includes("login")) {
-        console.log(6868, localStorage.getItem('token'))
+    if (to.path.includes("manager") && !to.path.includes("login") && !to.path.includes("register")) {
+        console.log(6868, localStorage.getItem('tokenBE'))
         axios.get('http://127.0.0.1:8000/api/me', {
             headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`,
+              'Authorization': `Bearer ${localStorage.getItem('tokenBE')}`,
+              'Accept': 'application/json'
             },
           }).then((response) => {
             if (response.status === 200) {
@@ -134,7 +144,11 @@ router.beforeEach((to, from, next) => {
               next();
               console.log("Da xac thuc")
             } else {
-              next('/manager/login');
+              if (to.path.includes("register")) {
+                next('/manager/register');
+              } else {
+                next('/manager/login');
+              }
             }
           }).catch((error) => {
             console.log(444, error)

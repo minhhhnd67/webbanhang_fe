@@ -8,8 +8,3 @@ export function api (base_api, method, url = '', data = {}, headers = {}, parame
         axios.get(`${base_api}${url}`, { parameters }, { headers });
     }
 }
-
-export function getTokenBE () {
-    return localStorage.getItem('tokenBE');
-
-}

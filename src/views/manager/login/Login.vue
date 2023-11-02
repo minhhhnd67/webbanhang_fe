@@ -2,17 +2,20 @@
   <div class="main" :style="mainStyle">
     <h1>MTPhone</h1>
     <p v-if="data">Data trả về từ cửa sổ mới: {{ data }}</p>
-    <input type="text" name="email" id="email" placeholder="Email" :style="input" />
+    <input type="text" v-model="email" name="email" id="email" placeholder="Email" :style="input" />
     <br />
     <input
       type="password"
+      v-model="password"
       name="password"
       id="password"
       placeholder="Password"
       :style="input"
     />
     <br />
-    <input type="button" value="Login" class="button" id="done" :style="inputStyle" />
+    <input type="button" @click="handleLogin()" value="Login" class="button" id="login" :style="inputStyle" />
+    <br />
+    <input type="button" @click="register()" value="Chưa có tài khoản" class="button" id="register" :style="inputStyle" />
     <br />
     <img
       src="../../../icons/google.svg"
@@ -24,9 +27,10 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import router from "./../../../router"
 import store from "./../../../store"
+import { loginGoogle, login } from './../../../api/manager/auth'
 
 export default {
   name: "LoginManager",
@@ -53,35 +57,60 @@ export default {
     channel.onmessage = function (event) {
       // Nhận dữ liệu
       const data = event.data;
-      this.login_google = data.login_google;
-      this.token = data.token;
-      localStorage.setItem('token', this.token);
+      this.login_google = data.login_google
+      this.token = data.token
+      localStorage.setItem('tokenBE', this.token)
       store.state.permission = 1
-      store.state.token = this.token
+      store.state.tokenBE = this.token
       store.state.is_login_manager = false
       // Xử lý dữ liệu
       console.log(1234, data);
-      router.push({ name: "m-home" });
+      router.push({ name: "m-home" })
     };
   },
   created() {},
   watch: {},
   methods: {
-    loginWithGoogle() {
-      axios
-        .post("http://127.0.0.1:8000/api/get-google-sign-in-url")
-        .then((response) => {
-          var url = response.data.url;
-          window.open(
-            url,
-            "_blank",
-            "location=yes,height=570,width=520,scrollbars=yes,status=yes"
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    async loginWithGoogle() {
+      const response = await loginGoogle()
+      window.open(
+        response.data.url,
+        "_blank",
+        "location=yes,height=570,width=520,scrollbars=yes,status=yes"
+      );
+
+      // console.log(123, data);
+      // axios
+      //   .post("http://127.0.0.1:8000/api/get-google-sign-in-url")
+      //   .then((response) => {
+      //     var url = response.data.url;
+          // window.open(
+          //   url,
+          //   "_blank",
+          //   "location=yes,height=570,width=520,scrollbars=yes,status=yes"
+          // );
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
     },
+    async handleLogin() {
+      const data = {
+        email: this.email,
+        password: this.password
+      }
+      const response = await login(data)
+      if (response.data.code == 200) {
+        store.state.permission = 1
+        store.state.tokenBE = response.data.data.token
+        localStorage.setItem('tokenBE', response.data.data.token)
+        store.state.is_login_manager = false
+        router.push({ name: "m-home" })
+      }
+    },
+    register() {
+      router.push({ name: "m-register" })
+    }
   },
 };
 </script>

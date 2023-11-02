@@ -68,4 +68,9 @@ export default {
 .el-submenu .el-menu-item {
   min-width: 100px!important;
 }
+
+a {
+  text-decoration: none;
+  color: #ffffff;
+}
 </style>

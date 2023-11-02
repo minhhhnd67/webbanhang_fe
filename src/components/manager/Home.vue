@@ -7,17 +7,17 @@
           <el-dropdown placement="right-start">
             <i class="el-icon-setting" style="margin-right: 15px"></i>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>Add</el-dropdown-item>
-              <el-dropdown-item>Delete</el-dropdown-item>
+              <el-dropdown-item>Profile</el-dropdown-item>
+              <el-dropdown-item @click="handleLogout()">Logout</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <span>Tom</span>
+          <span @click="handleLogout()">Tom</span>
         </el-col>
       </el-row>
     </el-header>
 
     <el-main>
-      <el-table :data="tableData">
+      <el-table>
         <el-table-column prop="date" label="Date" width="140"> </el-table-column>
         <el-table-column prop="name" label="Name" width="120"> </el-table-column>
         <el-table-column prop="address" label="Address"> </el-table-column>
@@ -29,6 +29,8 @@
 <script>
 // import router from "./../../router";
 import MBreadcrumb from "./../../layouts/manager/Breadcrumb.vue";
+import { logout } from './.././../api/manager/auth'
+import store from "./../../store"
 export default {
   name: "M-Helloword",
   components: { MBreadcrumb },
@@ -55,9 +57,18 @@ export default {
     },
   },
   created() {
-    console.log(this.$route.name);
   },
   methods: {
+    async handleLogout() {
+      console.log(6789)
+      const response = await logout()
+      if (response.data.code == 200) {
+        store.state.is_login_manager = true
+        store.state.tokenBE = ''
+        localStorage.setItem('tokenBE', '');
+        this.$router.push({ name: "m-login" });
+      }
+    }
   },
 };
 </script>
