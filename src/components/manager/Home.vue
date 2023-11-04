@@ -4,14 +4,14 @@
       <el-row :span="24">
         <el-col :span="21"><MBreadcrumb :routeMatched="thisRoute.matched" /></el-col>
         <el-col :span="3" class="right">
-          <el-dropdown placement="right-start">
+          <!-- <el-dropdown placement="right-start">
             <i class="el-icon-setting" style="margin-right: 15px"></i>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>Profile</el-dropdown-item>
               <el-dropdown-item @click="handleLogout()">Logout</el-dropdown-item>
             </el-dropdown-menu>
-          </el-dropdown>
-          <span @click="handleLogout()">Tom</span>
+          </el-dropdown> -->
+          <button @click="handleLogout()">Logout</button>
         </el-col>
       </el-row>
     </el-header>

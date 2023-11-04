@@ -12,6 +12,7 @@ const routes = [
         component: () => import('../components/HelloWorld.vue'),
         meta: {
           role: ["guest", "user"],
+          title: "Trang chủ",
         }
     },
     {
@@ -23,8 +24,6 @@ const routes = [
           title: "Đăng nhập",
         }
     },
-
-
 
     // Route Admin, Manager
     {
@@ -64,8 +63,35 @@ const routes = [
         }
     },
     {
+      path: '/manager/store',
+      name: 'm-store',
+      component: () => import('./../components/manager/store/Index.vue'),
+      meta: {
+        role: ["admin"],
+        title: "Quản lý cơ sở",
+      },
+      children: [
+        {
+          path: '/manager/store/list',
+          component: () => import('./../components/manager/store/Index.vue'),
+          meta: {
+            role: ["admin"],
+            title: 'Danh sách cơ sở',
+          },
+        },
+        {
+          path: '/manager/store/create',
+          component: () => import('./../components/manager/store/Index.vue'),
+          meta: {
+            role: ["admin"],
+            title: 'Thêm cơ sở mới',
+          },
+        },
+      ]
+    },
+    {
       path: '/manager/categories',
-      component: () => import('./../components/manager/Home.vue'),
+      // component: () => import('./../components/manager/Home.vue'),
       meta: {
         role: ["admin"],
         title: 'Danh mục sản phẩm',
@@ -73,7 +99,7 @@ const routes = [
       children: [
         {
           path: '/manager/categories/apple',
-          component: () => import('./../components/manager/Home.vue'),
+          component: () => import('./../components/manager/store/Index.vue'),
           meta: {
             role: ["admin"],
             title: 'Apple',
@@ -90,7 +116,6 @@ const routes = [
       ],
     },
 
-
     // manger-branch
     {
       path: '/manager/product',
@@ -102,7 +127,7 @@ const routes = [
       children: [
         {
           path: '/manager/product/apple',
-          component: () => import('./../components/manager/Home.vue'),
+          component: () => import('./../components/manager/store/Index.vue'),
           meta: {
             role: ["manager-branch"],
             title: 'Apple',

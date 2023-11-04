@@ -13,7 +13,7 @@
     <div :key="index" v-for="(route, index) in routes">
       <el-submenu v-if="route.meta.role.includes('admin') && route.children !== undefined">
         <template slot="title">
-          <i class="el-icon-location"></i>
+          <!-- <i class="el-icon-location"></i> -->
           <span>{{ route.meta.title }}</span>
         </template>
         <el-menu-item-group>
@@ -26,8 +26,11 @@
         </el-menu-item-group>
       </el-submenu>
       <el-menu-item index="4" v-if="route.meta.role.includes('admin') && route.children === undefined">
-        <i class="el-icon-setting"></i>
-        <span>{{ route.meta.title }}</span>
+        <router-link :to="route.path" style="width: 100%;">
+          <!-- <i class="el-icon-setting"></i> -->
+          <span>{{ route.meta.title }}</span>
+        </router-link>
+        
       </el-menu-item>
     </div>
       

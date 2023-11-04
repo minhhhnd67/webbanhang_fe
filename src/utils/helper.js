@@ -5,7 +5,7 @@ export function api (base_api, method, url = '', data = {}, headers = {}, parame
         return axios.post(`${base_api}${url}`, data, { headers, parameters });
     }
     if (method == 'get') {
-        axios.get(`${base_api}${url}`, { parameters }, { headers });
+        return axios.get(`${base_api}${url}`, { headers, parameters });
     }
 }
 
