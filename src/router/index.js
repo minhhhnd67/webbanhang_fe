@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import axios from 'axios'
 import store from './../store'
+import ManagerLayout from "@/layouts/manager/Index.vue"
 Vue.use(VueRouter)
 
 const routes = [
@@ -13,6 +14,7 @@ const routes = [
         meta: {
           role: ["guest", "user"],
           title: "Trang chủ",
+          showMenu: false,
         }
     },
     {
@@ -22,6 +24,7 @@ const routes = [
         meta: {
           role: "guest",
           title: "Đăng nhập",
+          showMenu: false,
         }
     },
 
@@ -33,6 +36,7 @@ const routes = [
       meta: {
         role: ["guest"],
         title: "Đăng nhập",
+        showMenu: false,
       }
     },
     {
@@ -42,6 +46,7 @@ const routes = [
       meta: {
         role: ["guest"],
         title: "Đăng ký",
+        showMenu: false,
       }
     },
     {
@@ -51,6 +56,7 @@ const routes = [
       meta: {
         role: ["guest"],
         title: "Đăng nhập",
+        showMenu: false,
       }
     },
     {
@@ -60,15 +66,17 @@ const routes = [
         meta: {
           role: ["admin", "manger-branch", "manager-store", "manager-warehouse"],
           title: "Trang chủ",
+          showMenu: true,
         }
     },
     {
       path: '/manager/store',
       name: 'm-store',
-      component: () => import('./../components/manager/store/Index.vue'),
+      component: ManagerLayout,
       meta: {
         role: ["admin"],
         title: "Quản lý cơ sở",
+        showMenu: true,
       },
       children: [
         {
@@ -77,24 +85,27 @@ const routes = [
           meta: {
             role: ["admin"],
             title: 'Danh sách cơ sở',
+            showMenu: true,
           },
         },
         {
           path: '/manager/store/create',
-          component: () => import('./../components/manager/store/Index.vue'),
+          component: () => import('./../components/manager/store/Create.vue'),
           meta: {
             role: ["admin"],
             title: 'Thêm cơ sở mới',
+            showMenu: true,
           },
         },
       ]
     },
     {
       path: '/manager/categories',
-      // component: () => import('./../components/manager/Home.vue'),
+      component: ManagerLayout,
       meta: {
         role: ["admin"],
         title: 'Danh mục sản phẩm',
+        showMenu: true,
       },
       children: [
         {
@@ -103,6 +114,7 @@ const routes = [
           meta: {
             role: ["admin"],
             title: 'Apple',
+            showMenu: true,
           },
         },
         {
@@ -111,6 +123,7 @@ const routes = [
           meta: {
             role: ["admin"],
             title: 'Banana',
+            showMenu: true,
           },
         },
       ],
@@ -123,6 +136,7 @@ const routes = [
       meta: {
         role: ["manager-branch"],
         title: 'Sản phẩm',
+        showMenu: false,
       },
       children: [
         {
@@ -131,6 +145,7 @@ const routes = [
           meta: {
             role: ["manager-branch"],
             title: 'Apple',
+            showMenu: false,
           },
         },
         {
@@ -139,6 +154,7 @@ const routes = [
           meta: {
             role: ["manager-branch"],
             title: 'Banana',
+            showMenu: false,
           },
         },
       ],

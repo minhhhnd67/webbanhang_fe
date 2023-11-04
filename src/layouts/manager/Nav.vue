@@ -18,14 +18,16 @@
         </template>
         <el-menu-item-group>
           <!-- <el-menu-item :index="routeChild.path" v-for="(routeChild, idx) of route.children" :key="idx"><a :href="routeChild.path">{{ routeChild.meta.title }}</a></el-menu-item> -->
-          <el-menu-item :index="routeChild.path" v-for="(routeChild, idx) of route.children" :key="idx">
-            <router-link :to="routeChild.path" style="width: 100%;">
-              {{ routeChild.meta.title }}
-            </router-link>
-          </el-menu-item>
+          <div :index="routeChild.path" v-for="(routeChild, idx) of route.children" :key="idx">
+            <el-menu-item v-if="routeChild.meta.showMenu">
+              <router-link :to="routeChild.path" style="width: 100%;">
+                {{ routeChild.meta.title }}
+              </router-link>
+            </el-menu-item>
+          </div>
         </el-menu-item-group>
       </el-submenu>
-      <el-menu-item index="4" v-if="route.meta.role.includes('admin') && route.children === undefined">
+      <el-menu-item index="4" v-if="route.meta.role.includes('admin') && route.meta.showMenu && route.children === undefined">
         <router-link :to="route.path" style="width: 100%;">
           <!-- <i class="el-icon-setting"></i> -->
           <span>{{ route.meta.title }}</span>
