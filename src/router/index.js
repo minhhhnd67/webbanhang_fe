@@ -81,6 +81,7 @@ const routes = [
       children: [
         {
           path: '/manager/store/list',
+          name: 'm-store-list',
           component: () => import('./../components/manager/store/Index.vue'),
           meta: {
             role: ["admin"],
@@ -90,6 +91,7 @@ const routes = [
         },
         {
           path: '/manager/store/create',
+          name: 'm-store-create',
           component: () => import('./../components/manager/store/Create.vue'),
           meta: {
             role: ["admin"],

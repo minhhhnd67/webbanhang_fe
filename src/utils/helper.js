@@ -11,5 +11,4 @@ export function api (base_api, method, url = '', data = {}, headers = {}, parame
 
 export function getTokenBE () {
     return localStorage.getItem('tokenBE');
-
 }
