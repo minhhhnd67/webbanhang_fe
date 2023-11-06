@@ -99,6 +99,16 @@ const routes = [
             showMenu: true,
           },
         },
+        {
+          path: '/manager/store/:id/update',
+          name: 'm-store-update',
+          component: () => import('./../components/manager/store/Update.vue'),
+          meta: {
+            role: ["admin"],
+            title: 'Cập nhật thông tin cơ sở',
+            showMenu: false,
+          },
+        },
       ]
     },
     {

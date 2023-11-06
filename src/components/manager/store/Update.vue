@@ -76,29 +76,10 @@ import { Result } from 'element-ui';
               </el-select>
             </el-form-item>
 
-            <!-- <el-form-item label="Password" prop="pass">
-              <el-input
-                type="password"
-                v-model="ruleForm.pass"
-                autocomplete="off"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="Confirm" prop="checkPass">
-              <el-input
-                type="password"
-                v-model="ruleForm.checkPass"
-                autocomplete="off"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="Age" prop="age">
-              <el-input v-model.number="ruleForm.age"></el-input>
-            </el-form-item> -->
-
             <el-form-item>
               <el-button type="primary" @click="submitForm('ruleForm')"
-                >Thêm mới</el-button
+                >Cập nhật</el-button
               >
-              <!-- <el-button @click="resetForm('ruleForm')">Reset</el-button> -->
               <el-button @click="backToListStore()">Quay lại</el-button>
             </el-form-item>
           </el-form>
@@ -111,51 +92,16 @@ import { Result } from 'element-ui';
 <script>
 import MBreadcrumb from "@/layouts/manager/Breadcrumb.vue";
 import { logout } from "@/api/manager/auth";
-import { createStore } from "@/api/manager/store.js";
+import { showStore, updateStore } from "@/api/manager/store.js";
 import store from "@/store";
 import router from "@/router";
 import { getProvinces, getDistricts, getWards } from "@/api/common/ghn.js";
 export default {
-  name: "M-Store-Create",
+  name: "M-Store-Update",
   components: { MBreadcrumb },
   data() {
-    // var checkAge = (rule, value, callback) => {
-    //   if (!value) {
-    //     return callback(new Error("Please input the age"));
-    //   }
-    //   setTimeout(() => {
-    //     if (!Number.isInteger(value)) {
-    //       callback(new Error("Please input digits"));
-    //     } else {
-    //       if (value < 18) {
-    //         callback(new Error("Age must be greater than 18"));
-    //       } else {
-    //         callback();
-    //       }
-    //     }
-    //   }, 1000);
-    // };
-    // var validatePass = (rule, value, callback) => {
-    //   if (value === "") {
-    //     callback(new Error("Please input the password"));
-    //   } else {
-    //     if (this.ruleForm.checkPass !== "") {
-    //       this.$refs.ruleForm.validateField("checkPass");
-    //     }
-    //     callback();
-    //   }
-    // };
-    // var validatePass2 = (rule, value, callback) => {
-    //   if (value === "") {
-    //     callback(new Error("Please input the password again"));
-    //   } else if (value !== this.ruleForm.pass) {
-    //     callback(new Error("Two inputs don't match!"));
-    //   } else {
-    //     callback();
-    //   }
-    // };
-
     return {
+      id: "",
       tableData: [],
       search: "",
       ruleForm: {
@@ -167,18 +113,12 @@ export default {
         district_name: "",
         ward_id: "",
         ward_name: "",
-        // pass: "",
-        // checkPass: "",
-        // age: "",
       },
-      rules: {
-        // pass: [{ validator: validatePass, trigger: "blur" }],
-        // checkPass: [{ validator: validatePass2, trigger: "blur" }],
-        // age: [{ validator: checkAge, trigger: "blur" }],
-      },
+      rules: {},
       listProvinces: [],
       listDistricts: [],
       listWards: [],
+      allowWatch: false,
       value: "",
     };
   },
@@ -200,13 +140,14 @@ export default {
     },
   },
   created() {
+    this.showStore();
     this.getListProvinces();
   },
   mounted() {},
   watch: {
     "ruleForm.province_id": {
       handler: function (newValue) {
-        if (newValue != "") {
+        if (newValue != "" && this.allowWatch) {
           this.getListDistricts(newValue);
           this.ruleForm.district_id = "";
         }
@@ -215,11 +156,13 @@ export default {
     },
     "ruleForm.district_id": {
       handler: function (newValue) {
-        if (newValue != "") {
+        if (newValue != "" && this.allowWatch) {
           this.getListWards(newValue);
           this.ruleForm.ward_id = "";
         } else {
-          this.ruleForm.ward_id = "";
+          if (this.allowWatch) {
+            this.ruleForm.ward_id = "";
+          }
         }
       },
       deep: true,
@@ -228,6 +171,29 @@ export default {
   methods: {
     backToListStore() {
       router.push({ name: "m-store-list" });
+    },
+    async showStore() {
+      const response = await showStore(this.$route.params.id);
+
+      if (response.data.code == 200) {
+        var data = response.data.data;
+
+        await this.getListDistricts(data.province_id);
+        await this.getListWards(data.district_id);
+
+        this.ruleForm.name = data.name;
+        this.ruleForm.hotline = data.hotline;
+        this.ruleForm.province_id = data.province_id;
+        this.ruleForm.province_name = data.province_name;
+        this.ruleForm.district_id = data.district_id;
+        this.ruleForm.district_name = data.district_name;
+        this.ruleForm.ward_id = data.ward_id;
+        this.ruleForm.ward_name = data.ward_name;
+
+        setTimeout(() => {
+          this.allowWatch = true;
+        }, 1000);
+      }
     },
     async handleLogout() {
       const response = await logout();
@@ -257,11 +223,11 @@ export default {
           });
           this.ruleForm.ward_name = ward[0].WardName;
 
-          const response = await createStore(this.ruleForm);
+          const response = await updateStore(this.$route.params.id, this.ruleForm);
           if (response.data.code == 200) {
             this.$message({
               showClose: true,
-              message: "Thêm cơ sở mới thành công!",
+              message: "Cập nhật thông tin cơ sở thành công!",
               type: "success",
             });
             router.push({ name: "m-store-list" });
@@ -272,9 +238,6 @@ export default {
         }
       });
     },
-    // resetForm(formName) {
-    //   this.$refs[formName].resetFields();
-    // },
     async getListProvinces() {
       const response = await getProvinces();
       if (response.data.code == 200) {
