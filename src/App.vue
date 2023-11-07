@@ -32,7 +32,6 @@ import CFooter from "./layouts/customer/Footer.vue";
 // import MHeader from "./layouts/manager/Header.vue";
 // import MFooter from './layouts/manager/Footer.vue'
 import MNav from "./layouts/manager/Nav.vue";
-import router from './router'
 import store from "./store";
 import { mapGetters } from "vuex";
 export default {

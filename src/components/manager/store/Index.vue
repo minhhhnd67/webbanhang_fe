@@ -132,7 +132,7 @@ export default {
     },
     handleDelete(index, row) {
       console.log(index, row);
-      this.$confirm("Xóa cơ sở này?", "Warning", {
+      this.$confirm("Xóa cơ sở này?", "Xác nhận xóa cơ sở", {
         confirmButtonText: "Xóa",
         cancelButtonText: "Hủy",
         type: "warning",
