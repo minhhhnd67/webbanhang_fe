@@ -69,7 +69,6 @@ export default {
       //   this.is_login_manager = false
       // }
     }
-    console.log(router.getRoutes())
   },
 };
 </script>

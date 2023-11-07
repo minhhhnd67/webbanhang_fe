@@ -64,7 +64,6 @@ export default {
       store.state.tokenBE = this.token
       store.state.is_login_manager = false
       // Xử lý dữ liệu
-      console.log(1234, data);
       router.push({ name: "m-home" })
     };
   },
@@ -79,7 +78,6 @@ export default {
         "location=yes,height=570,width=520,scrollbars=yes,status=yes"
       );
 
-      // console.log(123, data);
       // axios
       //   .post("http://127.0.0.1:8000/api/get-google-sign-in-url")
       //   .then((response) => {

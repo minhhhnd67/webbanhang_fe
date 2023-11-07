@@ -184,7 +184,6 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.path.includes("manager") && !to.path.includes("login") && !to.path.includes("register")) {
-        console.log(6868, localStorage.getItem('tokenBE'))
         axios.get('http://127.0.0.1:8000/api/me', {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('tokenBE')}`,
@@ -206,7 +205,6 @@ router.beforeEach((to, from, next) => {
           }).catch((error) => {
             console.log(444, error)
             next('/manager/login')
-            console.log(124)
           });
     } else {
         next()

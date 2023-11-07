@@ -57,7 +57,6 @@ export default {
   }, 
   components: {  },
   mounted() {
-    console.log(123, this.routes)
   },
   methods: {
     handleOpen(key, keyPath) {

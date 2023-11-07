@@ -44,10 +44,8 @@ export default {
     breadcrumbs() {
       var breadcrumbs = [];
       var currentRoute = this.$route;
-      console.log(666, currentRoute);
 
       while (currentRoute.parent) {
-        console.log(currentRoute.parent);
         breadcrumbs.push({
           name: currentRoute.parent.meta.breadcrumb,
         });
@@ -60,7 +58,6 @@ export default {
   },
   methods: {
     async handleLogout() {
-      console.log(6789)
       const response = await logout()
       if (response.data.code == 200) {
         store.state.is_login_manager = true
