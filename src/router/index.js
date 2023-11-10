@@ -112,6 +112,48 @@ const routes = [
       ]
     },
     {
+      path: '/manager/user',
+      name: 'm-user',
+      component: ManagerLayout,
+      meta: {
+        role: ["admin"],
+        title: "Quản lý tài khoản",
+        showMenu: true,
+      },
+      children: [
+        {
+          path: '/manager/user/list',
+          name: 'm-user-list',
+          component: () => import('./../components/manager/user/Index.vue'),
+          meta: {
+            role: ["admin"],
+            title: 'Danh sách tài khoản',
+            showMenu: true,
+          },
+        },
+        {
+          path: '/manager/user/create',
+          name: 'm-user-create',
+          component: () => import('./../components/manager/user/Create.vue'),
+          meta: {
+            role: ["admin"],
+            title: 'Thêm tài khoản mới',
+            showMenu: true,
+          },
+        },
+        {
+          path: '/manager/user/:id/update',
+          name: 'm-user-update',
+          component: () => import('./../components/manager/user/Update.vue'),
+          meta: {
+            role: ["admin"],
+            title: 'Cập nhật thông tin tài khoản',
+            showMenu: false,
+          },
+        },
+      ]
+    },
+    {
       path: '/manager/categories',
       component: ManagerLayout,
       meta: {

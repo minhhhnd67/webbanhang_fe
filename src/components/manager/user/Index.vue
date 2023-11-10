@@ -27,7 +27,7 @@
     <el-main>
       <el-row type="flex" justify="end">
         <el-col :span="4"
-          ><el-button type="success" @click="addStore()">Thêm mới</el-button></el-col
+          ><el-button type="success" @click="addUser()">Thêm mới</el-button></el-col
         >
       </el-row>
       <el-table
@@ -38,8 +38,9 @@
         "
         style="width: 100%"
       >
-        <el-table-column prop="name" label="Tên cơ sở" :span="6"> </el-table-column>
-        <el-table-column prop="hotline" label="Hotline" :span="2"> </el-table-column>
+        <el-table-column prop="name" label="Họ tên" :span="6"> </el-table-column>
+        <el-table-column prop="phone" label="Số điện thoại" :span="2"> </el-table-column>
+        <el-table-column prop="role" label="Chức vụ" :span="2"> </el-table-column>
         <el-table-column prop="address" label="Địa chỉ" :span="10"> </el-table-column>
         <el-table-column align="right">
           <template slot="header" slot-scope="scope">
@@ -47,7 +48,7 @@
               v-model="search"
               size="mini"
               @click="test123(scope)"
-              placeholder="Tìm kiếm theo tên cơ sở"
+              placeholder="Tìm kiếm theo tên"
             />
           </template>
           <template slot-scope="scope">
@@ -63,6 +64,17 @@
           </template>
         </el-table-column>
       </el-table>
+      <div class="block">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="current_page"
+          :page-size="page_size"
+          layout="prev, pager, next"
+          :total="total"
+        >
+        </el-pagination>
+      </div>
     </el-main>
   </el-container>
 </template>
@@ -73,13 +85,16 @@ import MBreadcrumb from "@/layouts/manager/Breadcrumb.vue";
 import { logout } from "@/api/manager/auth";
 import store from "@/store";
 import route from "@/router";
-import { listStore, deleteStore } from "@/api/manager/store.js";
+import { listUser, deleteUser } from "@/api/manager/user.js";
 export default {
-  name: "M-Store-Index",
+  name: "M-User-INdex",
   components: { MBreadcrumb },
   data() {
     return {
       tableData: [],
+      current_page: 1,
+      page_size: 5,
+      total: 1000,
       search: "",
     };
   },
@@ -87,7 +102,7 @@ export default {
     thisRoute() {
       return this.$route;
     },
-    
+
     breadcrumbs() {
       var breadcrumbs = [];
       var currentRoute = this.$route;
@@ -102,7 +117,7 @@ export default {
     },
   },
   created() {
-    this.getListStore();
+    this.getListUser();
   },
   mounted() {},
   methods: {
@@ -115,36 +130,48 @@ export default {
         this.$router.push({ name: "m-login" });
       }
     },
-    addStore() {
-      route.push({ name: "m-store-create" });
+    handleSizeChange(val) {
+      console.log(`${val} items per page`);
     },
-    async getListStore() {
-      const response = await listStore();
+    handleCurrentChange(val) {
+      console.log(`current page: ${val}`);
+      this.getListUser({page: val});
+    },
+    addUser() {
+      route.push({ name: "m-user-create" });
+    },
+    async getListUser(parameters = {}) {
+      const response = await listUser(parameters);
       if (response.data.code == 200) {
-        this.tableData = response.data.data;
+        console.log(111, response.data.data.data);
+        this.tableData = response.data.data.data;
+        this.current_page = response.data.data.current_page;
+        this.page_size = response.data.data.per_page;
+        this.total = response.data.data.total;
+
       } else {
         this.tableData = [];
       }
     },
     handleEdit(index, row) {
       console.log(index, row);
-      route.push({ name: "m-store-update", params: { id: row.id } });
+      route.push({ name: "m-user-update", params: { id: row.id } });
     },
     handleDelete(index, row) {
       console.log(index, row);
-      this.$confirm("Xóa cơ sở này?", "Xác nhận xóa cơ sở", {
+      this.$confirm("Xóa tài khoản này?", "Xác nhận xóa tài khoản", {
         confirmButtonText: "Xóa",
         cancelButtonText: "Hủy",
         type: "warning",
       })
         .then(async () => {
-          const response = await deleteStore(row.id);
+          const response = await deleteUser(row.id);
           if (response.data.code == 200) {
             this.$message({
               type: "success",
               message: "Xóa thành công ",
             });
-            this.getListStore();
+            this.getListUser();
           }
         })
         .catch((e) => {
