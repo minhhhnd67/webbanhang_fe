@@ -154,33 +154,46 @@ const routes = [
       ]
     },
     {
-      path: '/manager/categories',
+      path: '/manager/category',
+      name: 'm-category',
       component: ManagerLayout,
       meta: {
         role: ["admin"],
-        title: 'Danh mục sản phẩm',
+        title: "Quản lý Danh mục sản phẩm",
         showMenu: true,
       },
       children: [
         {
-          path: '/manager/categories/apple',
-          component: () => import('./../components/manager/store/Index.vue'),
+          path: '/manager/category/list',
+          name: 'm-category-list',
+          component: () => import('./../components/manager/category/Index.vue'),
           meta: {
             role: ["admin"],
-            title: 'Apple',
+            title: 'Danh sách danh mục sản phẩm',
             showMenu: true,
           },
         },
         {
-          path: '/manager/categories/banana',
-          component: () => import('./../components/manager/Home.vue'),
+          path: '/manager/category/create',
+          name: 'm-category-create',
+          component: () => import('./../components/manager/category/Create.vue'),
           meta: {
             role: ["admin"],
-            title: 'Banana',
+            title: 'Thêm danh mục sản phẩm mới',
             showMenu: true,
           },
         },
-      ],
+        {
+          path: '/manager/category/:id/update',
+          name: 'm-category-update',
+          component: () => import('./../components/manager/category/Update.vue'),
+          meta: {
+            role: ["admin"],
+            title: 'Cập nhật thông tin danh mục sản phẩm',
+            showMenu: false,
+          },
+        },
+      ]
     },
 
     // manger-branch
