@@ -195,36 +195,47 @@ const routes = [
         },
       ]
     },
-
-    // manger-branch
     {
       path: '/manager/product',
-      component: () => import('./../components/manager/Home.vue'),
+      name: 'm-product',
+      component: ManagerLayout,
       meta: {
-        role: ["manager-branch"],
-        title: 'Sản phẩm',
-        showMenu: false,
+        role: ["admin"],
+        title: "Quản lý sản phẩm",
+        showMenu: true,
       },
       children: [
         {
-          path: '/manager/product/apple',
-          component: () => import('./../components/manager/store/Index.vue'),
+          path: '/manager/product/list',
+          name: 'm-product-list',
+          component: () => import('./../components/manager/product/Index.vue'),
           meta: {
-            role: ["manager-branch"],
-            title: 'Apple',
-            showMenu: false,
+            role: ["admin"],
+            title: 'Danh sách sản phẩm',
+            showMenu: true,
           },
         },
         {
-          path: '/manager/product/banana',
-          component: () => import('./../components/manager/Home.vue'),
+          path: '/manager/product/create',
+          name: 'm-product-create',
+          component: () => import('./../components/manager/product/Create.vue'),
           meta: {
-            role: ["manager-branch"],
-            title: 'Banana',
+            role: ["admin"],
+            title: 'Thêm sản phẩm mới',
+            showMenu: true,
+          },
+        },
+        {
+          path: '/manager/product/:id/update',
+          name: 'm-product-update',
+          component: () => import('./../components/manager/product/Update.vue'),
+          meta: {
+            role: ["admin"],
+            title: 'Cập nhật thông tin sản phẩm',
             showMenu: false,
           },
         },
-      ],
+      ]
     },
 ]
 

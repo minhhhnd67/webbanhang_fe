@@ -119,7 +119,7 @@ import { Result } from 'element-ui';
               <el-button type="primary" @click="submitForm('ruleForm')"
                 >Cập nhật</el-button
               >
-              <el-button @click="backToListStore()">Quay lại</el-button>
+              <el-button @click="backToListUser()">Quay lại</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -228,7 +228,7 @@ export default {
     },
   },
   methods: {
-    backToListStore() {
+    backToListUser() {
       router.push({ name: "m-user-list" });
     },
     async showUser() {
