@@ -237,6 +237,48 @@ const routes = [
         },
       ]
     },
+    {
+      path: '/manager/order',
+      name: 'm-order',
+      component: ManagerLayout,
+      meta: {
+        role: ["admin"],
+        title: "Quản lý đơn hàng",
+        showMenu: true,
+      },
+      children: [
+        {
+          path: '/manager/order/list',
+          name: 'm-order-list',
+          component: () => import('./../components/manager/order/Index.vue'),
+          meta: {
+            role: ["admin"],
+            title: 'Danh sách đơn hàng',
+            showMenu: true,
+          },
+        },
+        {
+          path: '/manager/order/create',
+          name: 'm-order-create',
+          component: () => import('./../components/manager/order/Create.vue'),
+          meta: {
+            role: ["admin"],
+            title: 'Thêm đơn hàng mới',
+            showMenu: true,
+          },
+        },
+        {
+          path: '/manager/order/:id/update',
+          name: 'm-order-update',
+          component: () => import('./../components/manager/order/Update.vue'),
+          meta: {
+            role: ["admin"],
+            title: 'Cập nhật thông tin đơn hàng',
+            showMenu: false,
+          },
+        },
+      ]
+    },
 ]
 
 export {routes}

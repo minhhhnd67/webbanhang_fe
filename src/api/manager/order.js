@@ -1,7 +1,7 @@
 import { api, getTokenBE } from "./../../utils/helper";
 import config from "./../../config/config.dev.json";
 
-export function listProduct(parameters) {
+export function listOrder(parameters) {
   const headers = {
     Authorization: `Bearer ${getTokenBE()}`,
   };
@@ -9,22 +9,7 @@ export function listProduct(parameters) {
   return api(
     config.BASE_BE_API,
     "get",
-    "/api/product",
-    {},
-    headers,
-    parameters
-  );
-}
-
-export function allProduct(parameters) {
-  const headers = {
-    Authorization: `Bearer ${getTokenBE()}`,
-  };
-
-  return api(
-    config.BASE_BE_API,
-    "get",
-    "/api/product/all",
+    "/api/order",
     {},
     headers,
     parameters

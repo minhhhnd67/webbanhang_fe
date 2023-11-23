@@ -29,3 +29,14 @@ export function getStatusUser() {
         {id: 1, name: "Hoạt động"}
     ];
 }
+
+export function getStatusOrder() {
+    return [
+        {id: 0, name: "Chờ xác nhận"},
+        {id: 1, name: "Đã xác nhận"},
+        {id: 2, name: "Chuẩn bị hàng"},
+        {id: 3, name: "Đang giao hàng"},
+        {id: 4, name: "Hoàn thành"},
+        {id: 5, name: "Đã hủy"},
+    ];
+}
