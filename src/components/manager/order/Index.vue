@@ -85,8 +85,7 @@ import MBreadcrumb from "@/layouts/manager/Breadcrumb.vue";
 import { logout } from "@/api/manager/auth";
 import store from "@/store";
 import route from "@/router";
-import { deleteUser } from "@/api/manager/user.js";
-import { listOrder } from "@/api/manager/order.js";
+import { listOrder, deleteOrder } from "@/api/manager/order.js";
 export default {
   name: "M-Order-Index",
   components: { MBreadcrumb },
@@ -167,7 +166,7 @@ export default {
         type: "warning",
       })
         .then(async () => {
-          const response = await deleteUser(row.id);
+          const response = await deleteOrder(row.id);
           if (response.data.code == 200) {
             this.$message({
               type: "success",

@@ -36,7 +36,7 @@
             class="demo-ruleForm"
           >
             <el-form-item label="Họ tên" prop="name">
-              <el-input v-model="ruleForm.name"></el-input>
+              <el-col :span="12"><el-input v-model="ruleForm.name"></el-input></el-col>
             </el-form-item>
             <el-form-item label="Trạng thái" prop="status">
               <el-select v-model="ruleForm.status" placeholder="Trạng thái">
@@ -50,7 +50,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="Số điện thoại" prop="phone">
-              <el-input v-model="ruleForm.phone"></el-input>
+              <el-col :span="12"><el-input v-model="ruleForm.phone"></el-input></el-col>
             </el-form-item>
             <el-form-item label="Tỉnh / Thành phố" prop="province_id">
               <el-select v-model="ruleForm.province_id" placeholder="Tỉnh / Thành phố">
@@ -86,7 +86,14 @@
               </el-select>
             </el-form-item>
             <el-form-item label="Địa chỉ chi tiết" prop="address_detail">
-              <el-input v-model="ruleForm.address_detail"></el-input>
+              <el-col :span="12">
+                <el-input
+                  type="textarea"
+                  :rows="5"
+                  placeholder="Địa chỉ chi tiết"
+                  v-model="ruleForm.address_detail">
+                </el-input>
+              </el-col>
             </el-form-item>
             <el-form-item label="Sản phẩm đơn hàng" prop="name">
               <el-button @click="addProduct()" type="success">+</el-button>
@@ -132,13 +139,14 @@
                             </el-option>
                           </el-select>
                         </el-row>
+                        <el-link type="info"></el-link>
                       </el-col>
                     </el-col>
                     <el-col :span="4">
                       {{ ruleForm.order_details[index].price }}
                     </el-col>
                     <el-col :span="6">
-                      <el-input v-model="ruleForm.order_details[index].amount" placeholder="Số lượng"></el-input>
+                      <el-input-number v-model="ruleForm.order_details[index].amount" :min="1" :max="100"></el-input-number>
                     </el-col>
                   </el-row>
                 </el-col>
@@ -152,10 +160,17 @@
                   ></el-button>
                 </el-col>
               </el-row>
+              <el-row>
+                <el-col :span="23">
+                  <el-row >
+                    <el-col :span="8"><el-link type="info"></el-link></el-col>
+                    <el-col :span="6"><el-link type="info"></el-link></el-col>
+                    <el-col :span="4">Tổng tiền:</el-col>
+                    <el-col :span="6">{{ ruleForm.total_money }}</el-col>
+                  </el-row>
+                </el-col>
+              </el-row>
             </el-form-item>
-
-
-
             <el-form-item>
               <el-button type="primary" @click="submitForm('ruleForm')"
                 >Thêm mới</el-button
@@ -176,8 +191,8 @@ import store from "@/store";
 import router from "@/router";
 import { getProvinces, getDistricts, getWards } from "@/api/common/ghn.js";
 import { getStatusOrder } from "@/utils/helper.js"
-import { createUser } from "@/api/manager/user.js";
 import { allProduct } from "@/api/manager/product.js";
+import { createOrder } from "@/api/manager/order.js";
 export default {
   name: "M-Order-Create",
   components: { MBreadcrumb },
@@ -190,6 +205,7 @@ export default {
         store_id: 4,
         user_id: 0,
         status: 4,
+        total_money: 0,
         type: 1,
         name: "",
         phone: "",
@@ -276,12 +292,14 @@ export default {
       handler: function (newValue) {
         console.log(111, newValue);
         console.log(222, this.oldValue);
+        this.ruleForm.total_money = 0;
         newValue.forEach((item, index) => {
+          this.ruleForm.total_money += item.price * item.amount;
           if (this.oldValue[index] == undefined) {
             this.oldValue.push({
               product_id: "",
               price: 0,
-              amount: 0,
+              amount: 1,
               sku_info: ""
             });
           }
@@ -330,7 +348,7 @@ export default {
   },
   methods: {
     backToListUser() {
-      router.push({ name: "m-user-list" });
+      router.push({ name: "m-order-list" });
     },
     async handleLogout() {
       const response = await logout();
@@ -344,9 +362,9 @@ export default {
     addProduct() {
       this.ruleForm.order_details.push({
         product_id: "",
-        amount: 0,
+        amount: 1,
         price: 0,
-        sku_info: []
+        sku_info: ""
       });
       this.listSku.push([]);
       // this.resSku.push([]);
@@ -375,9 +393,15 @@ export default {
           });
           this.ruleForm.ward_name = ward[0].WardName;
 
+          this.ruleForm.order_details.forEach((order_detail, index) => {
+            this.listSku[index].forEach((item, idx) => {
+              order_detail.sku_info += this.resSku[index][idx].skuName + ": " + this.resSku[index][idx].skuValue + ", ";
+            })
+          })
+
           console.log(888 , this.ruleForm);
 
-          const response = await createUser(this.ruleForm);
+          const response = await createOrder(this.ruleForm);
           if (response.data.code == 200) {
             this.$message({
               showClose: true,

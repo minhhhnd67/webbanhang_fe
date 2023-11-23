@@ -16,12 +16,12 @@ export function listOrder(parameters) {
   );
 }
 
-export function createProduct(data) {
+export function createOrder(data) {
   const headers = {
     Authorization: `Bearer ${getTokenBE()}`,
   };
 
-  return api(config.BASE_BE_API, "post", "/api/product/create", data, headers);
+  return api(config.BASE_BE_API, "post", "/api/order/create", data, headers);
 }
 
 export function showProduct(id) {
@@ -46,7 +46,7 @@ export function updateProduct(id, data) {
   );
 }
 
-export function deleteProduct(id) {
+export function deleteOrder(id) {
   const headers = {
     Authorization: `Bearer ${getTokenBE()}`,
   };
@@ -54,7 +54,7 @@ export function deleteProduct(id) {
   return api(
     config.BASE_BE_API,
     "post",
-    `/api/product/${id}/delete`,
+    `/api/order/${id}/delete`,
     {},
     headers
   );
