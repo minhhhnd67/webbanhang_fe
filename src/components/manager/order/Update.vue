@@ -27,20 +27,25 @@ import { Result } from 'element-ui';
 
     <el-main>
       <el-row type="flex" class="row-bg">
-        <el-col :span="12">
+        <el-col :span="24">
           <el-form
             :model="ruleForm"
             status-icon
             :rules="rules"
             ref="ruleForm"
-            label-width="120px"
+            label-width="200px"
             class="demo-ruleForm"
           >
-          <el-form-item label="Email" prop="email">
-            <el-input v-model="ruleForm.email" :disabled="true"></el-input>
-          </el-form-item>
-          <el-form-item label="Họ tên" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
+          <el-form-item label="Loại đơn hàng" prop="type">
+            <el-select v-model="ruleForm.type" placeholder="Loại đơn hàng">
+              <el-option
+                v-for="item in listTypeOrder"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="Trạng thái" prop="status">
             <el-select v-model="ruleForm.status" placeholder="Trạng thái">
@@ -53,30 +58,15 @@ import { Result } from 'element-ui';
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="Chức danh" prop="province_id">
-            <el-select v-model="ruleForm.role" placeholder="Chức danh">
-              <el-option
-                v-for="item in roles"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="Chi nhánh" prop="store_id">
-            <el-select v-model="ruleForm.store_id" placeholder="Chi nhánh">
-              <el-option
-                v-for="item in listStore"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              >
-              </el-option>
-            </el-select>
+          <el-form-item label="Họ tên" prop="name">
+            <el-col :span="12">
+              <el-input v-model="ruleForm.name"></el-input>
+            </el-col>
           </el-form-item>
           <el-form-item label="Số điện thoại" prop="phone">
-            <el-input v-model="ruleForm.phone"></el-input>
+            <el-col :span="12">
+              <el-input v-model="ruleForm.phone"></el-input>
+            </el-col>
           </el-form-item>
           <el-form-item label="Tỉnh / Thành phố" prop="province_id">
             <el-select v-model="ruleForm.province_id" placeholder="Tỉnh / Thành phố">
@@ -112,14 +102,69 @@ import { Result } from 'element-ui';
             </el-select>
           </el-form-item>
           <el-form-item label="Địa chỉ chi tiết" prop="address_detail">
-            <el-input v-model="ruleForm.address_detail"></el-input>
+            <el-col :span="12">
+              <el-input
+                type="textarea"
+                :rows="5"
+                placeholder="Địa chỉ chi tiết"
+                v-model="ruleForm.address_detail">
+              </el-input>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="Sản phẩm đơn hàng" prop="name">
+          </el-form-item>
+          <el-form-item>
+            <el-row
+              style="
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+                padding: 10px;
+              "
+              v-for="(order_detail, index) in ruleForm.order_details"
+              :key="index"
+            >
+              <el-col :span="24">
+                <el-row >
+                  <el-col :span="8">Sản phẩm</el-col>
+                  <el-col :span="6">Sku</el-col>
+                  <el-col :span="4">Giá</el-col>
+                  <el-col :span="6">Số lượng</el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8">
+                    {{ ruleForm.order_details[index].product.name }}
+                  </el-col>
+                  <el-col :span="6">
+                    <el-col :span="18">
+                      {{ ruleForm.order_details[index].sku_info }}
+                      <el-link type="info"></el-link>
+                    </el-col>
+                  </el-col>
+                  <el-col :span="4">
+                    {{ ruleForm.order_details[index].product.price }}
+                  </el-col>
+                  <el-col :span="6">
+                    {{ ruleForm.order_details[index].amount }}
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="23">
+                <el-row >
+                  <el-col :span="8"><el-link type="info"></el-link></el-col>
+                  <el-col :span="6"><el-link type="info"></el-link></el-col>
+                  <el-col :span="4">Tổng tiền:</el-col>
+                  <el-col :span="6">{{ ruleForm.total_money }}</el-col>
+                </el-row>
+              </el-col>
+            </el-row>
           </el-form-item>
 
             <el-form-item>
               <el-button type="primary" @click="submitForm('ruleForm')"
                 >Cập nhật</el-button
               >
-              <el-button @click="backToListUser()">Quay lại</el-button>
+              <el-button @click="backToListOrder()">Quay lại</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -131,25 +176,26 @@ import { Result } from 'element-ui';
 <script>
 import MBreadcrumb from "@/layouts/manager/Breadcrumb.vue";
 import { logout } from "@/api/manager/auth";
-import { listStore } from "@/api/manager/store.js";
-import { showUser, updateUser } from "@/api/manager/user.js";
+import { showOrder, updateOrder } from "@/api/manager/order.js";
 import store from "@/store";
 import router from "@/router";
 import { getProvinces, getDistricts, getWards } from "@/api/common/ghn.js";
-import { getRoles, getStatusUser } from "@/utils/helper.js"
+import { getStatusOrder, getTypeOrder } from "@/utils/helper.js"
 export default {
-  name: "M-Store-Update",
+  name: "M-Order-Update",
   components: { MBreadcrumb },
   data() {
     return {
-      id: "",
+      store_id: 4,
       tableData: [],
       search: "",
       ruleForm: {
-        email: "",
+        store_id: 4,
+        user_id: 0,
+        status: 4,
+        total_money: 0,
+        type: "",
         name: "",
-        role: "",
-        store_id: "",
         phone: "",
         province_id: "",
         province_name: "",
@@ -158,24 +204,21 @@ export default {
         ward_id: "",
         ward_name: "",
         address_detail: "",
-        status: ""
-        // pass: "",
-        // checkPass: "",
-        // age: "",
+        order_details: []
       },
       rules: {
-        // pass: [{ validator: validatePass, trigger: "blur" }],
-        // checkPass: [{ validator: validatePass2, trigger: "blur" }],
-        // age: [{ validator: checkAge, trigger: "blur" }],
       },
-      roles: [],
+      listTypeOrder: [],
       listStatus: [],
-      listStore: [],
       listProvinces: [],
       listDistricts: [],
       listWards: [],
-      allowWatch: false,
+      listProduct: [],
+      listSku: [],
+      resSku: [],
+      oldValue: [],
       value: "",
+      allowWatch: false
     };
   },
   computed: {
@@ -197,10 +240,9 @@ export default {
   },
   created() {
     this.getListProvinces();
-    this.roles = getRoles();
-    this.listStatus = getStatusUser();
-    this.getListStores();
-    this.showUser();
+    this.listStatus = getStatusOrder();
+    this.listTypeOrder = getTypeOrder();
+    this.showOrder();
   },
   mounted() {},
   watch: {
@@ -228,11 +270,11 @@ export default {
     },
   },
   methods: {
-    backToListUser() {
-      router.push({ name: "m-user-list" });
+    backToListOrder() {
+      router.push({ name: "m-order-list" });
     },
-    async showUser() {
-      const response = await showUser(this.$route.params.id);
+    async showOrder() {
+      const response = await showOrder(this.$route.params.id);
 
       if (response.data.code == 200) {
         var data = response.data.data;
@@ -240,11 +282,11 @@ export default {
         await this.getListDistricts(data.province_id);
         await this.getListWards(data.district_id);
 
-        this.ruleForm.email = data.email;
-        this.ruleForm.name = data.name;
-        this.ruleForm.role = data.role;
-        this.ruleForm.store_id = data.store_id;
         this.ruleForm.status = data.status;
+        this.ruleForm.total_money = data.total_money;
+        this.ruleForm.type = data.type;
+        this.ruleForm.name = data.name;
+        this.ruleForm.store_id = data.store_id;
         this.ruleForm.name = data.name;
         this.ruleForm.phone = data.phone;
         this.ruleForm.province_id = data.province_id;
@@ -254,6 +296,9 @@ export default {
         this.ruleForm.ward_id = data.ward_id;
         this.ruleForm.ward_name = data.ward_name;
         this.ruleForm.address_detail = data.address_detail;
+        this.ruleForm.order_details = data.order_details;
+
+        console.log(666, this.ruleForm)
 
         setTimeout(() => {
           this.allowWatch = true;
@@ -288,7 +333,7 @@ export default {
           });
           this.ruleForm.ward_name = ward[0].WardName;
 
-          const response = await updateUser(this.$route.params.id, this.ruleForm);
+          const response = await updateOrder(this.$route.params.id, this.ruleForm);
           if (response.data.code == 200) {
             this.$message({
               showClose: true,
@@ -302,13 +347,6 @@ export default {
           return false;
         }
       });
-    },
-    async getListStores() {
-      const response = await listStore();
-      console.log(111, response);
-      if (response.data.code == 200) {
-        this.listStore = response.data.data;
-      }
     },
     async getListProvinces() {
       const response = await getProvinces();

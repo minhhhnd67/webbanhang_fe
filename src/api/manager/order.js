@@ -24,15 +24,15 @@ export function createOrder(data) {
   return api(config.BASE_BE_API, "post", "/api/order/create", data, headers);
 }
 
-export function showProduct(id) {
+export function showOrder(id) {
   const headers = {
     Authorization: `Bearer ${getTokenBE()}`,
   };
 
-  return api(config.BASE_BE_API, "get", `/api/product/${id}/show`, {}, headers);
+  return api(config.BASE_BE_API, "get", `/api/order/${id}/show`, {}, headers);
 }
 
-export function updateProduct(id, data) {
+export function updateOrder(id, data) {
   const headers = {
     Authorization: `Bearer ${getTokenBE()}`,
   };
@@ -40,7 +40,7 @@ export function updateProduct(id, data) {
   return api(
     config.BASE_BE_API,
     "post",
-    `/api/product/${id}/update`,
+    `/api/order/${id}/update`,
     data,
     headers
   );

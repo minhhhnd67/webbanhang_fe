@@ -40,3 +40,10 @@ export function getStatusOrder() {
         {id: 5, name: "Đã hủy"},
     ];
 }
+
+export function getTypeOrder() {
+    return [
+        {id: 1, name: "Offline"},
+        {id: 2, name: "Online"},
+    ];
+}
