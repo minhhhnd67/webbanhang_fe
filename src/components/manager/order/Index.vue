@@ -38,10 +38,26 @@
         "
         style="width: 100%"
       >
-        <el-table-column prop="code" label="Code" :span="2"> </el-table-column>
-        <el-table-column prop="name" label="Tên" :span="2"> </el-table-column>
-        <el-table-column prop="total_money" label="Tổng tiền" :span="2"> </el-table-column>
-        <el-table-column prop="address" label="Địa chỉ" :span="10"> </el-table-column>
+        <el-table-column prop="code" label="Code"></el-table-column>
+        <el-table-column label="Loại đơn hàng">
+          <template slot-scope="scope">
+            {{ showTypeOrder((scope.row.type)) }}
+          </template>
+        </el-table-column>
+        <el-table-column label="Trạng thái">
+          <template slot-scope="scope">
+            {{ showStatus((scope.row.status)) }}
+          </template>
+        </el-table-column>el-table>
+        <el-table-column prop="name" label="Tên"> </el-table-column>
+        <el-table-column prop="total_money" label="Tổng tiền"> </el-table-column>
+        <el-table-column label="Địa chỉ">
+          <template slot-scope="scope">
+            <span style="white-space: pre-wrap;">
+              {{ scope.row.address }}
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column align="right">
           <template slot="header" slot-scope="scope">
             <el-input
@@ -86,6 +102,7 @@ import { logout } from "@/api/manager/auth";
 import store from "@/store";
 import route from "@/router";
 import { listOrder, deleteOrder } from "@/api/manager/order.js";
+import { getStatusOrder, getTypeOrder } from "@/utils/helper.js"
 export default {
   name: "M-Order-Index",
   components: { MBreadcrumb },
@@ -95,15 +112,17 @@ export default {
       tableData: [],
       current_page: 1,
       page_size: 5,
-      total: 1000,
+      total: 100,
       search: "",
+      listStatus: [],
+      listTypeOrder: []
     };
   },
   computed: {
     thisRoute() {
       return this.$route;
     },
-
+    
     breadcrumbs() {
       var breadcrumbs = [];
       var currentRoute = this.$route;
@@ -118,6 +137,8 @@ export default {
     },
   },
   created() {
+    this.listStatus = getStatusOrder();
+    this.listTypeOrder = getTypeOrder();
     this.getListOrder({storeId: this.storeId});
   },
   mounted() {},
@@ -179,6 +200,18 @@ export default {
           console.log(123, e);
           console.log("Đã hủy xóa");
         });
+    },
+    showTypeOrder(typeId) {
+      let typeOrder = this.listTypeOrder.filter((obj) => {
+        return obj.id == typeId;
+      });
+      return typeOrder[0].name;
+    },
+    showStatus(statusId) {
+      let status = this.listStatus.filter((obj) => {
+        return obj.id == statusId;
+      });
+      return status[0].name;
     },
     test123(scope) {
       console.log(scope);
