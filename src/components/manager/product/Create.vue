@@ -70,7 +70,7 @@
               <el-input v-model="ruleForm.image"></el-input>
             </el-form-item>
             <el-form-item label="Mô tả sản phẩm" prop="description">
-              <el-input v-model="ruleForm.description"></el-input>
+              <vue-editor v-model="ruleForm.description"></vue-editor>
             </el-form-item>
             <el-form-item v-for="(attribute, index) in this.listAttribute" :label="attribute.name" :key="attribute.id" prop="status">
               <el-select v-model="ruleForm.attributes[index].attribute_option_id" placeholder="Lựa chọn">
@@ -168,9 +168,10 @@ import store from "@/store";
 import router from "@/router";
 import { createProduct } from "@/api/manager/product.js";
 import { listCategory } from "@/api/manager/category.js" ;
+import { VueEditor } from "vue2-editor";
 export default {
   name: "M-Product-Create",
-  components: { MBreadcrumb },
+  components: { MBreadcrumb, VueEditor },
   data() {
     return {
       tableData: [],

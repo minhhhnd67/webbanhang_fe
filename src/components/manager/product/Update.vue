@@ -71,7 +71,7 @@ import { Result } from 'element-ui';
               <el-input v-model="ruleForm.image"></el-input>
             </el-form-item>
             <el-form-item label="Mô tả sản phẩm" prop="description">
-              <el-input v-model="ruleForm.description"></el-input>
+              <vue-editor v-model="ruleForm.description"></vue-editor>
             </el-form-item>
             <el-form-item
               v-for="(attribute, index) in this.listAttribute"
@@ -174,9 +174,10 @@ import { showProduct, updateProduct } from "@/api/manager/product.js";
 import store from "@/store";
 import router from "@/router";
 import { listCategory } from "@/api/manager/category.js";
+import { VueEditor } from "vue2-editor";
 export default {
   name: "M-Store-Update",
-  components: { MBreadcrumb },
+  components: { MBreadcrumb, VueEditor },
   data() {
     return {
       tableData: [],
