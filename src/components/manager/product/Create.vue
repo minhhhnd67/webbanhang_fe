@@ -67,7 +67,24 @@
               </el-col>
             </el-form-item>
             <el-form-item label="Ảnh" prop="image">
-              <el-input v-model="ruleForm.image"></el-input>
+              <el-upload
+                class="avatar-uploader"
+                :action="urlUploadImage"
+                :headers="{
+                  Authorization: `Bearer ${this.tokenBE}`,
+                }"
+                :data="{
+                  path: 'product',
+                }"
+                name="image"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload"
+                >
+                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+
             </el-form-item>
             <el-form-item label="Mô tả sản phẩm" prop="description">
               <vue-editor v-model="ruleForm.description"></vue-editor>
@@ -162,6 +179,7 @@
 </template>
 
 <script>
+import config from "@/config/config.dev.json";
 import MBreadcrumb from "@/layouts/manager/Breadcrumb.vue";
 import { logout } from "@/api/manager/auth";
 import store from "@/store";
@@ -169,11 +187,14 @@ import router from "@/router";
 import { createProduct } from "@/api/manager/product.js";
 import { listCategory } from "@/api/manager/category.js" ;
 import { VueEditor } from "vue2-editor";
+import { getTokenBE } from "@/utils/helper.js";
 export default {
   name: "M-Product-Create",
   components: { MBreadcrumb, VueEditor },
   data() {
     return {
+      baseURL: "",
+      urlUploadImage: "",
       tableData: [],
       search: "",
       ruleForm: {
@@ -202,6 +223,11 @@ export default {
       roles: [],
       listCategory: [],
       listAttribute: [],
+      dialogImageUrl: '',
+      dialogVisible: false,
+      disabled: false,
+      tokenBE: "",
+      imageUrl: "",
     };
   },
   computed: {
@@ -222,7 +248,10 @@ export default {
     },
   },
   created() {
+    this.baseURL = config.BASE_BE_API;
+    this.urlUploadImage = config.BASE_BE_API + "/api/upload-image"
     this.getListCategory();
+    this.tokenBE = getTokenBE();
   },
   mounted() {},
   watch: {
@@ -297,7 +326,6 @@ export default {
           });
 
           console.log(6688, this.ruleForm);
-
           const response = await createProduct(this.ruleForm);
           if (response.data.code == 200) {
             this.$message({
@@ -319,12 +347,29 @@ export default {
         this.listCategory = response.data.data;
         console.log(123, this.listCategory);
       }
+    },
+
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+      console.log(666, this.imageUrl);
+      console.log(888, res);
+      if (res.code == 200) {
+        this.ruleForm.image = res.data.path;
+        console.log(999, this.ruleForm.image);
+      }
+    },
+    beforeAvatarUpload(file) {
+      const isLt10M = file.size / 1024 / 1024 < 10;
+      if (!isLt10M) {
+        this.$message.error('Avatar picture size can not exceed 10MB!');
+      }
+      return isLt10M;
     }
   },
 };
 </script>
 
-<style>
+<style scoped>
 .el-row {
   margin-bottom: 20px;
   &:last-child {
@@ -350,5 +395,29 @@ export default {
 .row-bg {
   padding: 10px 0;
   background-color: #f9fafc;
+}
+
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>

@@ -190,7 +190,7 @@ import { logout } from "@/api/manager/auth";
 import store from "@/store";
 import router from "@/router";
 import { getProvinces, getDistricts, getWards } from "@/api/common/ghn.js";
-import { getStatusOrder } from "@/utils/helper.js"
+import { getStatusOrder } from "@/utils/helper.js";
 import { allProduct } from "@/api/manager/product.js";
 import { createOrder } from "@/api/manager/order.js";
 export default {
