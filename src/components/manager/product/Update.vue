@@ -1,30 +1,6 @@
 import { Result } from 'element-ui';
 <template>
   <el-container>
-    <el-header
-      class="navbar"
-      style="
-        padding: 25px 10px;
-        font-size: 12px;
-        background-color: rgb(255, 255, 255);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-      "
-    >
-      <el-row :span="24">
-        <el-col :span="21"><MBreadcrumb :routeMatched="thisRoute.matched" /></el-col>
-        <el-col :span="3" class="right">
-          <el-dropdown placement="right-start">
-            <i class="el-icon-setting" style="margin-right: 15px"></i>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>Profile</el-dropdown-item>
-              <el-dropdown-item @click="handleLogout()">Logout</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <span @click="handleLogout()">Tom</span>
-        </el-col>
-      </el-row>
-    </el-header>
-
     <el-main>
       <el-row type="flex" class="row-bg">
         <el-col :span="24">
@@ -68,8 +44,6 @@ import { Result } from 'element-ui';
               </el-col>
             </el-form-item>
             <el-form-item label="Ảnh" prop="image">
-              <!-- <el-input v-model="ruleForm.image"></el-input> -->
-
               <el-upload
                 class="avatar-uploader"
                 :action="urlUploadImage"
@@ -188,17 +162,14 @@ import { Result } from 'element-ui';
 
 <script>
 import config from "@/config/config.dev.json";
-import MBreadcrumb from "@/layouts/manager/Breadcrumb.vue";
-import { logout } from "@/api/manager/auth";
 import { showProduct, updateProduct } from "@/api/manager/product.js";
-import store from "@/store";
 import router from "@/router";
 import { listCategory } from "@/api/manager/category.js";
 import { VueEditor } from "vue2-editor";
 import { getTokenBE } from "@/utils/helper.js";
 export default {
   name: "M-Store-Update",
-  components: { MBreadcrumb, VueEditor },
+  components: { VueEditor },
   data() {
     return {
       baseURL: "",
@@ -216,14 +187,6 @@ export default {
         description: "",
         attributes: [],
         skus: [
-          // {
-          //   name: "",
-          //   skuOptions: [
-          //     {
-          //       name: "",
-          //     },
-          //   ],
-          // },
         ],
       },
       rules: {},
@@ -240,18 +203,6 @@ export default {
   computed: {
     thisRoute() {
       return this.$route;
-    },
-    breadcrumbs() {
-      var breadcrumbs = [];
-      var currentRoute = this.$route;
-
-      while (currentRoute.parent) {
-        breadcrumbs.push({
-          name: currentRoute.parent.meta.breadcrumb,
-        });
-        currentRoute = currentRoute.parent;
-      }
-      return breadcrumbs;
     },
   },
   created() {
@@ -279,7 +230,6 @@ export default {
               attribute_option_value: "",
             });
           });
-          console.log(111, this.ruleForm.attributes);
         }
       },
       deep: true,
@@ -293,14 +243,12 @@ export default {
       const response = await listCategory();
       if (response.data.code == 200) {
         this.listCategory = response.data.data;
-        console.log(333, this.listCategory);
       }
     },
     async showProduct() {
       const response = await showProduct(this.$route.params.id);
 
       if (response.data.code == 200) {
-        console.log(123, response.data.data);
         const data = response.data.data;
         this.ruleForm.category_id = data.category_id;
         this.ruleForm.code = data.code;
@@ -328,8 +276,6 @@ export default {
 
         setTimeout(() => {
           const attributes = data.attributes;
-          console.log(456, attributes);
-          console.log(678, this.listAttribute);
           this.listAttribute.forEach((attribute, index) => {
             var attr = attributes.filter((obj) => {
               return (obj.pivot.attribute_id == attribute.id);
@@ -339,17 +285,7 @@ export default {
             this.ruleForm.attributes[index].attribute_option_value =
               attr[0].pivot.attribute_option_value;
           });
-          console.log(666, this.ruleForm);
         }, 500);
-      }
-    },
-    async handleLogout() {
-      const response = await logout();
-      if (response.data.code == 200) {
-        store.state.is_login_manager = true;
-        store.state.tokenBE = "";
-        localStorage.setItem("tokenBE", "");
-        this.$router.push({ name: "m-login" });
       }
     },
     submitForm(formName) {
@@ -364,8 +300,6 @@ export default {
 
             object.attribute_option_value = attribute[0].name;
           });
-
-          console.log(6688, this.ruleForm);
 
           const response = await updateProduct(this.$route.params.id, this.ruleForm);
           if (response.data.code == 200) {
@@ -405,11 +339,8 @@ export default {
     },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
-      console.log(666, this.imageUrl);
-      console.log(888, res);
       if (res.code == 200) {
         this.ruleForm.image = res.data.path;
-        console.log(999, this.ruleForm.image);
       }
     },
     beforeAvatarUpload(file) {

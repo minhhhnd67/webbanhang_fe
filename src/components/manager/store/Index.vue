@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header
+    <!-- <el-header
       class="navbar"
       style="
         padding: 25px 10px;
@@ -22,7 +22,7 @@
           <span @click="handleLogout()">Tom</span>
         </el-col>
       </el-row>
-    </el-header>
+    </el-header> -->
 
     <el-main>
       <el-row type="flex" justify="end">
@@ -69,14 +69,14 @@
 
 <script>
 // import router from "./../../router";
-import MBreadcrumb from "@/layouts/manager/Breadcrumb.vue";
+// import MBreadcrumb from "@/layouts/manager/Breadcrumb.vue";
 import { logout } from "@/api/manager/auth";
 import store from "@/store";
 import route from "@/router";
 import { listStore, deleteStore } from "@/api/manager/store.js";
 export default {
   name: "M-Store-Index",
-  components: { MBreadcrumb },
+  // components: { MBreadcrumb },
   data() {
     return {
       tableData: [],

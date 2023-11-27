@@ -1,6 +1,5 @@
 <template>
-  <el-container>
-    <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
+  <el-row>
     <div v-if="!is_manager">
       <div>
         <CHeader v-show="true" />
@@ -12,24 +11,28 @@
         <CFooter />
       </div>
     </div>
-    <el-container v-if="is_manager">
-      <MNav v-if="!getIsLoginManager" />
-      <el-container>
-        <!-- <MHeader v-if="!getIsLoginManager" /> -->
-        <router-view></router-view>
-      </el-container>
-      <!-- <MFooter v-if="!getIsLoginManager"/> -->
-    </el-container>
 
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
-  </el-container>
+    <el-row v-if="is_manager">
+      <el-col :span="4">
+        <MNav v-if="!getIsLoginManager" />
+      </el-col>
+      <el-col :span="20">
+        <el-row>
+          <MHeader v-if="!getIsLoginManager" />
+        </el-row>
+        <el-row>
+          <router-view></router-view>
+        </el-row>
+      </el-col>
+    </el-row>
+  </el-row>
 </template>
 
 <script>
 import { routeGuard } from "./utils/routeGuard";
 import CHeader from "./layouts/customer/Header.vue";
 import CFooter from "./layouts/customer/Footer.vue";
-// import MHeader from "./layouts/manager/Header.vue";
+import MHeader from "./layouts/manager/Header.vue";
 // import MFooter from './layouts/manager/Footer.vue'
 import MNav from "./layouts/manager/Nav.vue";
 import store from "./store";
@@ -42,7 +45,7 @@ export default {
   components: {
     CHeader,
     CFooter,
-    // MHeader,
+    MHeader,
     // MFooter,
     MNav,
   },

@@ -1,29 +1,5 @@
 <template>
   <el-container>
-    <el-header
-      class="navbar"
-      style="
-        padding: 25px 10px;
-        font-size: 12px;
-        background-color: rgb(255, 255, 255);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-      "
-    >
-      <el-row :span="24">
-        <el-col :span="21"><MBreadcrumb :routeMatched="thisRoute.matched" /></el-col>
-        <el-col :span="3" class="right">
-          <el-dropdown placement="right-start">
-            <i class="el-icon-setting" style="margin-right: 15px"></i>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>Profile</el-dropdown-item>
-              <el-dropdown-item @click="handleLogout()">Logout</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <span @click="handleLogout()">Tom</span>
-        </el-col>
-      </el-row>
-    </el-header>
-
     <el-main>
       <el-row type="flex" class="row-bg">
         <el-col :span="24">
@@ -185,9 +161,6 @@
 </template>
 
 <script>
-import MBreadcrumb from "@/layouts/manager/Breadcrumb.vue";
-import { logout } from "@/api/manager/auth";
-import store from "@/store";
 import router from "@/router";
 import { getProvinces, getDistricts, getWards } from "@/api/common/ghn.js";
 import { getStatusOrder } from "@/utils/helper.js";
@@ -195,7 +168,9 @@ import { allProduct } from "@/api/manager/product.js";
 import { createOrder } from "@/api/manager/order.js";
 export default {
   name: "M-Order-Create",
-  components: { MBreadcrumb },
+  components: {
+
+  },
   data() {
     return {
       store_id: 4,
@@ -234,18 +209,6 @@ export default {
   computed: {
     thisRoute() {
       return this.$route;
-    },
-    breadcrumbs() {
-      var breadcrumbs = [];
-      var currentRoute = this.$route;
-
-      while (currentRoute.parent) {
-        breadcrumbs.push({
-          name: currentRoute.parent.meta.breadcrumb,
-        });
-        currentRoute = currentRoute.parent;
-      }
-      return breadcrumbs;
     },
   },
   created() {
@@ -290,8 +253,6 @@ export default {
     },
     "ruleForm.order_details": {
       handler: function (newValue) {
-        console.log(111, newValue);
-        console.log(222, this.oldValue);
         this.ruleForm.total_money = 0;
         newValue.forEach((item, index) => {
           this.ruleForm.total_money += item.price * item.amount;
@@ -350,15 +311,6 @@ export default {
     backToListUser() {
       router.push({ name: "m-order-list" });
     },
-    async handleLogout() {
-      const response = await logout();
-      if (response.data.code == 200) {
-        store.state.is_login_manager = true;
-        store.state.tokenBE = "";
-        localStorage.setItem("tokenBE", "");
-        this.$router.push({ name: "m-login" });
-      }
-    },
     addProduct() {
       this.ruleForm.order_details.push({
         product_id: "",
@@ -399,8 +351,6 @@ export default {
             })
           })
 
-          console.log(888 , this.ruleForm);
-
           const response = await createOrder(this.ruleForm);
           if (response.data.code == 200) {
             this.$message({
@@ -436,7 +386,6 @@ export default {
     },
     async getAllProduct(parameters = {}) {
       const response = await allProduct(parameters);
-      console.log(111, response);
       if (response.data.code == 200) {
         this.listProduct = response.data.data;
       }

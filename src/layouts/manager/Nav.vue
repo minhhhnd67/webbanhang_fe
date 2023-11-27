@@ -1,5 +1,5 @@
 <template>
-  <el-col :span="4">
+  <el-col :span="24">
     <el-menu
       style="height: 100vh"
       default-active="2"
