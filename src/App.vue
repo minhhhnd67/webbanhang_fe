@@ -16,7 +16,9 @@
       <el-col :span="4">
         <MNav v-if="!getIsLoginManager" />
       </el-col>
-      <el-col :span="20">
+      <el-col
+        :span="20"
+      >
         <el-row>
           <MHeader v-if="!getIsLoginManager" />
         </el-row>
@@ -53,6 +55,7 @@ export default {
     return {
       is_manager: false,
       is_login_manager: store.state.is_login_manager,
+      loading: true
     };
   },
   computed: {
