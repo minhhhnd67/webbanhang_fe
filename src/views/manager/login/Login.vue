@@ -120,6 +120,7 @@ export default {
 .main {
   background: rgba(255, 255, 255, 0.4);
   position: absolute;
+  margin: 30px !important;
   top: 20%;
   left: 30%;
   width: 40%;

@@ -9,16 +9,34 @@
     "
   >
     <el-row :span="24">
-      <el-col :span="21"><MBreadcrumb :routeMatched="thisRoute.matched" /></el-col>
-      <el-col :span="3" class="right">
-        <el-dropdown placement="right-start">
-          <i class="el-icon-setting" style="margin-right: 15px"></i>
+      <el-col :span="16"><MBreadcrumb :routeMatched="thisRoute.matched" /></el-col>
+      <el-col :span="3" style="margin-top: -5px;">
+        <el-dropdown size="small" :span="24">
+          <el-button size="small" :span="24">
+            Tất cả cở sở<i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>Profile</el-dropdown-item>
-            <el-dropdown-item @click="handleLogout()">Logout</el-dropdown-item>
+            <el-dropdown-item>Action 1</el-dropdown-item>
+            <el-dropdown-item>Action 2</el-dropdown-item>
+            <el-dropdown-item>Action 3</el-dropdown-item>
+            <el-dropdown-item>Action 4</el-dropdown-item>
+            <el-dropdown-item>Action 5</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <span @click="handleLogout()">Tom</span>
+      </el-col>
+      <el-col :span="3"><span> Admin - Ngo Duc Minh</span></el-col>
+      <el-col :span="2" style="margin-top: -10px;">
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <el-avatar :size="40" :src="circleUrl"></el-avatar>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>Profile</el-dropdown-item>
+            <el-dropdown-item>
+              <span @click="handleLogout()">Logout</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-col>
     </el-row>
   </el-header>
@@ -32,13 +50,13 @@ export default {
   components: { MBreadcrumb },
   data() {
     return {
+      circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
     };
   },
   computed: {
     thisRoute() {
       return this.$route;
     },
-    
     breadcrumbs() {
       var breadcrumbs = [];
       var currentRoute = this.$route;

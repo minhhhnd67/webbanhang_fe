@@ -12,12 +12,12 @@
       </div>
     </div>
 
-    <el-row v-if="is_manager">
-      <el-col :span="4">
+    <el-row v-if="is_manager && !getIsLoginManager">
+      <el-col :span="5">
         <MNav v-if="!getIsLoginManager" />
       </el-col>
       <el-col
-        :span="20"
+        :span="19"
       >
         <el-row>
           <MHeader v-if="!getIsLoginManager" />
@@ -26,6 +26,10 @@
           <router-view></router-view>
         </el-row>
       </el-col>
+    </el-row>
+
+    <el-row v-if="getIsLoginManager">
+      <router-view></router-view>
     </el-row>
   </el-row>
 </template>

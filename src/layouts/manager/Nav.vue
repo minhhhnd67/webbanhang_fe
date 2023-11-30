@@ -1,24 +1,21 @@
 <template>
   <el-col :span="24">
     <el-menu
-      style="height: 100vh"
-      default-active="2"
+      style="height: 100vh;"
       class="el-menu-vertical-demo"
-      @open="handleOpen"
-      @close="handleClose"
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b"
     >
-    <div :key="index" v-for="(route, index) in routes">
-      <el-submenu v-if="route.meta.role.includes('admin') && route.children !== undefined">
+    <template v-for="(route, index) in routes">
+      <el-submenu :index="index" v-if="route.meta.role.includes('admin') && route.children !== undefined" :key="index">
         <template slot="title">
-          <!-- <i class="el-icon-location"></i> -->
+          <i :class="route.meta.icon"></i>
           <span>{{ route.meta.title }}</span>
         </template>
         <el-menu-item-group>
           <!-- <el-menu-item :index="routeChild.path" v-for="(routeChild, idx) of route.children" :key="idx"><a :href="routeChild.path">{{ routeChild.meta.title }}</a></el-menu-item> -->
-          <div :index="routeChild.path" v-for="(routeChild, idx) of route.children" :key="idx">
+          <div :index="`${index}-${idx}`" v-for="(routeChild, idx) of route.children" :key="idx">
             <el-menu-item v-if="routeChild.meta.showMenu">
               <router-link :to="routeChild.path" style="width: 100%;">
                 {{ routeChild.meta.title }}
@@ -27,15 +24,14 @@
           </div>
         </el-menu-item-group>
       </el-submenu>
-      <el-menu-item index="4" v-if="route.meta.role.includes('admin') && route.meta.showMenu && route.children === undefined">
+      <el-menu-item :index="index" v-if="route.meta.role.includes('admin') && route.meta.showMenu && route.children === undefined" :key="index">
         <router-link :to="route.path" style="width: 100%;">
-          <!-- <i class="el-icon-setting"></i> -->
+          <i :class="route.meta.icon"></i>
           <span>{{ route.meta.title }}</span>
         </router-link>
         
       </el-menu-item>
-    </div>
-      
+    </template>
     </el-menu>
   </el-col>
 </template>

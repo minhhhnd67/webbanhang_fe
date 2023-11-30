@@ -67,6 +67,7 @@ const routes = [
           role: ["admin", "manger-branch", "manager-store", "manager-warehouse"],
           title: "Trang chủ",
           showMenu: true,
+          icon: "el-icon-s-home"
         }
     },
     {
@@ -77,6 +78,7 @@ const routes = [
         role: ["admin"],
         title: "Quản lý cơ sở",
         showMenu: true,
+        icon: "el-icon-s-shop"
       },
       children: [
         {
@@ -119,6 +121,7 @@ const routes = [
         role: ["admin"],
         title: "Quản lý tài khoản",
         showMenu: true,
+        icon: "el-icon-user-solid"
       },
       children: [
         {
@@ -161,6 +164,7 @@ const routes = [
         role: ["admin"],
         title: "Quản lý Danh mục sản phẩm",
         showMenu: true,
+        icon: "el-icon-s-grid"
       },
       children: [
         {
@@ -203,6 +207,7 @@ const routes = [
         role: ["admin"],
         title: "Quản lý sản phẩm",
         showMenu: true,
+        icon: "el-icon-s-cooperation"
       },
       children: [
         {
@@ -245,6 +250,7 @@ const routes = [
         role: ["admin"],
         title: "Quản lý đơn hàng",
         showMenu: true,
+        icon: "el-icon-shopping-cart-2"
       },
       children: [
         {
