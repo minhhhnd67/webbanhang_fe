@@ -8,7 +8,7 @@
           </el-carousel-item>
         </el-carousel>
       </el-row>
-      <teplate>
+      <template>
         <el-row style="background-color: #ffd400; border-radius: 20px 20px 0px 0px;" type="flex" justify="center">
           <el-col :span="3">
             <h2>Sản phẩm mới</h2>
@@ -30,8 +30,8 @@
             </el-card>
           </el-col>
         </el-row>
-      </teplate>
-      <teplate>
+      </template>
+      <template>
         <el-row style="background-color: #ffd400; border-radius: 20px 20px 0px 0px; margin-top: 20px;" type="flex" justify="center">
           <el-col :span="4">
             <h2>Điện thoại bán chạy</h2>
@@ -53,7 +53,7 @@
             </el-card>
           </el-col>
         </el-row>
-      </teplate>
+      </template>
     </el-main>
   </el-container>
 </template>

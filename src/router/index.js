@@ -25,17 +25,37 @@ const routes = [
           component: () => import('./../components/customer/Home.vue'),
           meta: {
             role: ["guest", "user"],
-            title: 'Danh sách cơ sở',
+            title: 'Trang chủ',
             showMenu: false,
           },
         },
         {
-          path: '/product/detail',
-          name: 'm-store-create',
-          component: () => import('./../components/manager/store/Create.vue'),
+          path: '/product-category',
+          name: 'm-product-category',
+          component: () => import('./../components/customer/ProductCategory.vue'),
           meta: {
             role: ["guest", "user"],
-            title: 'Thêm cơ sở mới',
+            title: 'Danh sách sản phẩm theo danh mục',
+            showMenu: false,
+          },
+        },
+        {
+          path: '/product-detail',
+          name: 'm-product-detail',
+          component: () => import('./../components/customer/ProductDetail.vue'),
+          meta: {
+            role: ["guest", "user"],
+            title: 'Chi tiết sản phẩm',
+            showMenu: false,
+          },
+        },
+        {
+          path: '/cart',
+          name: 'm-cart',
+          component: () => import('./../components/customer/Cart.vue'),
+          meta: {
+            role: ["guest", "user"],
+            title: 'Giỏ hàng',
             showMenu: false,
           },
         },

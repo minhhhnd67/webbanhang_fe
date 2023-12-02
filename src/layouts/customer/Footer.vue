@@ -1,5 +1,5 @@
 <template>
-  <el-footer style="height: 400px; background-color: #50504e; color: #ffffff;">
+  <el-footer style="height: 380px; background-color: #50504e; color: #ffffff;">
     <el-row style="padding: 10px;">
       <el-col :span="6">
         <el-row>
@@ -52,8 +52,8 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="row-bg" justify="center">
-      <el-col :span="8">
-        <p>@ Bản quyền thuộc về Công Ty Cổ Phần Viễn Thông NDM Group</p>
+      <el-col :span="7">
+        <p><small>@ Bản quyền thuộc về Công Ty Cổ Phần Viễn Thông NDM Group</small></p>
       </el-col>
     </el-row>
   </el-footer>
