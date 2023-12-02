@@ -3,19 +3,43 @@ import VueRouter from 'vue-router'
 import axios from 'axios'
 import store from './../store'
 import ManagerLayout from "@/layouts/manager/Index.vue"
+import CustomerLayout from "@/layouts/customer/Index.vue"
 Vue.use(VueRouter)
 
 const routes = [
     // Route Guest, User
     {
-        path: '/',
-        name: 'c-home',
-        component: () => import('../components/HelloWorld.vue'),
-        meta: {
-          role: ["guest", "user"],
-          title: "Trang chủ",
-          showMenu: false,
-        }
+      path: '/',
+      name: 'c-display',
+      component: CustomerLayout,
+      meta: {
+        role: ["guest", "user"],
+        title: "Trang chủ",
+        showMenu: true,
+        icon: "el-icon-s-home"
+      },
+      children: [
+        {
+          path: '/',
+          name: 'm-home',
+          component: () => import('./../components/customer/Home.vue'),
+          meta: {
+            role: ["guest", "user"],
+            title: 'Danh sách cơ sở',
+            showMenu: false,
+          },
+        },
+        {
+          path: '/product/detail',
+          name: 'm-store-create',
+          component: () => import('./../components/manager/store/Create.vue'),
+          meta: {
+            role: ["guest", "user"],
+            title: 'Thêm cơ sở mới',
+            showMenu: false,
+          },
+        },
+      ]
     },
     {
         path: '/user/login',

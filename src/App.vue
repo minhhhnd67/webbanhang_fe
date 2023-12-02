@@ -1,8 +1,8 @@
 <template>
   <el-row>
-    <div v-if="!is_manager">
+    <el-row v-if="!is_manager">
       <div>
-        <CHeader v-show="true" />
+        <CHeader/>
       </div>
       <div>
         <router-view></router-view>
@@ -10,7 +10,7 @@
       <div>
         <CFooter />
       </div>
-    </div>
+    </el-row>
 
     <el-row v-if="is_manager && !getIsLoginManager">
       <el-col :span="5">
@@ -28,7 +28,7 @@
       </el-col>
     </el-row>
 
-    <el-row v-if="getIsLoginManager">
+    <el-row v-if="getIsLoginManager && is_manager">
       <router-view></router-view>
     </el-row>
   </el-row>
