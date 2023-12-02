@@ -15,16 +15,41 @@
           </el-col>
         </el-row>
         <el-row class="row-bg" >
-          <el-col :xs="12" :sm="12" :md="8" :lg="6" :xl="6" v-for="(o, index) in 10" :key="o" :index="index">
-            <el-card :body-style="{ padding: '10px 50px', margin: '5px' }">
-              <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
-              <div style="padding: 14px;">
-                <span>Yummy hamburger</span>
-                <div class="bottom clearfix">
-                  <time class="time">{{ currentDate }}</time>
-                  <el-button type="text" class="button">Operating</el-button>
+          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" v-for="(o, index) in 10" :key="o" :index="index">
+            <el-card :body-style="{ padding: '10px 20px', margin: '5px' }">
+              <el-button>
+                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+                <div style="padding: 14px;">
+                  <span>Yummy hamburger</span>
+                  <div class="bottom clearfix">
+                    <time class="time">{{ currentDate }}</time>
+                    <el-button type="text" class="button">Operating</el-button>
+                  </div>
                 </div>
-              </div>
+              </el-button>
+            </el-card>
+          </el-col>
+        </el-row>
+      </teplate>
+      <teplate>
+        <el-row style="background-color: #ffd400; border-radius: 20px 20px 0px 0px; margin-top: 20px;" type="flex" justify="center">
+          <el-col :span="4">
+            <h2>Điện thoại bán chạy</h2>
+          </el-col>
+        </el-row>
+        <el-row class="row-bg">
+          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" v-for="(o, index) in 10" :key="o" :index="index">
+            <el-card :body-style="{ padding: '20px 20px', margin: '5px' }">
+              <el-button>
+                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+                <div style="padding: 14px;">
+                  <span>Yummy hamburger</span>
+                  <div class="bottom clearfix">
+                    <time class="time">{{ currentDate }}</time>
+                    <el-button type="text" class="button">Operating</el-button>
+                  </div>
+                </div>
+              </el-button>
             </el-card>
           </el-col>
         </el-row>
