@@ -34,8 +34,10 @@
       </el-col>
       <el-col :span="5">
         <el-row>
-          <el-col :span="11" style="margin-right: 5px;">
-            <el-button icon="el-icon-shopping-cart-2" style="width: 100%; background-color: rgba(255,172,10,.6);">Giỏ hàng</el-button>
+          <el-col :span="12" style="margin-right: 5px;">
+            <el-badge :value="12" class="item">
+              <el-button icon="el-icon-shopping-cart-2" style="width: 100%; background-color: rgba(255,172,10,.6);">Giỏ hàng</el-button>
+            </el-badge>
           </el-col>
           <el-col :span="11">
             <el-button icon="el-icon-user" style="width: 100%; background-color: rgba(255,172,10,.6);">Tài khoản</el-button>

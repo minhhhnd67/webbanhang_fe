@@ -1,28 +1,57 @@
 <template>
   <el-container>
     <el-main>
-      <el-row>
+      <!-- <el-row>
         <el-col :span="2"><el-link></el-link></el-col>
         <el-col :span="20">
           <h2>Điện thoại iPhone 15 Pro Max 256GB</h2>
         </el-col>
-      </el-row>
+      </el-row> -->
       <el-row>
         <el-col :span="3"><el-link></el-link></el-col>
         <el-col :span="8">
-          <el-card :body-style="{ padding: '20px 30px' }">
-            <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png">
-            <!-- <div style="padding: 14px;">
-              <span>Yummy hamburger</span>
-              <div class="bottom clearfix">
-                <time class="time">{{ currentDate }}</time>
-                <el-button type="text" class="button">Operating</el-button>
-              </div>
-            </div> -->
-          </el-card>
+          <el-row>
+            <el-col :span="22">
+              <img style="width: 100%;" src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png">
+            </el-col>
+          </el-row>
         </el-col>
-        <el-col :span="4">
-          Giá
+        <el-col :span="10">
+          <el-row>
+            <h2>Điện thoại iPhone 15 Pro Max 256GB</h2>
+          </el-row>
+          <el-row>
+            <el-col :span="20">
+              <h3 style="color: #ff5100;">Giá: 32.000.000đ</h3>
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 10px;">
+            <el-col :span="4">Màu sắc:</el-col>
+            <el-col :span="20">
+              <el-radio v-model="radio2" label="1" border size="medium">Titan Đen</el-radio>
+              <el-radio v-model="radio2" label="2" border size="medium">Titan Trắng</el-radio>
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 10px;">
+            <el-col :span="4">Kích thước:</el-col>
+            <el-col :span="20">
+              <el-radio v-model="radio3" label="1" border size="medium">7 Inch</el-radio>
+              <el-radio v-model="radio3" label="2" border size="medium">8 Inch</el-radio>
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 20px;">
+            <el-col :span="4">Số lượng:</el-col>
+            <el-col :span="20">
+              <el-input-number v-model="num" @change="handleChange" :min="1" :max="10"></el-input-number>
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 50px;">
+            <el-col :span="4">
+              <el-button style="background-color: #ff5100;" icon="el-icon-shopping-cart-2">Thêm vào giỏ hàng</el-button>
+            </el-col>
+            <el-col :span="20">
+            </el-col>
+          </el-row>
         </el-col>
       </el-row>
       <el-row>
@@ -43,7 +72,10 @@ export default {
   name: "C-ProductDetail",
   data() {
     return {
-      src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg'
+      src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
+      radio2: "",
+      radio3: "",
+      num: 1,
     }
   }
 };
