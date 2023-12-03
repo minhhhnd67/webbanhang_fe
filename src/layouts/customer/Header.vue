@@ -47,13 +47,13 @@
     </el-row>
     <el-row style="padding: 10px">
       <el-col :span="2"><el-link></el-link></el-col>
-      <el-col :span="3"><i class="el-icon-mobile-phone"></i> Điện thoại</el-col>
-      <el-col :span="3"><i class="el-icon-monitor"></i> Laptop</el-col>
-      <el-col :span="3"><i class="el-icon-headset"></i> Tai nghe</el-col>
-      <el-col :span="3"><i class="el-icon-mobile"></i> Ốp điện thoại</el-col>
-      <el-col :span="3"><i class="el-icon-printer"></i> PC, Máy in</el-col>
-      <el-col :span="3"><i class="el-icon-watch-1"></i> Đồng hồ</el-col>
-      <el-col :span="3"><i class="el-icon-bank-card"></i> Thẻ cào</el-col>
+      <el-col :span="3"><el-button style="background-color: #ffd400; border: 0px;"><i class="el-icon-mobile-phone"></i> Điện thoại</el-button></el-col>
+      <el-col :span="3"><el-button style="background-color: #ffd400; border: 0px;"><i class="el-icon-monitor"></i> Laptop</el-button></el-col>
+      <el-col :span="3"><el-button style="background-color: #ffd400; border: 0px;"><i class="el-icon-headset"></i> Tai nghe</el-button></el-col>
+      <el-col :span="3"><el-button style="background-color: #ffd400; border: 0px;"><i class="el-icon-mobile"></i> Ốp điện thoại</el-button></el-col>
+      <el-col :span="3"><el-button style="background-color: #ffd400; border: 0px;"><i class="el-icon-printer"></i> PC, Máy in</el-button></el-col>
+      <el-col :span="3"><el-button style="background-color: #ffd400; border: 0px;"><i class="el-icon-watch-1"></i> Đồng hồ</el-button></el-col>
+      <el-col :span="3"><el-button style="background-color: #ffd400; border: 0px;"><i class="el-icon-bank-card"></i> Thẻ cào</el-button></el-col>
     </el-row>
   </el-row>
 </template>
