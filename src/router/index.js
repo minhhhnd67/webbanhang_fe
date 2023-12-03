@@ -85,7 +85,17 @@ const routes = [
           component: () => import('./../components/customer/Profile.vue'),
           meta: {
             role: ["user"],
-            title: 'Đăng ký',
+            title: 'Thông tin tài khoản',
+            showMenu: false,
+          },
+        },
+        {
+          path: '/order',
+          name: 'c-order',
+          component: () => import('./../components/customer/Order.vue'),
+          meta: {
+            role: ["user"],
+            title: 'Danh sách đơn hàng',
             showMenu: false,
           },
         },
