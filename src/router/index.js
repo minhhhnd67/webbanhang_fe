@@ -21,7 +21,7 @@ const routes = [
       children: [
         {
           path: '/',
-          name: 'm-home',
+          name: 'c-home',
           component: () => import('./../components/customer/Home.vue'),
           meta: {
             role: ["guest", "user"],
@@ -31,7 +31,7 @@ const routes = [
         },
         {
           path: '/product-category',
-          name: 'm-product-category',
+          name: 'c-product-category',
           component: () => import('./../components/customer/ProductCategory.vue'),
           meta: {
             role: ["guest", "user"],
@@ -41,7 +41,7 @@ const routes = [
         },
         {
           path: '/product-detail',
-          name: 'm-product-detail',
+          name: 'c-product-detail',
           component: () => import('./../components/customer/ProductDetail.vue'),
           meta: {
             role: ["guest", "user"],
@@ -51,7 +51,7 @@ const routes = [
         },
         {
           path: '/cart',
-          name: 'm-cart',
+          name: 'c-cart',
           component: () => import('./../components/customer/Cart.vue'),
           meta: {
             role: ["guest", "user"],
@@ -61,25 +61,35 @@ const routes = [
         },
         {
           path: '/login',
-          name: 'm-cart',
+          name: 'c-login',
           component: () => import('./../components/customer/Login.vue'),
           meta: {
-            role: ["guest", "user"],
-            title: 'Giỏ hàng',
+            role: ["guest"],
+            title: 'Đăng nhập',
+            showMenu: false,
+          },
+        },
+        {
+          path: '/register',
+          name: 'c-register',
+          component: () => import('./../components/customer/Register.vue'),
+          meta: {
+            role: ["guest"],
+            title: 'Đăng ký',
+            showMenu: false,
+          },
+        },
+        {
+          path: '/profile',
+          name: 'c-profile',
+          component: () => import('./../components/customer/Profile.vue'),
+          meta: {
+            role: ["user"],
+            title: 'Đăng ký',
             showMenu: false,
           },
         },
       ]
-    },
-    {
-        path: '/user/login',
-        name: 'c-login',
-        component: () => import('../views/customer/login/Login.vue'),
-        meta: {
-          role: "guest",
-          title: "Đăng nhập",
-          showMenu: false,
-        }
     },
 
     // Route Admin, Manager
