@@ -1,6 +1,6 @@
 <template>
   <div class="main" :style="mainStyle">
-    <h1>MTPhone</h1>
+    <h1>Mobi Store</h1>
     <p v-if="data">Data trả về từ cửa sổ mới: {{ data }}</p>
     <input type="text" v-model="email" name="email" id="email" placeholder="Email" :style="input" />
     <br />

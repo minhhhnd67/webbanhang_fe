@@ -131,7 +131,7 @@
               <el-link></el-link>
             </el-col>
             <el-col :span="4">
-              <p><b>Tổng tiền</b></p>
+              <p><b>Tổng tiền:</b></p>
             </el-col>
             <el-col :span="3">
               <p style="color: #ff5100"><b>68.000.000đ</b></p>

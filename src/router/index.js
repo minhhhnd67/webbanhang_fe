@@ -59,6 +59,16 @@ const routes = [
             showMenu: false,
           },
         },
+        {
+          path: '/login',
+          name: 'm-cart',
+          component: () => import('./../components/customer/Login.vue'),
+          meta: {
+            role: ["guest", "user"],
+            title: 'Giỏ hàng',
+            showMenu: false,
+          },
+        },
       ]
     },
     {
