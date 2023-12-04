@@ -19,7 +19,7 @@ import { Result } from 'element-ui';
               <el-input v-model="ruleForm.hotline"></el-input>
             </el-form-item>
             <el-form-item label="Tỉnh / Thành phố" prop="province_id">
-              <el-select v-model="ruleForm.province_id" placeholder="Tỉnh / Thành phố">
+              <el-select v-model="ruleForm.province_id" filterable  placeholder="Tỉnh / Thành phố">
                 <el-option
                   v-for="item in listProvinces"
                   :key="item.ProvinceID"
@@ -30,7 +30,7 @@ import { Result } from 'element-ui';
               </el-select>
             </el-form-item>
             <el-form-item label="Quận / Huyện" prop="district">
-              <el-select v-model="ruleForm.district_id" placeholder="Quận / Huyện">
+              <el-select v-model="ruleForm.district_id" filterable  placeholder="Quận / Huyện">
                 <el-option
                   v-for="item in listDistricts"
                   :key="item.DistrictID"
@@ -41,7 +41,7 @@ import { Result } from 'element-ui';
               </el-select>
             </el-form-item>
             <el-form-item label="Xã / Phường" prop="ward">
-              <el-select v-model="ruleForm.ward_id" placeholder="Xã / Phường">
+              <el-select v-model="ruleForm.ward_id" filterable  placeholder="Xã / Phường">
                 <el-option
                   v-for="item in listWards"
                   :key="item.WardCode"
@@ -50,6 +50,9 @@ import { Result } from 'element-ui';
                 >
                 </el-option>
               </el-select>
+            </el-form-item>
+            <el-form-item label="Địa chỉ chi tiết: " prop="address_detail">
+              <el-input v-model="ruleForm.address_detail"></el-input>
             </el-form-item>
 
             <!-- <el-form-item label="Password" prop="pass">
@@ -142,6 +145,7 @@ export default {
         district_name: "",
         ward_id: "",
         ward_name: "",
+        address_detail: "",
         // pass: "",
         // checkPass: "",
         // age: "",
@@ -162,8 +166,11 @@ export default {
       return this.$route;
     },
   },
-  created() {
+  beforeCreate() {
     this.getListProvinces();
+  },
+  created() {
+    
   },
   mounted() {},
   watch: {

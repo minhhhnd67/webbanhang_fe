@@ -51,6 +51,9 @@ import { Result } from 'element-ui';
                 </el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="Địa chỉ chi tiết: " prop="address_detail">
+              <el-input v-model="ruleForm.address_detail"></el-input>
+            </el-form-item>
 
             <el-form-item>
               <el-button type="primary" @click="submitForm('ruleForm')"
@@ -88,6 +91,7 @@ export default {
         district_name: "",
         ward_id: "",
         ward_name: "",
+        address_detail: "",
       },
       rules: {},
       listProvinces: [],
@@ -152,6 +156,7 @@ export default {
         this.ruleForm.district_name = data.district_name;
         this.ruleForm.ward_id = data.ward_id;
         this.ruleForm.ward_name = data.ward_name;
+        this.ruleForm.address_detail = data.address_detail;
 
         setTimeout(() => {
           this.allowWatch = true;

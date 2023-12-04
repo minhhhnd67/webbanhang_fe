@@ -12,7 +12,7 @@
             class="demo-ruleForm"
           >
             <el-form-item label="Danh mục sản phẩm" prop="category_id">
-              <el-select v-model="ruleForm.category_id" placeholder="Danh mục sản phẩm">
+              <el-select filterable v-model="ruleForm.category_id" placeholder="Danh mục sản phẩm">
                 <el-option
                   v-for="item in listCategory"
                   :key="item.id"
@@ -66,7 +66,7 @@
               <vue-editor v-model="ruleForm.description"></vue-editor>
             </el-form-item>
             <el-form-item v-for="(attribute, index) in this.listAttribute" :label="attribute.name" :key="attribute.id" prop="status">
-              <el-select v-model="ruleForm.attributes[index].attribute_option_id" placeholder="Lựa chọn">
+              <el-select filterable v-model="ruleForm.attributes[index].attribute_option_id" placeholder="Lựa chọn">
                 <el-option
                   v-for="item in attribute.attribute_options"
                   :key="String(item.id)"

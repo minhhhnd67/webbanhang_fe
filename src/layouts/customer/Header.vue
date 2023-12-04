@@ -11,12 +11,12 @@
       <el-col :span="4">
         <el-row>
           <el-col :span="24">
-            <el-select id="selectStore" v-model="value" filterable placeholder="Chọn cơ sở">
+            <el-select id="selectStore" v-model="storeId" filterable placeholder="Chọn cơ sở">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                v-for="item in allStore"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
               >
               </el-option>
             </el-select>
@@ -59,10 +59,14 @@
 </template>
 
 <script>
+import { allStore } from "@/api/customer/store.js"
+
 export default {
   name: "CustomerHeader",
   data() {
     return {
+      allStore: [],
+      storeId: "",
       options: [
         {
           value: "Option1",
@@ -88,6 +92,18 @@ export default {
       value: "",
     };
   },
+  created() {
+    this.getAllStore();
+  },
+  methods: {
+    async getAllStore() {
+      const response = await allStore();
+      if (response.data.code == 200) {
+        this.allStore = response.data.data;
+        this.storeId = this.allStore[0].id;
+      }
+    },
+  }
 };
 </script>
 

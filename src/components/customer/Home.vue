@@ -3,8 +3,21 @@
     <el-main>
       <el-row>
         <el-carousel indicator-position="outside">
-          <el-carousel-item style="background-color: #ffd400;" v-for="item in 4" :key="item">
-            <h3>{{ item }}</h3>
+          <el-carousel-item>
+            <img style="width: 50%; height: 100%;" src="./../../assets/690-300-max-iphone15-promax-th1102.webp" />
+            <img style="width: 50%; height: 100%;" src="./../../assets/690-300-max-iphone15-promax-th1102.webp" />
+          </el-carousel-item>
+          <el-carousel-item>
+            <img style="width: 50%; height: 100%;" src="./../../assets/samsung-flip-fold-sliding-th12.webp" />
+            <img style="width: 50%; height: 100%;" src="./../../assets/samsung-flip-fold-sliding-th12.webp" />
+          </el-carousel-item>
+          <el-carousel-item>
+            <img style="width: 50%; height: 100%;" src="./../../assets/macbook-pro-m3-sliding-maumoi.webp" />
+            <img style="width: 50%; height: 100%;" src="./../../assets/macbook-pro-m3-sliding-maumoi.webp" />
+          </el-carousel-item>
+          <el-carousel-item>
+            <img style="width: 50%; height: 100%;" src="./../../assets/sliding-dienthoai-xiaomi-13c.webp" />
+            <img style="width: 50%; height: 100%;" src="./../../assets/sliding-dienthoai-xiaomi-13c.webp" />
           </el-carousel-item>
         </el-carousel>
       </el-row>
