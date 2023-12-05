@@ -40,7 +40,7 @@ const routes = [
           },
         },
         {
-          path: '/product-detail',
+          path: '/product/:id/show',
           name: 'c-product-detail',
           component: () => import('./../components/customer/ProductDetail.vue'),
           meta: {

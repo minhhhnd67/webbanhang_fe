@@ -2,10 +2,16 @@ import axios from 'axios'
 
 export function api (base_api, method, url = '', data = {}, headers = {}, parameters = {}) {
     if (method == 'post') {
-        return axios.post(`${base_api}${url}`, data, {headers: headers, params: parameters });
+        return axios.post(`${base_api}${url}`, data, {headers: headers, params: parameters }).catch(function (err) {
+            console.log(err);
+            return { data: { code: 400, message: err}};
+        });
     }
     if (method == 'get') {
-        return axios.get(`${base_api}${url}`, { headers: headers, params: parameters });
+        return axios.get(`${base_api}${url}`, { headers: headers, params: parameters }).catch(function (err) {
+            console.log(err);
+            return { data: { code: 400, message: err}};
+        });
     }
 }
 
@@ -46,4 +52,13 @@ export function getTypeOrder() {
         {id: 1, name: "Offline"},
         {id: 2, name: "Online"},
     ];
+}
+
+export function formatMoney(amount) {
+    let moneyVND = Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "VND",
+    });
+
+    return moneyVND.format(amount);
 }

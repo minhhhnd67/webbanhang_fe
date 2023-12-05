@@ -28,15 +28,14 @@
           </el-col>
         </el-row>
         <el-row class="row-bg" >
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" v-for="(o, index) in 10" :key="o" :index="index">
+          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" v-for="(item, index) in listNewProduct" :key="index">
             <el-card :body-style="{ padding: '10px 20px', margin: '5px' }">
-              <el-button>
-                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+              <el-button @click="productDetail(item.id)">
+                <img style="width: 100%;" :src="item.image" class="image">
                 <div style="padding: 14px;">
-                  <span>Yummy hamburger</span>
+                  <span>{{ item.name }}</span>
                   <div class="bottom clearfix">
-                    <time class="time">{{ currentDate }}</time>
-                    <el-button type="text" class="button">Operating</el-button>
+                    <el-button type="text" style="color: #ff7300;" class="button">{{ item.price }}</el-button>
                   </div>
                 </div>
               </el-button>
@@ -44,17 +43,17 @@
           </el-col>
         </el-row>
       </template>
-      <template>
+      <!-- <template>
         <el-row style="background-color: #ffd400; border-radius: 20px 20px 0px 0px; margin-top: 20px;" type="flex" justify="center">
           <el-col :span="4">
             <h2>Điện thoại bán chạy</h2>
           </el-col>
         </el-row>
         <el-row class="row-bg">
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" v-for="(o, index) in 10" :key="o" :index="index">
+          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" v-for="(item, index) in listNewProduct" :key="index">
             <el-card :body-style="{ padding: '20px 20px', margin: '5px' }">
               <el-button>
-                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+                <img style="width: 100%;" :src="item.image" class="image">
                 <div style="padding: 14px;">
                   <span>Yummy hamburger</span>
                   <div class="bottom clearfix">
@@ -66,25 +65,61 @@
             </el-card>
           </el-col>
         </el-row>
-      </template>
+      </template> -->
     </el-main>
   </el-container>
 </template>
 
 <script>
+import route from "@/router";
+import { getNewProductByStore } from "@/api/customer/product.js";
+import EventBus from '@/utils/EventBus.js';
+import config from "@/config/config.dev.json";
+import { formatMoney } from "@/utils/helper.js";
+
 export default {
   name: "C-Home",
   components: {},
   data() {
-    return {};
+    return {
+      baseURL: "",
+      storeId: "",
+      listNewProduct: [],
+    };
   },
   computed: {
     thisRoute() {
       return this.$route;
     },
   },
-  created() {},
-  methods: {},
+  beforeCreate() {
+  },
+  created() {
+    this.baseURL = config.BASE_BE_API;
+    EventBus.$on('change-store', (payload) => {
+      console.log(33, payload);
+      this.storeId = payload.storeId;
+      if (this.storeId) {
+        this.listNewProductByStore(this.storeId);
+      }
+    });
+  },
+  methods: {
+    async listNewProductByStore(storeId) {
+      const response = await getNewProductByStore(storeId);
+      console.log(666, response);
+      if (response.data.code == 200) {
+        this.listNewProduct = response.data.data;
+        this.listNewProduct.forEach((item) => {
+          item.image = this.baseURL + '/storage/' + item.image;
+          item.price =  formatMoney(item.price);
+        });
+      }
+    },
+    productDetail(id) {
+      route.push({ name: "c-product-detail", params: { id: id } });
+    }
+  },
 };
 </script>
 
