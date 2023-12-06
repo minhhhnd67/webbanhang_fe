@@ -9,6 +9,14 @@ export function getNewProductByStore(store_id, parameters = {}) {
   return api(config.BASE_BE_API, "get", `/api/customer/store/${store_id}/get-new-product`, {}, headers, parameters);
 }
 
+export function searchProduct(store_id, parameters = {}) {
+  const headers = {
+    Authorization: ``,
+  };
+
+  return api(config.BASE_BE_API, "get", `/api/customer/store/${store_id}/search-product`, {}, headers, parameters);
+}
+
 export function showProduct(id) {
     const headers = {
         Authorization: ``,

@@ -25,20 +25,14 @@
               <h3 style="color: #ff5100;">Giá: {{ product.price }}</h3>
             </el-col>
           </el-row>
-          <el-row style="margin-top: 10px;">
-            <el-col :span="4">Màu sắc:</el-col>
+
+          <el-row style="margin-top: 10px;" v-for="(sku, index) in product.skus" :key="index">
+            <el-col :span="4">{{ sku.name }}:</el-col>
             <el-col :span="20">
-              <el-radio v-model="radio2" label="1" border size="medium">Titan Đen</el-radio>
-              <el-radio v-model="radio2" label="2" border size="medium">Titan Trắng</el-radio>
+              <el-radio v-for="(option, idx) in sku.sku_options" :key="idx" v-model="radio2" :label="option.name" border size="medium">{{ option.name }}</el-radio>
             </el-col>
           </el-row>
-          <el-row style="margin-top: 10px;">
-            <el-col :span="4">Kích thước:</el-col>
-            <el-col :span="20">
-              <el-radio v-model="radio3" label="1" border size="medium">7 Inch</el-radio>
-              <el-radio v-model="radio3" label="2" border size="medium">8 Inch</el-radio>
-            </el-col>
-          </el-row>
+
           <el-row style="margin-top: 20px;">
             <el-col :span="4">Số lượng:</el-col>
             <el-col :span="20">
@@ -59,6 +53,10 @@
         <el-col :span="20" style="margin-top: 50px;">
           <h2>Thông tin sản phẩm</h2>
         </el-col>
+      </el-row>
+      <el-row style="margin-top: 5px;" v-for="(attribute, index) in product.attributes" :key="index">
+        <el-col :span="2"><el-link></el-link></el-col>
+        <el-col :span="20" style="font-size: 18px;"><b>{{ attribute.name }}: {{ attribute.pivot.attribute_option_value }}</b></el-col>
       </el-row>
       <el-row>
         <el-col :span="2"><el-link></el-link></el-col>

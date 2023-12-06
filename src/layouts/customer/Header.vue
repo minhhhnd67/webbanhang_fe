@@ -2,10 +2,12 @@
   <el-row style="background-color: #ffd400;">
     <el-row style="padding: 10px">
       <el-col :span="1"><el-link></el-link></el-col>
-      <el-col :span="4">
+      <el-col :span="5">
         <el-row>
-          <el-col :span="3"><i class="el-icon-s-home" style="font-size: 30px; color: #1a1501;"></i></el-col>
-          <el-col :span="20"><b style="font-size: 30px; color: #1a1501;">Mobi Store</b></el-col>
+          <el-button @click="backToHome()" style="margin-top: -10px; border: 0px; background-color: #ffd400;">
+            <el-col :span="6"><i class="el-icon-s-home" style="font-size: 30px; color: #1a1501;"></i></el-col>
+            <el-col :span="18"><b style="font-size: 30px; color: #1a1501;">Mobi Store</b></el-col>
+          </el-button>
         </el-row>
       </el-col>
       <el-col :span="4">
@@ -23,11 +25,11 @@
           </el-col>
         </el-row>
       </el-col>
-      <el-col :span="9">
+      <el-col :span="8">
         <el-row>
           <el-col :span="22">
-            <el-input placeholder="Tìm kiếm" v-model="input3" class="input-with-select">
-              <el-button slot="append" icon="el-icon-search"></el-button>
+            <el-input placeholder="Tìm kiếm" v-model="search" class="input-with-select">
+              <el-button @click="searchProduct()" slot="append" icon="el-icon-search"></el-button>
             </el-input>
           </el-col>
         </el-row>
@@ -62,6 +64,7 @@
 </template>
 
 <script>
+import route from "@/router";
 import { allStore } from "@/api/customer/store.js";
 import { allCategory } from "@/api/customer/category.js";
 import EventBus from '@/utils/EventBus.js';
@@ -73,30 +76,7 @@ export default {
       allStore: [],
       storeId: "",
       allCategory: [],
-      input3: "",
-      options: [
-        {
-          value: "Option1",
-          label: "Option1",
-        },
-        {
-          value: "Option2",
-          label: "Option2",
-        },
-        {
-          value: "Option3",
-          label: "Option3",
-        },
-        {
-          value: "Option4",
-          label: "Option4",
-        },
-        {
-          value: "Option5",
-          label: "Option5",
-        },
-      ],
-      value: "",
+      search: "",
     };
   },
   watch: {
@@ -113,6 +93,9 @@ export default {
     this.getAllCategory();
   },
   methods: {
+    backToHome() {
+      route.push({ name: "c-home"});
+    },
     async getAllStore() {
       const response = await allStore();
       if (response.data.code == 200) {
@@ -126,12 +109,19 @@ export default {
         this.allCategory = response.data.data;
       }
     },
-    emitEvent() {
-      // Gửi event với dữ liệu
-      console.log(22);
-      EventBus.$emit('change-store', {
+    emitEvent(isSearch = false) {
+      EventBus.$emit('search-product', {
         storeId: this.storeId,
+        search: this.search,
+        isSearch: isSearch,
       });
+    },
+    searchProduct() {
+      if (this.search) {
+        this.emitEvent(true);
+      } else {
+        this.emitEvent();
+      }
     },
   }
 };
