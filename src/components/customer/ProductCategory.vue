@@ -3,89 +3,65 @@
     <el-main>
       <el-row>
         <el-carousel indicator-position="outside">
-          <el-carousel-item
-            style="background-color: #ffd400"
-            v-for="item in 4"
-            :key="item"
-          >
-            <h3>{{ item }}</h3>
+          <el-carousel-item>
+            <img
+              style="width: 50%; height: 100%"
+              src="./../../assets/690-300-max-iphone15-promax-th1102.webp"
+            />
+            <img
+              style="width: 50%; height: 100%"
+              src="./../../assets/690-300-max-iphone15-promax-th1102.webp"
+            />
+          </el-carousel-item>
+          <el-carousel-item>
+            <img
+              style="width: 50%; height: 100%"
+              src="./../../assets/samsung-flip-fold-sliding-th12.webp"
+            />
+            <img
+              style="width: 50%; height: 100%"
+              src="./../../assets/samsung-flip-fold-sliding-th12.webp"
+            />
+          </el-carousel-item>
+          <el-carousel-item>
+            <img
+              style="width: 50%; height: 100%"
+              src="./../../assets/macbook-pro-m3-sliding-maumoi.webp"
+            />
+            <img
+              style="width: 50%; height: 100%"
+              src="./../../assets/macbook-pro-m3-sliding-maumoi.webp"
+            />
+          </el-carousel-item>
+          <el-carousel-item>
+            <img
+              style="width: 50%; height: 100%"
+              src="./../../assets/sliding-dienthoai-xiaomi-13c.webp"
+            />
+            <img
+              style="width: 50%; height: 100%"
+              src="./../../assets/sliding-dienthoai-xiaomi-13c.webp"
+            />
           </el-carousel-item>
         </el-carousel>
       </el-row>
       <template>
-        <!-- <el-row
-          style="background-color: #ffd400; border-radius: 20px 20px 0px 0px"
-          type="flex"
-          justify="center"
-        >
-          <el-col :span="3">
-            <h2>Sản phẩm mới</h2>
-          </el-col>
-        </el-row> -->
         <el-row style="margin: 30px 10px;">
-          <el-col :span="4">
+          <el-col :span="4" v-for="(attribute, index) in category.attributes" :key="index">
             <el-row>
               <el-col :span="22">
-                <el-select v-model="value" filterable placeholder="Hãng">
+                <el-select v-model="value" filterable :placeholder="attribute.name">
                   <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
+                    v-for="item in attribute.attribute_options"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
                   >
                   </el-option>
                 </el-select>
               </el-col>
             </el-row>
           </el-col>
-          <el-col :span="4">
-            <el-row>
-              <el-col :span="22">
-                <el-select v-model="value" filterable placeholder="RAM">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
-                </el-select>
-              </el-col>
-            </el-row>
-          </el-col>
-          <el-col :span="4">
-            <el-row>
-              <el-col :span="22">
-                <el-select v-model="value" filterable placeholder="Dung lượng">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
-                </el-select>
-              </el-col>
-            </el-row>
-          </el-col>
-          <el-col :span="4">
-            <el-row>
-              <el-col :span="22">
-                <el-select v-model="value" filterable placeholder="Hệ điều hành">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
-                </el-select>
-              </el-col>
-            </el-row>
-          </el-col>
-
-
-
         </el-row>
         <el-row class="row-bg">
           <el-col
@@ -94,61 +70,108 @@
             :md="8"
             :lg="6"
             :xl="6"
-            v-for="(o, index) in 10"
-            :key="o"
-            :index="index"
+            v-for="(item, index) in listNewProduct"
+            :key="index"
           >
             <el-card :body-style="{ padding: '10px 20px', margin: '5px' }">
-              <el-button>
-                <img
-                  src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                  class="image"
-                />
+              <el-button @click="productDetail(item.id)">
+                <img style="width: 100%" :src="item.image" class="image" />
                 <div style="padding: 14px">
-                  <span>Yummy hamburger</span>
+                  <span>{{ item.name }}</span>
                   <div class="bottom clearfix">
-                    <time class="time">{{ currentDate }}</time>
-                    <el-button type="text" class="button">Operating</el-button>
+                    <el-button type="text" style="color: #ff7300" class="button">{{
+                      item.price
+                    }}</el-button>
                   </div>
                 </div>
               </el-button>
             </el-card>
           </el-col>
         </el-row>
+        <el-row style="margin-top: 30px;" type="flex" justify="center">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="current_page"
+            page-size="12"
+            layout="prev, pager, next"
+            :total="total"
+          >
+          </el-pagination>
+        </el-row>
       </template>
     </el-main>
   </el-container>
 </template>
 <script>
+import route from "@/router";
+import { showCategory } from "@/api/customer/category.js";
+import { searchProduct } from "@/api/customer/product.js";
+import { formatMoney } from "@/utils/helper.js";
+import EventBus from "@/utils/EventBus.js";
+import config from "@/config/config.dev.json";
+
 export default {
   name: "C-ProductCategory",
   data() {
     return {
-      options: [
-        {
-          value: "Option1",
-          label: "Option1",
-        },
-        {
-          value: "Option2",
-          label: "Option2",
-        },
-        {
-          value: "Option3",
-          label: "Option3",
-        },
-        {
-          value: "Option4",
-          label: "Option4",
-        },
-        {
-          value: "Option5",
-          label: "Option5",
-        },
-      ],
+      baseURL: "",
+      storeId: "",
+      categoryId: "",
+      category: {},
+      listNewProduct: [],
+      total: "",
+      search: "",
+      isSearch: true,
       value: "",
     };
   },
+  beforeCreate() {
+
+  },
+  created() {
+    this.baseURL = config.BASE_BE_API;
+    this.categoryId = this.$route.params.category_id;
+    this.getDetailCategory(this.$route.params.category_id);
+    EventBus.$on("search-product", (payload) => {
+      this.storeId = payload.storeId;
+      this.search = payload.search;
+      this.isSearch = payload.isSearch;
+      let parameters = {
+        search: payload.search,
+      };
+      this.listProductSearch(this.storeId, parameters);
+    });
+  },
+  methods: {
+    handleSizeChange(val) {
+      console.log(`${val} items per page`);
+    },
+    handleCurrentChange(val) {
+      console.log(`current page: ${val}`);
+      this.listProductSearch(this.storeId, { search: this.search, page: val });
+    },
+    async getDetailCategory(id) {
+      const response = await showCategory(id);
+      if (response.data.code == 200) {
+        this.category = response.data.data;
+      }
+    },
+    async listProductSearch(storeId, parameters = {}) {
+      const response = await searchProduct(storeId, parameters);
+      if (response.data.code == 200) {
+        this.listNewProduct = response.data.data.data;
+        this.total = response.data.data.total;
+        this.listNewProduct.forEach((item) => {
+          item.image = this.baseURL + "/storage/" + item.image;
+          item.price = formatMoney(item.price);
+        });
+      }
+    },
+    productDetail(id) {
+      route.push({ name: "c-product-detail", params: { id: id } });
+    },
+  }
 };
 </script>
 

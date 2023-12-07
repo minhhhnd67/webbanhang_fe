@@ -82,15 +82,6 @@
         </el-row>
       </template>
       <template v-if="isSearch">
-        <!-- <el-row
-          style="background-color: #ffd400; border-radius: 20px 20px 0px 0px"
-          type="flex"
-          justify="center"
-        >
-          <el-col :span="3">
-            <h2>Sản phẩm mới</h2>
-          </el-col>
-        </el-row> -->
         <el-row class="row-bg">
           <el-col
             :xs="24"
@@ -116,30 +107,18 @@
             </el-card>
           </el-col>
         </el-row>
+        <el-row style="margin-top: 30px;" type="flex" justify="center">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="current_page"
+            page-size="12"
+            layout="prev, pager, next"
+            :total="total"
+          >
+          </el-pagination>
+        </el-row>
       </template>
-      <!-- <template>
-        <el-row style="background-color: #ffd400; border-radius: 20px 20px 0px 0px; margin-top: 20px;" type="flex" justify="center">
-          <el-col :span="4">
-            <h2>Điện thoại bán chạy</h2>
-          </el-col>
-        </el-row>
-        <el-row class="row-bg">
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" v-for="(item, index) in listNewProduct" :key="index">
-            <el-card :body-style="{ padding: '20px 20px', margin: '5px' }">
-              <el-button>
-                <img style="width: 100%;" :src="item.image" class="image">
-                <div style="padding: 14px;">
-                  <span>Yummy hamburger</span>
-                  <div class="bottom clearfix">
-                    <time class="time">{{ currentDate }}</time>
-                    <el-button type="text" class="button">Operating</el-button>
-                  </div>
-                </div>
-              </el-button>
-            </el-card>
-          </el-col>
-        </el-row>
-      </template> -->
     </el-main>
   </el-container>
 </template>
@@ -161,6 +140,7 @@ export default {
       search: "",
       isSearch: false,
       listNewProduct: [],
+      total: "",
     };
   },
   computed: {
@@ -188,6 +168,13 @@ export default {
     });
   },
   methods: {
+    handleSizeChange(val) {
+      console.log(`${val} items per page`);
+    },
+    handleCurrentChange(val) {
+      console.log(`current page: ${val}`);
+      this.listProductSearch(this.storeId, { search: this.search, page: val });
+    },
     async listNewProductByStore(storeId) {
       const response = await getNewProductByStore(storeId);
       if (response.data.code == 200) {
@@ -201,7 +188,8 @@ export default {
     async listProductSearch(storeId, parameters = {}) {
       const response = await searchProduct(storeId, parameters);
       if (response.data.code == 200) {
-        this.listNewProduct = response.data.data;
+        this.listNewProduct = response.data.data.data;
+        this.total = response.data.data.total;
         this.listNewProduct.forEach((item) => {
           item.image = this.baseURL + "/storage/" + item.image;
           item.price = formatMoney(item.price);
