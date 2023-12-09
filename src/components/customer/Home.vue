@@ -148,9 +148,7 @@ export default {
       return this.$route;
     },
   },
-  beforeCreate() {},
-  created() {
-    this.baseURL = config.BASE_BE_API;
+  beforeCreate() {
     EventBus.$on("search-product", (payload) => {
       this.storeId = payload.storeId;
       this.search = payload.search;
@@ -166,6 +164,10 @@ export default {
         }
       }
     });
+  },
+  created() {
+    this.baseURL = config.BASE_BE_API;
+    
   },
   methods: {
     handleSizeChange(val) {

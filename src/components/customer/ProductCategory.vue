@@ -129,12 +129,6 @@ export default {
     };
   },
   beforeCreate() {
-
-  },
-  created() {
-    this.baseURL = config.BASE_BE_API;
-    this.categoryId = this.$route.params.category_id;
-    this.getDetailCategory(this.$route.params.category_id);
     EventBus.$on("search-product", (payload) => {
       console.log(12345);
       this.storeId = payload.storeId;
@@ -148,6 +142,12 @@ export default {
       this.getDetailCategory(this.$route.params.category_id);
       this.listProductSearch(this.storeId, parameters);
     });
+  },
+  created() {
+    this.baseURL = config.BASE_BE_API;
+    this.categoryId = this.$route.params.category_id;
+    this.getDetailCategory(this.$route.params.category_id);
+    
   },
   methods: {
     handleSizeChange(val) {

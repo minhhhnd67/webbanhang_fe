@@ -21,13 +21,13 @@
           </el-row>
           <el-row style="margin-top: 20px;" type="flex" justify="center">
             <el-col :span="16">
-              <el-button style="width: 100%; background-color: #ff5100; color: #ffffff;">Đăng nhập</el-button>
+              <el-button  @click="handleLogin()"  style="width: 100%; background-color: #ff5100; color: #ffffff;">Đăng nhập</el-button>
             </el-col>
           </el-row>
           <el-row style="margin-top: 20px;" type="flex" justify="center">
             <el-col :span="4">
               <el-row type="flex" justify="center">
-                <el-button style="background-color: #ffd400; border: 0px;">
+                <el-button @click="loginWithGoogle()" style="background-color: #ffd400; border: 0px;">
                   <img style="width: 50px;" src="@/icons/google.svg" alt="Login using Google"/>
                 </el-button>
               </el-row>
@@ -42,7 +42,7 @@
           </el-row>
           <el-row style="margin-top: 20px;" type="flex" justify="center">
             <el-col :span="8">
-              <p>Bạn chưa có tài khoản?<b style="color: #ff5100;">Đăng ký</b></p>
+              <p>Bạn chưa có tài khoản?<b style="color: #ff5100;"><a @click="register()">Đăng ký</a></b></p>
             </el-col>
           </el-row>
         </el-col>
@@ -51,13 +51,81 @@
   </el-container>
 </template>
 <script>
+import EventBus from '@/utils/EventBus.js';
+import router from "@/router";
+import store from "@/store";
+import { loginGoogle, login } from '@/api/manager/auth.js';
+
 export default {
   name: "C-Login",
   data() {
     return {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
+      data: null,
+      token: "",
+      login_google: false,
+      login_facebook: false,
     }
+  },
+  mounted() {
+    // Tạo một kênh
+    const channel = new BroadcastChannel("my-channel");
+    // Đăng ký nhận dữ liệu
+    channel.onmessage = function (event) {
+      // Nhận dữ liệu
+      const data = event.data;
+      this.login_google = data.login_google;
+      this.token = data.token;
+      localStorage.setItem('tokenBE', this.token);
+      store.state.permission = 1;
+      store.state.tokenBE = this.token;
+      store.state.is_login_manager = false;
+      // Xử lý dữ liệu
+      EventBus.$emit('emit-login', {
+        isLogin: true,
+      });
+      router.push({ name: "c-home" });
+      // setTimeout(() => { this.emitEvent(); }, 250);
+    };
+  },
+  methods: {
+    emitEvent(isSearch = false) {
+      console.log(222);
+      EventBus.$emit('search-product', {
+        storeId: this.storeId,
+        search: this.search,
+        isSearch: isSearch,
+      });
+    },
+    emitLogin() {
+      EventBus.$emit('emit-auth', {
+        isLogin: true,
+      });
+    }, 
+    async loginWithGoogle() {
+      const response = await loginGoogle()
+      window.open(
+        response.data.url,
+      );
+    },
+    async handleLogin() {
+      const data = {
+        email: this.email,
+        password: this.password
+      }
+      const response = await login(data)
+      if (response.data.code == 200) {
+        store.state.permission = 1
+        store.state.tokenBE = response.data.data.token
+        localStorage.setItem('tokenBE', response.data.data.token)
+        store.state.is_login_manager = false
+        router.push({ name: "m-home" })
+      }
+    },
+    register() {
+      router.push({ name: "c-register" });
+    },
   }
 };
 </script>

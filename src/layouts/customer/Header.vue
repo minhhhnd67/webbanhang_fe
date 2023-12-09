@@ -42,7 +42,8 @@
             </el-badge>
           </el-col>
           <el-col :span="11">
-            <el-button icon="el-icon-user" style="width: 100%; background-color: rgba(255,172,10,.6);">Tài khoản</el-button>
+            <el-button v-if="!isLogin" icon="el-icon-user" @click="login()" style="width: 100%; background-color: rgba(255,172,10,.6);">Đăng nhập</el-button>
+            <el-button v-if="isLogin" icon="el-icon-user" style="width: 100%; background-color: rgba(255,172,10,.6);">Tài khoản</el-button>
           </el-col>
         </el-row>
       </el-col>
@@ -77,6 +78,7 @@ export default {
       storeId: "",
       allCategory: [],
       search: "",
+      isLogin: false,
     };
   },
   watch: {
@@ -91,11 +93,15 @@ export default {
   created() {
     this.getAllStore();
     this.getAllCategory();
+    EventBus.$on("emit-auth", (payload) => {
+      this.isLogin = payload.isLogin;
+      setTimeout(() => { this.emitEvent(); }, 250);
+    });
   },
   methods: {
     backToHome() {
       route.push({ name: "c-home"}).catch(()=>{});
-      setTimeout(() => { this.emitEvent(); }, 250);
+      setTimeout(() => { this.emitEvent(); }, 100);
     },
     async getAllStore() {
       const response = await allStore();
@@ -128,6 +134,9 @@ export default {
     productCategory(category_id) {
       route.push({ name: "c-product-category", params: { category_id: category_id } }).catch(() => {});
       setTimeout(() => { this.emitEvent(); }, 100);
+    },
+    login() {
+      route.push({ name: "c-login" }).catch(() => {});
     }
   }
 };
