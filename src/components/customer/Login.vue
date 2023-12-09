@@ -82,10 +82,10 @@ export default {
       store.state.tokenBE = this.token;
       store.state.is_login_manager = false;
       // Xử lý dữ liệu
-      EventBus.$emit('emit-login', {
+      EventBus.$emit('emit-auth', {
         isLogin: true,
       });
-      router.push({ name: "c-home" });
+      router.push({ name: "c-home" }).catch(() => {});
       // setTimeout(() => { this.emitEvent(); }, 250);
     };
   },
@@ -98,11 +98,6 @@ export default {
         isSearch: isSearch,
       });
     },
-    emitLogin() {
-      EventBus.$emit('emit-auth', {
-        isLogin: true,
-      });
-    }, 
     async loginWithGoogle() {
       const response = await loginGoogle()
       window.open(
