@@ -25,7 +25,7 @@
           </el-col>
         </el-row>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="7">
         <el-row>
           <el-col :span="22">
             <el-input placeholder="Tìm kiếm" v-model="search" class="input-with-select">
@@ -34,7 +34,7 @@
           </el-col>
         </el-row>
       </el-col>
-      <el-col :span="5">
+      <el-col :span="6">
         <el-row>
           <el-col :span="12" style="margin-right: 5px;">
             <el-badge :value="12" class="item">
@@ -43,7 +43,25 @@
           </el-col>
           <el-col :span="11">
             <el-button v-if="!isLogin" icon="el-icon-user" @click="login()" style="width: 100%; background-color: rgba(255,172,10,.6);">Đăng nhập</el-button>
-            <el-button v-if="isLogin" icon="el-icon-user" style="width: 100%; background-color: rgba(255,172,10,.6);">Tài khoản</el-button>
+            <!-- <el-button v-if="isLogin" icon="el-icon-user" style="width: 100%; background-color: rgba(255,172,10,.6);">Tài khoản</el-button> -->
+            <el-row v-if="isLogin">
+              <el-col :span="18" style="padding-top: 10px;">
+                <span>Ngo Duc Minh</span>
+              </el-col>
+              <el-col :span="6">
+                <el-dropdown>
+                  <span class="el-dropdown-link">
+                    <el-avatar :size="40" :src="circleUrl"></el-avatar>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>Tài khoản</el-dropdown-item>
+                    <el-dropdown-item>
+                      <span @click="handleLogout()">Đăng xuất</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </el-col>
+            </el-row>
           </el-col>
         </el-row>
       </el-col>
@@ -66,9 +84,12 @@
 
 <script>
 import route from "@/router";
+import store from "@/store";
+import EventBus from '@/utils/EventBus.js';
 import { allStore } from "@/api/customer/store.js";
 import { allCategory } from "@/api/customer/category.js";
-import EventBus from '@/utils/EventBus.js';
+import { logout } from "@/api/manager/auth";
+
 
 export default {
   name: "CustomerHeader",
@@ -79,6 +100,7 @@ export default {
       allCategory: [],
       search: "",
       isLogin: false,
+      circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
     };
   },
   watch: {
@@ -102,6 +124,31 @@ export default {
     backToHome() {
       route.push({ name: "c-home"}).catch(()=>{});
       setTimeout(() => { this.emitEvent(); }, 100);
+    },
+    async handleLogout() {
+      this.$confirm("Đăng xuất tài khoản?", "Xác nhận đăng xuất tài khoản", {
+        confirmButtonText: "Đăng xuất",
+        cancelButtonText: "Hủy",
+        type: "warning",
+      })
+        .then(async () => {
+          const response = await logout();
+          if (response.data.code == 200) {
+            store.state.is_login_manager = true;
+            store.state.tokenBE = "";
+            localStorage.setItem("tokenBE", "");
+            this.isLogin = false;
+
+            this.$message({
+              type: "success",
+              message: "Đăng xuất thành công",
+            });
+          }
+        })
+        .catch((e) => {
+          console.log(123, e);
+          console.log("Đã hủy xóa");
+        });
     },
     async getAllStore() {
       const response = await allStore();
