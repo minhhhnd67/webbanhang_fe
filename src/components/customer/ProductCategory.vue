@@ -50,7 +50,7 @@
           <el-col :span="4" v-for="(attribute, index) in category.attributes" :key="index">
             <el-row>
               <el-col :span="22">
-                <el-select v-model="value" filterable :placeholder="attribute.name">
+                <el-select v-model="attributes[index].attribute_option_id" @change="searchProductAttribute()" filterable :placeholder="attribute.name">
                   <el-option
                     v-for="item in attribute.attribute_options"
                     :key="item.id"
@@ -93,7 +93,7 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page.sync="current_page"
-            page-size="12"
+            :page-size="pageSize"
             layout="prev, pager, next"
             :total="total"
           >
@@ -120,7 +120,9 @@ export default {
       categoryId: "",
       category: {},
       listNewProduct: [],
+      attributes: [],
       total: "",
+      pageSize: 12,
       search: "",
       isSearch: true,
       value: "",
@@ -134,12 +136,16 @@ export default {
     this.categoryId = this.$route.params.category_id;
     this.getDetailCategory(this.$route.params.category_id);
     EventBus.$on("search-product", (payload) => {
+      console.log(12345);
       this.storeId = payload.storeId;
       this.search = payload.search;
       this.isSearch = payload.isSearch;
       let parameters = {
         search: payload.search,
+        category_id: this.$route.params.category_id,
+        attributes: this.attributes
       };
+      this.getDetailCategory(this.$route.params.category_id);
       this.listProductSearch(this.storeId, parameters);
     });
   },
@@ -149,12 +155,18 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`current page: ${val}`);
-      this.listProductSearch(this.storeId, { search: this.search, page: val });
+      this.listProductSearch(this.storeId, { search: this.search, attributes: this.attributes, page: val });
     },
     async getDetailCategory(id) {
       const response = await showCategory(id);
       if (response.data.code == 200) {
         this.category = response.data.data;
+        this.category.attributes.forEach((attribute) => {
+          this.attributes.push({
+            attribute_id: attribute.id,
+            attribute_option_id: ""
+          });
+        });
       }
     },
     async listProductSearch(storeId, parameters = {}) {
@@ -167,6 +179,10 @@ export default {
           item.price = formatMoney(item.price);
         });
       }
+    },
+    searchProductAttribute() {
+      console.log(666, this.attributes);
+      this.listProductSearch(this.storeId, { search: this.search, attributes: this.attributes });
     },
     productDetail(id) {
       route.push({ name: "c-product-detail", params: { id: id } });

@@ -94,7 +94,8 @@ export default {
   },
   methods: {
     backToHome() {
-      route.push({ name: "c-home"});
+      route.push({ name: "c-home"}).catch(()=>{});
+      setTimeout(() => { this.emitEvent(); }, 250);
     },
     async getAllStore() {
       const response = await allStore();
@@ -110,6 +111,7 @@ export default {
       }
     },
     emitEvent(isSearch = false) {
+      console.log(111);
       EventBus.$emit('search-product', {
         storeId: this.storeId,
         search: this.search,
@@ -124,7 +126,8 @@ export default {
       }
     },
     productCategory(category_id) {
-      route.push({ name: "c-product-category", params: { category_id: category_id } });
+      route.push({ name: "c-product-category", params: { category_id: category_id } }).catch(() => {});
+      setTimeout(() => { this.emitEvent(); }, 100);
     }
   }
 };
