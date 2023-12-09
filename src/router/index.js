@@ -379,10 +379,10 @@ router.beforeEach((to, from, next) => {
             },
           }).then((response) => {
             if (response.status === 200) {
-              store.state.role = 'admin'
-              store.state.is_login_manager = false
+              store.state.role = 'admin';
+              store.state.is_login_manager = false;
               next();
-              console.log("Da xac thuc")
+              console.log("Da xac thuc");
             } else {
               if (to.path.includes("register")) {
                 next('/manager/register');
@@ -391,11 +391,36 @@ router.beforeEach((to, from, next) => {
               }
             }
           }).catch((error) => {
-            console.log(444, error)
-            next('/manager/login')
+            console.log(400, error);
+            next('/manager/login');
           });
     } else {
-        next()
+      if (to.path.includes("manager") && (to.path.includes("login") || to.path.includes("register"))) {
+        axios.get('http://127.0.0.1:8000/api/me', {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('tokenBE')}`,
+              'Accept': 'application/json'
+            },
+          }).then((response) => {
+            if (response.status === 200) {
+              store.state.role = 'admin';
+              store.state.is_login_manager = false;
+              next('/manager/home');
+              console.log("Da xac thuc");
+            } else {
+              if (to.path.includes("register")) {
+                next('/manager/register');
+              } else {
+                next('/manager/login');
+              }
+            }
+          }).catch((error) => {
+            console.log(400, error);
+            next();
+          });
+      } else {
+        next();
+      }
     }
     
   });
