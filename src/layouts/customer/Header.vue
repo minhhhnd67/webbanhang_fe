@@ -54,7 +54,9 @@
                     <el-avatar :size="40" :src="circleUrl"></el-avatar>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>Tài khoản</el-dropdown-item>
+                    <el-dropdown-item>
+                      <span @click="profile()">Tài khoản</span>
+                    </el-dropdown-item>
                     <el-dropdown-item>
                       <span @click="handleLogout()">Đăng xuất</span>
                     </el-dropdown-item>
@@ -88,7 +90,7 @@ import store from "@/store";
 import EventBus from '@/utils/EventBus.js';
 import { allStore } from "@/api/customer/store.js";
 import { allCategory } from "@/api/customer/category.js";
-import { logout } from "@/api/manager/auth";
+import { logout, me } from "@/api/customer/auth.js";
 
 
 export default {
@@ -113,6 +115,7 @@ export default {
     }
   },
   created() {
+    this.getProfile();
     this.getAllStore();
     this.getAllCategory();
     EventBus.$on("emit-auth", (payload) => {
@@ -124,6 +127,12 @@ export default {
     backToHome() {
       route.push({ name: "c-home"}).catch(()=>{});
       setTimeout(() => { this.emitEvent(); }, 100);
+    },
+    async getProfile() {
+      const response = await me();
+      if (response.data.code == 200) {
+        this.isLogin = true;
+      }
     },
     async handleLogout() {
       this.$confirm("Đăng xuất tài khoản?", "Xác nhận đăng xuất tài khoản", {
@@ -184,6 +193,9 @@ export default {
     },
     login() {
       route.push({ name: "c-login" }).catch(() => {});
+    },
+    profile() {
+      route.push({ name: "c-profile" }).catch(() => {});
     }
   }
 };
