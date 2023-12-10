@@ -91,12 +91,15 @@ import EventBus from '@/utils/EventBus.js';
 import { allStore } from "@/api/customer/store.js";
 import { allCategory } from "@/api/customer/category.js";
 import { logout, me } from "@/api/customer/auth.js";
+import config from "@/config/config.dev.json";
 
 
 export default {
   name: "CustomerHeader",
   data() {
     return {
+      baseURL: "",
+      mUser: {},
       allStore: [],
       storeId: "",
       allCategory: [],
@@ -115,6 +118,7 @@ export default {
     }
   },
   created() {
+    this.baseURL = config.BASE_BE_API;
     this.getProfile();
     this.getAllStore();
     this.getAllCategory();
@@ -131,6 +135,11 @@ export default {
     async getProfile() {
       const response = await me();
       if (response.data.code == 200) {
+        this.mUser =  response.data.data;
+        store.state.mUser = response.data.data;
+        if (response.data.data.avatar) {
+          this.circleUrl = this.baseURL + "/storage/" + response.data.data.avatar;
+        }
         this.isLogin = true;
       }
     },

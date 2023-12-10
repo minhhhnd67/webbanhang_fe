@@ -5,6 +5,8 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state () {
       return {
+        cUser: {},
+        mUser: {},
         tokenBE: '',
         is_login_manager: true
       }
