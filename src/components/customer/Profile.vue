@@ -92,6 +92,23 @@
               <el-col :span="12">
                 <el-upload
                   class="avatar-uploader"
+                  :action="urlUploadImage"
+                  :headers="{
+                    Authorization: `Bearer ${this.tokenBE}`,
+                  }"
+                  :data="{
+                    path: 'user',
+                  }"
+                  name="image"
+                  :show-file-list="false"
+                  :on-success="handleAvatarSuccess"
+                  :before-upload="beforeAvatarUpload"
+                  >
+                  <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                  <i v-else style="border: 1px solid" class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+                <!-- <el-upload
+                  class="avatar-uploader"
                   name="image"
                   :show-file-list="false"
                   :on-success="handleAvatarSuccess"
@@ -103,7 +120,7 @@
                     style="border: 1px solid"
                     class="el-icon-plus avatar-uploader-icon"
                   ></i>
-                </el-upload>
+                </el-upload> -->
               </el-col>
             </el-row>
             <el-row style="margin-top: 30px" type="flex" justify="center">
@@ -121,16 +138,21 @@
 </template>
 
 <script>
+import config from "@/config/config.dev.json";
 import EventBus from '@/utils/EventBus.js';
 import router from "@/router";
 import { getProvinces, getDistricts, getWards } from "@/api/common/ghn.js";
 import { me } from "@/api/customer/auth.js";
 import { updateUser } from "@/api/customer/user.js";
+import { getTokenBE } from "@/utils/helper.js";
 
 export default {
   name: "C-Profile",
   data() {
     return {
+      baseURL: "",
+      urlUploadImage: "",
+      tokenBE: "",
       profile: {},
       ruleForm: {
         email: "",
@@ -143,14 +165,19 @@ export default {
         ward_id: "",
         ward_name: "",
         address_detail: "",
+        avatar: "",
       },
       listProvinces: [],
       listDistricts: [],
       listWards: [],
       allowWatch: false,
+      imageUrl: "",
     };
   },
   created() {
+    this.baseURL = config.BASE_BE_API;
+    this.urlUploadImage = config.BASE_BE_API + "/api/upload-image";
+    this.tokenBE = getTokenBE();
     this.getListProvinces();
     this.getProfile();
   },
@@ -179,6 +206,11 @@ export default {
         this.ruleForm.ward_id = data.ward_id;
         this.ruleForm.ward_name = data.ward_name;
         this.ruleForm.address_detail = data.address_detail;
+        this.ruleForm.avatar = data.avatar;
+
+        if (this.ruleForm.avatar) {
+          this.imageUrl = this.baseURL + "/storage/" + this.ruleForm.avatar;
+        }
 
         setTimeout(() => {
           this.allowWatch = true;
@@ -240,6 +272,19 @@ export default {
         this.listWards = response.data.data;
       }
     },
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+      if (res.code == 200) {
+        this.ruleForm.avatar = res.data.path;
+      }
+    },
+    beforeAvatarUpload(file) {
+      const isLt10M = file.size / 1024 / 1024 < 10;
+      if (!isLt10M) {
+        this.$message.error('Avatar picture size can not exceed 10MB!');
+      }
+      return isLt10M;
+    }
   },
 };
 </script>
