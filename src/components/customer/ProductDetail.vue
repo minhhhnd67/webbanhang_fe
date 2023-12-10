@@ -29,19 +29,19 @@
           <el-row style="margin-top: 10px;" v-for="(sku, index) in product.skus" :key="index">
             <el-col :span="4">{{ sku.name }}:</el-col>
             <el-col :span="20">
-              <el-radio v-for="(option, idx) in sku.sku_options" :key="idx" v-model="radio2" :label="option.name" border size="medium">{{ option.name }}</el-radio>
+              <el-radio style="margin-bottom: 10px;" v-for="(option, idx) in sku.sku_options" :key="idx" v-model="skus[index].value" :label="option.name" border size="medium">{{ option.name }}</el-radio>
             </el-col>
           </el-row>
 
           <el-row style="margin-top: 20px;">
             <el-col :span="4">Số lượng:</el-col>
             <el-col :span="20">
-              <el-input-number v-model="num" @change="handleChange" :min="1" :max="10"></el-input-number>
+              <el-input-number v-model="addCart.amount" :min="1" :max="10"></el-input-number>
             </el-col>
           </el-row>
           <el-row style="margin-top: 50px;">
             <el-col :span="4">
-              <el-button style="background-color: #ff5100; color: #ffffff;" icon="el-icon-shopping-cart-2">Thêm vào giỏ hàng</el-button>
+              <el-button @click="addToCart()" style="background-color: #ff5100; color: #ffffff;" icon="el-icon-shopping-cart-2">Thêm vào giỏ hàng</el-button>
             </el-col>
             <el-col :span="20">
             </el-col>
@@ -82,11 +82,22 @@ export default {
       radio2: "",
       radio3: "",
       num: 1,
+      addCart: {
+        product_id: "",
+        name: "",
+        image: "",
+        code: "",
+        skus: "",
+        price: "",
+        amount: 1,
+      },
+      skus: [],
     }
   },
   created() {
     this.baseURL = config.BASE_BE_API;
     this.id = this.$route.params.id;
+    this.addCart.product_id = this.$route.params.id;
     console.log(1234);
     this.getProductDetail();
     console.log(12345);
@@ -99,7 +110,42 @@ export default {
         this.product = response.data.data;
         this.product.price = formatMoney(this.product.price);
         this.product.image = this.baseURL + '/storage/' + this.product.image;
+
+        // add cart
+        this.addCart.name = this.product.name;
+        this.addCart.code = this.product.code;
+        this.addCart.image = this.product.image;
+        this.addCart.price = this.product.price;
+
+        this.product.skus.forEach((sku) => {
+          this.skus.push({
+            name: sku.name,
+            value: "",
+          });
+        });
+        console.log(333, this.skus);
       }
+    },
+    addToCart() {
+      this.skus.forEach((sku) => {
+        this.addCart.skus += sku.name + ": " + sku.value + ", ";
+      });
+      console.log(666, this.addCart);
+
+      // Da dang nhap
+
+      // Chua dang nhap
+      var cart = JSON.parse(localStorage.getItem('cart'));
+      console.log(555, cart);
+      if (cart && cart != null && cart != []) {
+        cart.push(this.addCart);
+        localStorage.setItem('cart', JSON.stringify(cart));
+      } else {
+        localStorage.setItem('cart', JSON.stringify([this.addCart]));
+      }
+
+      cart = JSON.parse(localStorage.getItem('cart'));
+      console.log(888, cart);
     }
   }
 };

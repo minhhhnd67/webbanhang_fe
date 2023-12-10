@@ -29,76 +29,20 @@
               <el-link></el-link>
             </el-col>
           </el-row>
-          <el-row style="padding: 10px" type="flex" justify="center" :gutter="20">
+          <el-row v-for="(product, index) in listProducts" :key="index" style="padding: 10px" type="flex" justify="center" :gutter="20">
             <el-col :span="2">
               <img
                 style="width: 100%"
-                src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                :src="product.image"
               />
             </el-col>
-            <el-col :span="3"> VS022345 </el-col>
-            <el-col :span="4"> Đồng hồ FOSSIL 40 mm Nam FS5919 </el-col>
-            <el-col :span="4"> Màu: nâu, Loại dây: Dây da, </el-col>
-            <el-col :span="3"> 13.000.000đ </el-col>
+            <el-col :span="3"> {{ product.code }} </el-col>
+            <el-col :span="4"> {{ product.name }} </el-col>
+            <el-col :span="4"> {{ product.skus }} </el-col>
+            <el-col :span="3"> {{ product.price }}đ </el-col>
             <el-col :span="4">
               <el-input-number
-                v-model="num"
-                @change="handleChange"
-                :min="1"
-                :max="10"
-              ></el-input-number>
-            </el-col>
-            <el-col :span="1">
-              <el-button
-                type="danger"
-                size="small"
-                icon="el-icon-delete"
-                circle
-              ></el-button>
-            </el-col>
-          </el-row>
-          <el-row style="padding: 10px" type="flex" justify="center" :gutter="20">
-            <el-col :span="2">
-              <img
-                style="width: 100%"
-                src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-              />
-            </el-col>
-            <el-col :span="3"> VS022345 </el-col>
-            <el-col :span="4"> Đồng hồ FOSSIL 40 mm Nam FS5919 </el-col>
-            <el-col :span="4"> Màu: nâu, Loại dây: Dây da, </el-col>
-            <el-col :span="3"> 13.000.000đ </el-col>
-            <el-col :span="4">
-              <el-input-number
-                v-model="num"
-                @change="handleChange"
-                :min="1"
-                :max="10"
-              ></el-input-number>
-            </el-col>
-            <el-col :span="1">
-              <el-button
-                type="danger"
-                size="small"
-                icon="el-icon-delete"
-                circle
-              ></el-button>
-            </el-col>
-          </el-row>
-          <el-row style="padding: 10px" type="flex" justify="center" :gutter="20">
-            <el-col :span="2">
-              <img
-                style="width: 100%"
-                src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-              />
-            </el-col>
-            <el-col :span="3"> VS022345 </el-col>
-            <el-col :span="4"> Đồng hồ FOSSIL 40 mm Nam FS5919 </el-col>
-            <el-col :span="4"> Màu: nâu, Loại dây: Dây da, </el-col>
-            <el-col :span="3"> 13.000.000đ </el-col>
-            <el-col :span="4">
-              <el-input-number
-                v-model="num"
+                v-model="listProducts[index].amount"
                 @change="handleChange"
                 :min="1"
                 :max="10"
@@ -153,7 +97,7 @@
             <el-col :span="16">
               <el-row style="margin-top: 20px;">
                 <el-col :span="10">
-                  <el-input placeholder="Họ tên" v-model="input1">
+                  <el-input placeholder="Họ tên" v-model="name">
                     <template slot="prepend">Họ tên</template>
                   </el-input>
                 </el-col>
@@ -161,50 +105,50 @@
                   <el-link></el-link>
                 </el-col>
                 <el-col :span="10">
-                  <el-input placeholder="Số điện thoại" v-model="input1">
+                  <el-input placeholder="Số điện thoại" v-model="phone">
                     <template slot="prepend">Số điện thoại</template>
                   </el-input>
                 </el-col>
               </el-row>
               <el-row style="margin-top: 10px;">
                 <el-col :span="21" style="width: 100%;">
-                  <el-select v-model="value" filterable placeholder="Tỉnh / Thành phố">
+                  <el-select v-model="province_id" filterable placeholder="Tỉnh / Thành phố">
                     <el-option
-                      v-for="item in options"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                      v-for="item in listProvinces"
+                      :key="item.ProvinceID"
+                      :label="item.ProvinceName"
+                      :value="item.ProvinceID">
                     </el-option>
                   </el-select>
                 </el-col>
               </el-row>
               <el-row style="margin-top: 10px;">
                 <el-col :span="21" style="width: 100%;">
-                  <el-select v-model="value" filterable placeholder="Quận / Huyện">
+                  <el-select v-model="district_id" filterable placeholder="Quận / Huyện">
                     <el-option
-                      v-for="item in options"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                      v-for="item in listDistricts"
+                      :key="item.DistrictID"
+                      :label="item.DistrictName"
+                      :value="item.DistrictID">
                     </el-option>
                   </el-select>
                 </el-col>
               </el-row>
               <el-row style="margin-top: 10px;">
                 <el-col :span="21" style="width: 100%;">
-                  <el-select v-model="value" filterable placeholder="Xã / Phường">
+                  <el-select v-model="ward_id" filterable placeholder="Xã / Phường">
                     <el-option
-                      v-for="item in options"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                      v-for="item in listWards"
+                      :key="item.WardCode"
+                      :label="item.WardName"
+                      :value="item.WardCode">
                     </el-option>
                   </el-select>
                 </el-col>
               </el-row>
               <el-row style="margin-top: 10px;">
                 <el-col :span="21">
-                  <el-input placeholder="Địa chỉ chi tiết" v-model="input1">
+                  <el-input placeholder="Địa chỉ chi tiết" v-model="address_detail">
                     <template slot="prepend">Địa chỉ chi tiết</template>
                   </el-input>
                 </el-col>
@@ -231,10 +175,28 @@
   </el-container>
 </template>
 <script>
+import { getProvinces, getDistricts, getWards } from "@/api/common/ghn.js";
+
 export default {
   name: "C-Cart",
   data() {
     return {
+      name: "",
+      phone: "",
+      province_id: "",
+      province_name: "",
+      district_id: "",
+      district_name: "",
+      ward_id: "",
+      ward_name: "",
+      address_detail:  "",
+      note: "",
+      listProvinces: [],
+      listDistricts: [],
+      listWards: [],
+      listProducts: [],
+      
+
       src: "https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg",
       radio2: "",
       radio3: "",
@@ -257,6 +219,52 @@ export default {
         }],
         value: ''
     };
+  },
+  watch: {
+    "province_id": {
+      handler: function (newValue) {
+        if (newValue != "") {
+          this.getListDistricts(newValue);
+          this.district_id = "";
+        }
+      },
+      deep: true,
+    },
+    "district_id": {
+      handler: function (newValue) {
+        if (newValue != "") {
+          this.getListWards(newValue);
+          this.ward_id = "";
+        } else {
+          this.ward_id = "";
+        }
+      },
+      deep: true,
+    },
+  },
+  created() {
+    this.getListProvinces();
+    this.listProducts = JSON.parse(localStorage.getItem('cart'));
+  },
+  methods: {
+    async getListProvinces() {
+      const response = await getProvinces();
+      if (response.data.code == 200) {
+        this.listProvinces = response.data.data;
+      }
+    },
+    async getListDistricts(province_id) {
+      const response = await getDistricts(province_id);
+      if (response.data.code == 200) {
+        this.listDistricts = response.data.data;
+      }
+    },
+    async getListWards(district_id) {
+      const response = await getWards(district_id);
+      if (response.data.code == 200) {
+        this.listWards = response.data.data;
+      }
+    },
   },
 };
 </script>
