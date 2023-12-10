@@ -38,7 +38,7 @@
         <el-row>
           <el-col :span="12" style="margin-right: 5px;">
             <el-badge :value="12" class="item">
-              <el-button icon="el-icon-shopping-cart-2" style="width: 100%; background-color: rgba(255,172,10,.6);">Giỏ hàng</el-button>
+              <el-button @click="cart()" icon="el-icon-shopping-cart-2" style="width: 100%; background-color: rgba(255,172,10,.6);">Giỏ hàng</el-button>
             </el-badge>
           </el-col>
           <el-col :span="11">
@@ -56,6 +56,9 @@
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>
                       <span @click="profile()">Tài khoản</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item>
+                      <span @click="order()">Đơn hàng</span>
                     </el-dropdown-item>
                     <el-dropdown-item>
                       <span @click="handleLogout()">Đăng xuất</span>
@@ -205,7 +208,13 @@ export default {
     },
     profile() {
       route.push({ name: "c-profile" }).catch(() => {});
-    }
+    },
+    order() {
+      route.push({ name: "c-order" }).catch(() => {});
+    },
+    cart() {
+      route.push({ name: "c-cart" }).catch(() => {});
+    },
   }
 };
 </script>
