@@ -37,7 +37,7 @@
       <el-col :span="6">
         <el-row>
           <el-col :span="12" style="margin-right: 5px;">
-            <el-badge :value="12" class="item">
+            <el-badge :value="amountCart" class="item">
               <el-button @click="cart()" icon="el-icon-shopping-cart-2" style="width: 100%; background-color: rgba(255,172,10,.6);">Giỏ hàng</el-button>
             </el-badge>
           </el-col>
@@ -109,6 +109,7 @@ export default {
       search: "",
       isLogin: false,
       circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+      amountCart: 0,
     };
   },
   watch: {
@@ -127,13 +128,25 @@ export default {
     this.getAllCategory();
     EventBus.$on("emit-auth", (payload) => {
       this.isLogin = payload.isLogin;
-      setTimeout(() => { this.emitEvent(); }, 250);
+      setTimeout(() => { this.emitEvent(); }, 200);
     });
+    EventBus.$on("check-cart", () => {
+      this.checkAmountCart();
+    });
+    this.checkAmountCart();
   },
   methods: {
     backToHome() {
       route.push({ name: "c-home"}).catch(()=>{});
-      setTimeout(() => { this.emitEvent(); }, 100);
+      setTimeout(() => { this.emitEvent(); }, 200);
+    },
+    checkAmountCart () {
+      var cart = JSON.parse(localStorage.getItem('cart'));
+      if (cart) {
+        this.amountCart = cart.length;
+      } else {
+        this.amountCart = 0;
+      }
     },
     async getProfile() {
       const response = await me();
@@ -201,7 +214,7 @@ export default {
     },
     productCategory(category_id) {
       route.push({ name: "c-product-category", params: { category_id: category_id } }).catch(() => {});
-      setTimeout(() => { this.emitEvent(); }, 100);
+      setTimeout(() => { this.emitEvent(); }, 200);
     },
     login() {
       route.push({ name: "c-login" }).catch(() => {});

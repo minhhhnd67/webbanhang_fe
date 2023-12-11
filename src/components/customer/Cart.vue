@@ -39,7 +39,7 @@
             <el-col :span="3"> {{ product.code }} </el-col>
             <el-col :span="4"> {{ product.name }} </el-col>
             <el-col :span="4"> {{ product.skus }} </el-col>
-            <el-col :span="3"> {{ product.price }}đ </el-col>
+            <el-col :span="3"> {{ handleFormatMoney(product.price) }} </el-col>
             <el-col :span="4">
               <el-input-number
                 v-model="listProducts[index].amount"
@@ -50,6 +50,7 @@
             </el-col>
             <el-col :span="1">
               <el-button
+                @click="deleteProduct(index)"
                 type="danger"
                 size="small"
                 icon="el-icon-delete"
@@ -78,7 +79,7 @@
               <p><b>Tổng tiền:</b></p>
             </el-col>
             <el-col :span="3">
-              <p style="color: #ff5100"><b>68.000.000đ</b></p>
+              <p style="color: #ff5100"><b>{{ handleFormatMoney(this.total_money) }}</b></p>
             </el-col>
             <el-col :span="4">
               <el-link></el-link>
@@ -175,7 +176,9 @@
   </el-container>
 </template>
 <script>
+import EventBus from "@/utils/EventBus.js";
 import { getProvinces, getDistricts, getWards } from "@/api/common/ghn.js";
+import { formatMoney } from "@/utils/helper.js";
 
 export default {
   name: "C-Cart",
@@ -195,6 +198,7 @@ export default {
       listDistricts: [],
       listWards: [],
       listProducts: [],
+      total_money: 0,
       
 
       src: "https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg",
@@ -241,6 +245,18 @@ export default {
       },
       deep: true,
     },
+    "listProducts": {
+      handler: function (newListProducts) {
+        this.total_money = 0;
+        newListProducts.forEach((product) => {
+          this.total_money += product.price * product.amount;
+        });
+        localStorage.setItem('cart', JSON.stringify(newListProducts));
+        // check cart
+        EventBus.$emit("check-cart");
+      },
+      deep: true,
+    },
   },
   created() {
     this.getListProvinces();
@@ -265,6 +281,15 @@ export default {
         this.listWards = response.data.data;
       }
     },
+    deleteProduct(index) {
+      this.listProducts.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(this.listProducts));
+      // check cart
+      EventBus.$emit("check-cart");
+    },
+    handleFormatMoney(money) {
+      return formatMoney(money);
+    }
   },
 };
 </script>
