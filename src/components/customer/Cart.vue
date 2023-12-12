@@ -2,10 +2,7 @@
   <el-container>
     <el-main>
       <el-row type="flex" justify="center">
-        <el-col
-          style="background-color: #f0e7e3; border-radius: 20px"
-          :span="22"
-        >
+        <el-col style="background-color: #f0e7e3; border-radius: 20px" :span="22">
           <el-row style="padding: 10px" type="flex" justify="center" :gutter="30">
             <el-col :span="2">
               <p><b>Ảnh</b></p>
@@ -29,12 +26,16 @@
               <el-link></el-link>
             </el-col>
           </el-row>
-          <el-row v-for="(product, index) in listProducts" :key="index" style="padding: 10px" type="flex" justify="center" :gutter="20">
+          <el-row
+            v-for="(product, index) in listProducts"
+            :key="index"
+            style="padding: 10px"
+            type="flex"
+            justify="center"
+            :gutter="20"
+          >
             <el-col :span="2">
-              <img
-                style="width: 100%"
-                :src="product.image"
-              />
+              <img style="width: 100%" :src="product.image" />
             </el-col>
             <el-col :span="3"> {{ product.code }} </el-col>
             <el-col :span="4"> {{ product.name }} </el-col>
@@ -79,7 +80,9 @@
               <p><b>Tổng tiền:</b></p>
             </el-col>
             <el-col :span="3">
-              <p style="color: #ff5100"><b>{{ handleFormatMoney(this.total_money) }}</b></p>
+              <p style="color: #ff5100">
+                <b>{{ handleFormatMoney(this.total_money) }}</b>
+              </p>
             </el-col>
             <el-col :span="4">
               <el-link></el-link>
@@ -96,7 +99,7 @@
               <h3>Thông tin mua hàng</h3>
             </el-col>
             <el-col :span="16">
-              <el-row style="margin-top: 20px;">
+              <el-row style="margin-top: 20px">
                 <el-col :span="10">
                   <el-input placeholder="Họ tên" v-model="name">
                     <template slot="prepend">Họ tên</template>
@@ -111,50 +114,57 @@
                   </el-input>
                 </el-col>
               </el-row>
-              <el-row style="margin-top: 10px;">
-                <el-col :span="21" style="width: 100%;">
-                  <el-select v-model="province_id" filterable placeholder="Tỉnh / Thành phố">
+              <el-row style="margin-top: 10px">
+                <el-col :span="21" style="width: 100%">
+                  <el-select
+                    v-model="province_id"
+                    filterable
+                    placeholder="Tỉnh / Thành phố"
+                  >
                     <el-option
                       v-for="item in listProvinces"
                       :key="item.ProvinceID"
                       :label="item.ProvinceName"
-                      :value="item.ProvinceID">
+                      :value="item.ProvinceID"
+                    >
                     </el-option>
                   </el-select>
                 </el-col>
               </el-row>
-              <el-row style="margin-top: 10px;">
-                <el-col :span="21" style="width: 100%;">
+              <el-row style="margin-top: 10px">
+                <el-col :span="21" style="width: 100%">
                   <el-select v-model="district_id" filterable placeholder="Quận / Huyện">
                     <el-option
                       v-for="item in listDistricts"
                       :key="item.DistrictID"
                       :label="item.DistrictName"
-                      :value="item.DistrictID">
+                      :value="item.DistrictID"
+                    >
                     </el-option>
                   </el-select>
                 </el-col>
               </el-row>
-              <el-row style="margin-top: 10px;">
-                <el-col :span="21" style="width: 100%;">
+              <el-row style="margin-top: 10px">
+                <el-col :span="21" style="width: 100%">
                   <el-select v-model="ward_id" filterable placeholder="Xã / Phường">
                     <el-option
                       v-for="item in listWards"
                       :key="item.WardCode"
                       :label="item.WardName"
-                      :value="item.WardCode">
+                      :value="item.WardCode"
+                    >
                     </el-option>
                   </el-select>
                 </el-col>
               </el-row>
-              <el-row style="margin-top: 10px;">
+              <el-row style="margin-top: 10px">
                 <el-col :span="21">
                   <el-input placeholder="Địa chỉ chi tiết" v-model="address_detail">
                     <template slot="prepend">Địa chỉ chi tiết</template>
                   </el-input>
                 </el-col>
               </el-row>
-              <el-row style="margin-top: 10px;">
+              <el-row style="margin-top: 10px">
                 <el-col :span="21">
                   <el-input placeholder="Ghi chú (Nếu có)" v-model="input1">
                     <template slot="prepend">Ghi chú</template>
@@ -163,9 +173,13 @@
               </el-row>
 
               <!-- Button buy -->
-              <el-row style="margin-top: 50px;">
+              <el-row style="margin-top: 50px">
                 <el-col :span="21">
-                  <el-button style="width: 100%; background-color: #ff5100; color: #ffffff;">Đặt hàng</el-button>
+                  <el-button
+                    @click="handlePaymentVNPAY()"
+                    style="width: 100%; background-color: #ff5100; color: #ffffff"
+                    >Đặt hàng</el-button
+                  >
                 </el-col>
               </el-row>
             </el-col>
@@ -179,6 +193,7 @@
 import EventBus from "@/utils/EventBus.js";
 import { getProvinces, getDistricts, getWards } from "@/api/common/ghn.js";
 import { formatMoney } from "@/utils/helper.js";
+import { paymentVNPAY } from "@/api/common/vnpay.js";
 
 export default {
   name: "C-Cart",
@@ -192,40 +207,21 @@ export default {
       district_name: "",
       ward_id: "",
       ward_name: "",
-      address_detail:  "",
+      address_detail: "",
       note: "",
       listProvinces: [],
       listDistricts: [],
       listWards: [],
       listProducts: [],
       total_money: 0,
-      
 
       src: "https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg",
-      radio2: "",
-      radio3: "",
       num: 1,
-      options: [{
-          value: 'Option1',
-          label: 'Option1'
-        }, {
-          value: 'Option2',
-          label: 'Option2'
-        }, {
-          value: 'Option3',
-          label: 'Option3'
-        }, {
-          value: 'Option4',
-          label: 'Option4'
-        }, {
-          value: 'Option5',
-          label: 'Option5'
-        }],
-        value: ''
+      value: "",
     };
   },
   watch: {
-    "province_id": {
+    province_id: {
       handler: function (newValue) {
         if (newValue != "") {
           this.getListDistricts(newValue);
@@ -234,7 +230,7 @@ export default {
       },
       deep: true,
     },
-    "district_id": {
+    district_id: {
       handler: function (newValue) {
         if (newValue != "") {
           this.getListWards(newValue);
@@ -245,13 +241,13 @@ export default {
       },
       deep: true,
     },
-    "listProducts": {
+    listProducts: {
       handler: function (newListProducts) {
         this.total_money = 0;
         newListProducts.forEach((product) => {
           this.total_money += product.price * product.amount;
         });
-        localStorage.setItem('cart', JSON.stringify(newListProducts));
+        localStorage.setItem("cart", JSON.stringify(newListProducts));
         // check cart
         EventBus.$emit("check-cart");
       },
@@ -260,9 +256,29 @@ export default {
   },
   created() {
     this.getListProvinces();
-    this.listProducts = JSON.parse(localStorage.getItem('cart'));
+    this.listProducts = JSON.parse(localStorage.getItem("cart"));
+
+    // Tạo một kênh
+    const channel = new BroadcastChannel("payment-channel");
+    // Đăng ký nhận dữ liệu
+    channel.onmessage = function (event) {
+      // Nhận dữ liệu
+      const data = event.data;
+      console.log(1234, data);
+      // this.notiPayment();
+    };
+  },
+  mounted() {
+    
   },
   methods: {
+    notiPayment() {
+      this.$notify({
+        title: "Success",
+        message: "Thanh toán thành công",
+        type: "success",
+      });
+    },
     async getListProvinces() {
       const response = await getProvinces();
       if (response.data.code == 200) {
@@ -283,13 +299,23 @@ export default {
     },
     deleteProduct(index) {
       this.listProducts.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(this.listProducts));
+      localStorage.setItem("cart", JSON.stringify(this.listProducts));
       // check cart
       EventBus.$emit("check-cart");
     },
     handleFormatMoney(money) {
       return formatMoney(money);
-    }
+    },
+    async handlePaymentVNPAY() {
+      let data = {
+        total_money: this.total_money,
+      };
+      const response = await paymentVNPAY(data);
+      if (response.data.code == "00") {
+        let urlPayment = response.data.data;
+        window.open(urlPayment);
+      }
+    },
   },
 };
 </script>

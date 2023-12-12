@@ -101,6 +101,17 @@ const routes = [
         },
       ]
     },
+    {
+      path: '/payment/sucess',
+      name: 'c-payment-success',
+      component: () => import('@/views/customer/payment/Success.vue'),
+      meta: {
+        role: ["guest"],
+        title: "Thanh toán thành công",
+        showMenu: false,
+      }
+    },
+    
 
     // Route Admin, Manager
     {
