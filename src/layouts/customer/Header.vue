@@ -114,8 +114,9 @@ export default {
   },
   watch: {
     "storeId": {
-      handler: function () {
-        console.log(11);
+      handler: function (newStoreId) {
+        console.log(11, newStoreId);
+        store.state.cStoreId = newStoreId;
         this.emitEvent();
       },
       deep: false
@@ -128,6 +129,7 @@ export default {
     this.getAllCategory();
     EventBus.$on("emit-auth", (payload) => {
       this.isLogin = payload.isLogin;
+      this.getProfile();
       setTimeout(() => { this.emitEvent(); }, 200);
     });
     EventBus.$on("check-cart", () => {
@@ -153,6 +155,7 @@ export default {
       if (response.data.code == 200) {
         this.mUser =  response.data.data;
         store.state.mUser = response.data.data;
+        console.log(666, store.state.mUser);
         if (response.data.data.avatar) {
           this.circleUrl = this.baseURL + "/storage/" + response.data.data.avatar;
         }
@@ -170,6 +173,7 @@ export default {
           if (response.data.code == 200) {
             store.state.is_login_manager = true;
             store.state.tokenBE = "";
+            store.state.cUser = {};
             localStorage.setItem("tokenBE", "");
             this.isLogin = false;
 
@@ -189,6 +193,7 @@ export default {
       if (response.data.code == 200) {
         this.allStore = response.data.data;
         this.storeId = this.allStore[0].id;
+        store.state.cStoreId = this.allStore.id
       }
     },
     async getAllCategory() {

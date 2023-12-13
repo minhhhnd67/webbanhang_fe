@@ -2,15 +2,10 @@
     <el-container>
         <el-main>
             <el-row type="flex" justify="center">
-              <el-col :span="6">
-                <h1>Thanh toán thành công</h1>
-              </el-col>
+              <h1>Thanh toán thành công</h1>
             </el-row>
         </el-main>
     </el-container>
-  <!-- <div>
-    <h1>Thanh toán thành công</h1>
-  </div> -->
 </template>
 <script>
 export default {

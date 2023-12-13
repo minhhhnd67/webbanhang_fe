@@ -6,6 +6,7 @@ const store = new Vuex.Store({
     state () {
       return {
         cUser: {},
+        cStoreId: "",
         mUser: {},
         tokenBE: '',
         is_login_manager: true
