@@ -68,6 +68,35 @@
               </el-col>
             </el-row>
 
+            <!-- fee ship -->
+            <el-row
+              style="padding: 20px 10px; margin-top: 0px"
+              type="flex"
+              justify="center"
+              :gutter="20"
+            >
+              <el-col :span="2">
+                <el-link></el-link>
+              </el-col>
+              <el-col :span="3">
+                <el-link></el-link>
+              </el-col>
+              <el-col :span="4">
+                <el-link></el-link>
+              </el-col>
+              <el-col :span="4">
+                <p>Phí vận chuyển:</p>
+              </el-col>
+              <el-col :span="3">
+                <p>
+                  <b>{{ handleFormatMoney(this.feeShip) }}</b>
+                </p>
+              </el-col>
+              <el-col :span="4">
+                <el-link></el-link>
+              </el-col>
+            </el-row>
+
             <!-- total money -->
             <el-row
               style="padding: 20px 10px; margin-top: 0px"
@@ -211,7 +240,13 @@
 </template>
 <script>
 import EventBus from "@/utils/EventBus.js";
-import { getProvinces, getDistricts, getWards } from "@/api/common/ghn.js";
+import {
+  getProvinces,
+  getDistricts,
+  getWards,
+  calculateFeeShip,
+  createOrderShip,
+} from "@/api/common/ghn.js";
 import { formatMoney } from "@/utils/helper.js";
 import { paymentVNPAY } from "@/api/common/vnpay.js";
 import store from "@/store";
@@ -251,25 +286,70 @@ export default {
       src: "https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg",
       num: 1,
       value: "",
+
+      // data ghn
+      dataGHN: {
+        payment_type_id: 2,
+        note: "Tintest 123",
+        required_note: "KHONGCHOXEMHANG",
+        return_phone: "0332190458",
+        return_address: "39 NTT",
+        return_district_id: null,
+        return_ward_code: "",
+        client_order_code: "",
+        to_name: "TinTest124",
+        to_phone: "0987654321",
+        to_address: "72 Thành Thái, Phường 14, Quận 10, Hồ Chí Minh, Vietnam",
+        to_ward_code: "20107",
+        to_district_id: 1442,
+        cod_amount: 0,
+        content: "ABCDEF",
+        weight: 1000,
+        length: 15,
+        width: 15,
+        height: 10,
+        pick_station_id: 0,
+        insurance_value: 2000000,
+        service_id: 0,
+        service_type_id: 2,
+        coupon: null,
+        pick_shift: [2],
+        items: [],
+      },
+      feeShip: 0,
     };
   },
   watch: {
     "ruleForm.province_id": {
       handler: function (newValue) {
+        this.ruleForm.total_money -= this.feeShip;
+        this.feeShip = 0;
         if (newValue != "") {
           this.getListDistricts(newValue);
-          this.district_id = "";
+          this.ruleForm.district_id = "";
         }
       },
       deep: true,
     },
     "ruleForm.district_id": {
       handler: function (newValue) {
+        this.ruleForm.total_money -= this.feeShip;
+        this.feeShip = 0;
         if (newValue != "") {
           this.getListWards(newValue);
-          this.ward_id = "";
+          this.ruleForm.ward_id = "";
         } else {
-          this.ward_id = "";
+          this.ruleForm.ward_id = "";
+        }
+      },
+      deep: true,
+    },
+    "ruleForm.ward_id": {
+      handler: function (newValue) {
+        if (newValue) {
+          this.dataGHN.to_district_id = this.ruleForm.district_id;
+          this.dataGHN.to_ward_code = this.ruleForm.ward_id;
+          this.getFeeShip();
         }
       },
       deep: true,
@@ -277,29 +357,72 @@ export default {
     listProducts: {
       handler: function (newListProducts) {
         this.ruleForm.total_money = 0;
+        // let totalProduct = 0;
         newListProducts.forEach((product) => {
           this.ruleForm.total_money += product.price * product.amount;
         });
+        this.ruleForm.total_money += this.feeShip;
         localStorage.setItem("cart", JSON.stringify(newListProducts));
+
+        // thêm thông tin check vận chuyển
+        
+        if (this.listProducts != []) {
+          this.dataGHN.items = [];
+          this.listProducts.forEach((product) => {
+            this.dataGHN.items.push({
+              name: product.name,
+              code: product.code,
+              quantity: product.amount,
+              price: product.price,
+              length: 12,
+              width: 12,
+              height: 12,
+              category: {
+                level1: "Điệnt thoại",
+              },
+            });
+          });
+          console.log(678, this.dataGHN.items);
+        }
+
         // check cart
         EventBus.$emit("check-cart");
       },
       deep: true,
     },
     isSubmitForm: {
-      handler: function(newIsSubmitForm) {
+      handler: function (newIsSubmitForm) {
         // if (newIsSubmitForm == true) {
-          console.log(555, newIsSubmitForm);
-          // this.submitForm();
+        console.log(555, newIsSubmitForm);
+        // this.submitForm();
         // }
       },
-      deep:false
-    }
+      deep: false,
+    },
   },
   created() {
     this.getListProvinces();
     this.listProducts = JSON.parse(localStorage.getItem("cart"));
     this.ruleForm.store_id = store.state.cStoreId;
+
+    // thêm thông tin check vận chuyển
+    if (this.listProducts != []) {
+      this.listProducts.forEach((product) => {
+        this.dataGHN.items.push({
+          name: product.name,
+          code: product.code,
+          quantity: product.amount,
+          price: product.price,
+          length: 12,
+          width: 12,
+          height: 12,
+          category: {
+            level1: "Điện thoại",
+          },
+        });
+      });
+      console.log(678, this.dataGHN.items);
+    }
 
     // Tạo một kênh
     const channel = new BroadcastChannel("payment-channel");
@@ -355,7 +478,8 @@ export default {
       const response = await paymentVNPAY(data);
       if (response.data.code == "00") {
         let urlPayment = response.data.data;
-        this.submitForm('ruleForm');
+        this.submitForm("ruleForm");
+        this.addOrderShip();
         window.open(urlPayment);
       }
     },
@@ -393,15 +517,30 @@ export default {
               message: "Tạo đơn hàng mới thành công!",
               type: "success",
             });
-            this.listProducts = [];
+            
+            this.$refs[formName].resetFields();
+
             alert("Tạo đơn hàng mới thành công");
             // router.push({ name: "m-home" });
+            this.listProducts = [];
           }
         } else {
           console.log("error submit!!");
           return false;
         }
       });
+    },
+    async getFeeShip() {
+      const response = await calculateFeeShip(this.dataGHN);
+      console.log(response);
+      if (response.data.code == 200) {
+        this.feeShip = response.data.data.total_fee;
+        this.ruleForm.total_money += this.feeShip;
+      }
+    },
+    async addOrderShip() {
+      const response = await createOrderShip(this.dataGHN);
+      console.log(999, response);
     },
   },
 };

@@ -193,7 +193,7 @@ export default {
       if (response.data.code == 200) {
         this.allStore = response.data.data;
         this.storeId = this.allStore[0].id;
-        store.state.cStoreId = this.allStore.id
+        store.state.cStoreId = this.storeId;
       }
     },
     async getAllCategory() {

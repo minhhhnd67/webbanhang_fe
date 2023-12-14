@@ -53,3 +53,23 @@ export function getWards(district_id) {
     headers
   );
 }
+
+export function calculateFeeShip(data) {
+  const headers = {
+    "Token": `${config.TOKEN_GHN}`,
+    "Content-Type": "application/json",
+    "ShopId": `${config.ShopId}`
+  };
+
+  return api(config.BASE_GHN_API, "post", "/shiip/public-api/v2/shipping-order/preview", data, headers);
+}
+
+export function createOrderShip(data) {
+  const headers = {
+    "Token": `${config.TOKEN_GHN}`,
+    "Content-Type": "application/json",
+    "ShopId": `${config.ShopId}`
+  };
+
+  return api(config.BASE_GHN_API, "post", "/shiip/public-api/v2/shipping-order/create", data, headers);
+}
