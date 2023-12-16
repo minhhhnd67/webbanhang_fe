@@ -125,6 +125,7 @@
 
 <script>
 import route from "@/router";
+import store from "@/store";
 import { getNewProductByStore, searchProduct } from "@/api/customer/product.js";
 import EventBus from "@/utils/EventBus.js";
 import config from "@/config/config.dev.json";
@@ -167,7 +168,10 @@ export default {
   },
   created() {
     this.baseURL = config.BASE_BE_API;
-    
+    this.storeId = store.state.cStoreId;
+    if (this.storeId) {
+      this.listNewProductByStore(this.storeId);
+    }
   },
   methods: {
     handleSizeChange(val) {

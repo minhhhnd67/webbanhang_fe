@@ -105,6 +105,7 @@
 </template>
 <script>
 import route from "@/router";
+import store from "@/store";
 import { showCategory } from "@/api/customer/category.js";
 import { searchProduct } from "@/api/customer/product.js";
 import { formatMoney } from "@/utils/helper.js";
@@ -147,7 +148,10 @@ export default {
     this.baseURL = config.BASE_BE_API;
     this.categoryId = this.$route.params.category_id;
     this.getDetailCategory(this.$route.params.category_id);
-    
+    this.storeId = store.state.cStoreId;
+    if (this.storeId) {
+      this.listProductSearch(this.storeId);
+    }
   },
   methods: {
     handleSizeChange(val) {

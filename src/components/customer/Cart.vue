@@ -403,7 +403,10 @@ export default {
   created() {
     this.getListProvinces();
     this.listProducts = JSON.parse(localStorage.getItem("cart"));
-    this.ruleForm.store_id = store.state.cStoreId;
+    this.ruleForm.store_id = +localStorage.getItem('cStoreId');
+    if (!this.ruleForm.store_id) {
+      this.ruleForm.store_id = store.state.cStoreId;
+    }
 
     // thêm thông tin check vận chuyển
     if (this.listProducts != []) {

@@ -116,6 +116,7 @@ export default {
     "storeId": {
       handler: function (newStoreId) {
         console.log(11, newStoreId);
+        localStorage.setItem("cStoreId", newStoreId);
         store.state.cStoreId = newStoreId;
         this.emitEvent();
       },
@@ -192,7 +193,11 @@ export default {
       const response = await allStore();
       if (response.data.code == 200) {
         this.allStore = response.data.data;
-        this.storeId = this.allStore[0].id;
+        this.storeId = +localStorage.getItem('cStoreId');
+        console.log(this.allStore, this.storeId);
+        if (!this.storeId) {
+          this.storeId = this.allStore[0].id;
+        }
         store.state.cStoreId = this.storeId;
       }
     },
