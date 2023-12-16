@@ -230,6 +230,16 @@ const routes = [
           },
         },
         {
+          path: '/manager/user/profile',
+          name: 'm-user-profile',
+          component: () => import('./../components/manager/user/Profile.vue'),
+          meta: {
+            role: ["admin"],
+            title: 'Thông tin tài khoản',
+            showMenu: true,
+          },
+        },
+        {
           path: '/manager/user/:id/update',
           name: 'm-user-update',
           component: () => import('./../components/manager/user/Update.vue'),

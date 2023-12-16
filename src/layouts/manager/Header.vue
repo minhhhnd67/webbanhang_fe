@@ -31,7 +31,9 @@
             <el-avatar :size="40" :src="circleUrl"></el-avatar>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>Profile</el-dropdown-item>
+            <el-dropdown-item>
+              <span @click="profile()">Profile</span>
+            </el-dropdown-item>
             <el-dropdown-item>
               <span @click="handleLogout()">Logout</span>
             </el-dropdown-item>
@@ -79,6 +81,9 @@ export default {
         localStorage.setItem("tokenBE", "");
         this.$router.push({ name: "m-login" });
       }
+    },
+    profile() {
+      this.$router.push({ name: "m-user-profile" }).catch(() => {});
     },
   }
 };
