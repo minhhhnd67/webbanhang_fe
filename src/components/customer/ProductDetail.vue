@@ -78,6 +78,7 @@ export default {
       radio3: "",
       num: 1,
       addCart: {
+        store_id: "",
         product_id: "",
         name: "",
         image: "",
@@ -124,6 +125,7 @@ export default {
       }
     },
     addToCart() {
+      this.addCart.store_id = localStorage.getItem('cStoreId');
       this.skus.forEach((sku) => {
         this.addCart.skus += sku.name + ": " + sku.value + ", ";
       });

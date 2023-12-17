@@ -251,16 +251,19 @@ import { formatMoney } from "@/utils/helper.js";
 import { paymentVNPAY } from "@/api/common/vnpay.js";
 import store from "@/store";
 // import router from "@/router";
-import { createOrder } from "@/api/customer/order.js";
+import { createOrder, updateOrder } from "@/api/customer/order.js";
 
 export default {
   name: "C-Cart",
   data() {
     return {
+      order_id: "",
+      code_shipping: "",
+      status_payment: "",
       ruleForm: {
         store_id: "",
         user_id: 0,
-        status: 4,
+        status: 0,
         total_money: 0,
         type: 2,
         name: "",
@@ -292,7 +295,7 @@ export default {
         payment_type_id: 2,
         note: "Tintest 123",
         required_note: "KHONGCHOXEMHANG",
-        return_phone: "0332190458",
+        return_phone: "0394076444",
         return_address: "39 NTT",
         return_district_id: null,
         return_ward_code: "",
@@ -344,11 +347,13 @@ export default {
       },
       deep: true,
     },
-    "ruleForm.ward_id": {
+    "ruleForm.address_detail": {
       handler: function (newValue) {
-        if (newValue) {
+        if (newValue && this.ruleForm.ward_id) {
           this.dataGHN.to_district_id = this.ruleForm.district_id;
           this.dataGHN.to_ward_code = this.ruleForm.ward_id;
+          this.dataGHN.to_phone = this.ruleForm.phone;
+          this.dataGHN.to_address = this.ruleForm.address_detail;
           this.getFeeShip();
         }
       },
@@ -365,7 +370,7 @@ export default {
         localStorage.setItem("cart", JSON.stringify(newListProducts));
 
         // thêm thông tin check vận chuyển
-        
+
         if (this.listProducts != []) {
           this.dataGHN.items = [];
           this.listProducts.forEach((product) => {
@@ -390,6 +395,12 @@ export default {
       },
       deep: true,
     },
+    feeShip: {
+      handler: function () {
+        this.ruleForm.total_money += this.feeShip;
+      },
+      deep: false,
+    },
     isSubmitForm: {
       handler: function (newIsSubmitForm) {
         // if (newIsSubmitForm == true) {
@@ -402,12 +413,16 @@ export default {
   },
   created() {
     this.getListProvinces();
-    this.listProducts = JSON.parse(localStorage.getItem("cart"));
-    this.ruleForm.store_id = +localStorage.getItem('cStoreId');
+    this.ruleForm.store_id = +localStorage.getItem("cStoreId");
     if (!this.ruleForm.store_id) {
       this.ruleForm.store_id = store.state.cStoreId;
     }
-
+    
+    let dataProducts = JSON.parse(localStorage.getItem("cart"));
+    this.listProducts = dataProducts.filter((obj) => {
+      return obj.store_id == this.ruleForm.store_id;
+    });
+    
     // thêm thông tin check vận chuyển
     if (this.listProducts != []) {
       this.listProducts.forEach((product) => {
@@ -482,7 +497,6 @@ export default {
       if (response.data.code == "00") {
         let urlPayment = response.data.data;
         this.submitForm("ruleForm");
-        this.addOrderShip();
         window.open(urlPayment);
       }
     },
@@ -515,17 +529,18 @@ export default {
 
           const response = await createOrder(this.ruleForm);
           if (response.data.code == 200) {
-            this.$message({
-              showClose: true,
-              message: "Tạo đơn hàng mới thành công!",
-              type: "success",
-            });
-            
-            this.$refs[formName].resetFields();
+            this.order_id = response.data.data.order_id;
+            this.addOrderShip();
 
-            alert("Tạo đơn hàng mới thành công");
             // router.push({ name: "m-home" });
             this.listProducts = [];
+            this.ruleForm.name = "";
+            this.ruleForm.phone = "";
+            this.ruleForm.province_id = "";
+            this.ruleForm.district_id = "";
+            this.ruleForm.ward_id = "";
+            this.ruleForm.address_detail = "";
+            this.ruleForm.note = "";
           }
         } else {
           console.log("error submit!!");
@@ -538,12 +553,21 @@ export default {
       console.log(response);
       if (response.data.code == 200) {
         this.feeShip = response.data.data.total_fee;
-        this.ruleForm.total_money += this.feeShip;
       }
     },
     async addOrderShip() {
       const response = await createOrderShip(this.dataGHN);
       console.log(999, response);
+      if (response.data.code == 200) {
+        this.code_shipping = response.data.data.order_code;
+        const res = await updateOrder(this.order_id, {
+          code_shipping: this.code_shipping,
+        });
+        console.log(8899, res);
+        if (res.data.code == 200) {
+          alert("Tạo đơn hàng mới thành công");
+        }
+      }
     },
   },
 };

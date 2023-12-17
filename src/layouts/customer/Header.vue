@@ -118,6 +118,7 @@ export default {
         console.log(11, newStoreId);
         localStorage.setItem("cStoreId", newStoreId);
         store.state.cStoreId = newStoreId;
+        this.checkAmountCart();
         this.emitEvent();
       },
       deep: false
@@ -136,6 +137,8 @@ export default {
     EventBus.$on("check-cart", () => {
       this.checkAmountCart();
     });
+  },
+  mounted() {
     this.checkAmountCart();
   },
   methods: {
@@ -145,6 +148,9 @@ export default {
     },
     checkAmountCart () {
       var cart = JSON.parse(localStorage.getItem('cart'));
+      cart = cart.filter((obj) => {
+        return obj.store_id == localStorage.getItem('cStoreId');
+      });
       if (cart) {
         this.amountCart = cart.length;
       } else {
