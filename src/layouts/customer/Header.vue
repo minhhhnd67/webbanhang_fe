@@ -148,10 +148,10 @@ export default {
     },
     checkAmountCart () {
       var cart = JSON.parse(localStorage.getItem('cart'));
-      cart = cart.filter((obj) => {
-        return obj.store_id == localStorage.getItem('cStoreId');
-      });
       if (cart) {
+        cart = cart.filter((obj) => {
+          return obj.store_id == localStorage.getItem('cStoreId');
+        });
         this.amountCart = cart.length;
       } else {
         this.amountCart = 0;
@@ -205,6 +205,7 @@ export default {
           this.storeId = this.allStore[0].id;
         }
         store.state.cStoreId = this.storeId;
+        this.emitEvent();
       }
     },
     async getAllCategory() {

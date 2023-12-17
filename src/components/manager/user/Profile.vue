@@ -12,11 +12,6 @@
         <el-row type="flex" justify="center">
           <el-col :span="22">
             <el-row>
-              <el-col :span="24">
-                <h2>Thông tin tài khoản</h2>
-              </el-col>
-            </el-row>
-            <el-row>
               <el-col :span="12">
                 <el-row style="margin-top: 10px">
                   <el-col :span="22">
@@ -147,7 +142,7 @@
               <el-col :span="4">
                 <el-button
                   @click="submitForm('ruleForm')"
-                  style="width: 100%; background-color: #ff5100; color: #ffffff"
+                  style="width: 100%; background-color: #038f21; color: #ffffff"
                   >Lưu thông tin</el-button
                 >
               </el-col>

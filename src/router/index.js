@@ -236,7 +236,7 @@ const routes = [
           meta: {
             role: ["admin"],
             title: 'Thông tin tài khoản',
-            showMenu: true,
+            showMenu: false,
           },
         },
         {
@@ -392,6 +392,7 @@ const router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
+    document.title = "Mobi Store";
     if (to.path.includes("manager") && !to.path.includes("login") && !to.path.includes("register")) {
         axios.get('http://127.0.0.1:8000/api/me', {
             headers: {
