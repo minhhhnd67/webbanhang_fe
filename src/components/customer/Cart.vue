@@ -352,6 +352,7 @@ export default {
         if (newValue && this.ruleForm.ward_id) {
           this.dataGHN.to_district_id = this.ruleForm.district_id;
           this.dataGHN.to_ward_code = this.ruleForm.ward_id;
+          this.dataGHN.to_name = this.ruleForm.name;
           this.dataGHN.to_phone = this.ruleForm.phone;
           this.dataGHN.to_address = this.ruleForm.address_detail;
           this.getFeeShip();
@@ -417,7 +418,13 @@ export default {
     if (!this.ruleForm.store_id) {
       this.ruleForm.store_id = store.state.cStoreId;
     }
-    
+
+    let cUser = JSON.parse(localStorage.getItem("cUser"));
+    console.log(5566, cUser);
+    if (cUser) {
+      this.ruleForm.user_id = cUser.id;
+    }
+
     let dataProducts = JSON.parse(localStorage.getItem("cart"));
     this.listProducts = dataProducts.filter((obj) => {
       return obj.store_id == this.ruleForm.store_id;

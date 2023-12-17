@@ -102,7 +102,7 @@ export default {
   data() {
     return {
       baseURL: "",
-      mUser: {},
+      cUser: {},
       allStore: [],
       storeId: "",
       allCategory: [],
@@ -160,9 +160,10 @@ export default {
     async getProfile() {
       const response = await me();
       if (response.data.code == 200) {
-        this.mUser =  response.data.data;
-        store.state.mUser = response.data.data;
-        console.log(666, store.state.mUser);
+        this.cUser =  response.data.data;
+        store.state.cUser = response.data.data;
+        console.log(666, store.state.cUser);
+        localStorage.setItem('cUser', JSON.stringify(response.data.data));
         if (response.data.data.avatar) {
           this.circleUrl = this.baseURL + "/storage/" + response.data.data.avatar;
         }
@@ -182,6 +183,7 @@ export default {
             store.state.tokenBE = "";
             store.state.cUser = {};
             localStorage.setItem("tokenBE", "");
+            localStorage.setItem("cUser", "");
             this.isLogin = false;
 
             this.$message({

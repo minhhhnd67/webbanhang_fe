@@ -23,3 +23,18 @@ export function updateOrder(id, data) {
     headers
   );
 }
+
+export function listOrder(parameters) {
+  const headers = {
+    Authorization: ``,
+  };
+
+  return api(
+    config.BASE_BE_API,
+    "get",
+    "/api/customer/order/index",
+    {},
+    headers,
+    parameters
+  );
+}
