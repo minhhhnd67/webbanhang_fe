@@ -70,19 +70,17 @@
         </el-col>
       </el-row>
       <el-row type="flex" justify="center">
-        <el-col>
-          <div class="block">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page.sync="current_page"
-              :page-size="page_size"
-              layout="prev, pager, next"
-              :total="total"
-            >
-            </el-pagination>
-          </div>
-        </el-col>
+        <div class="block">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="current_page"
+            :page-size="page_size"
+            layout="prev, pager, next"
+            :total="total"
+          >
+          </el-pagination>
+        </div>
       </el-row>
     </el-main>
   </el-container>
