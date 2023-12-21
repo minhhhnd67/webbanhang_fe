@@ -1,6 +1,6 @@
 <template>
   <el-breadcrumb  separator="/">
-    <el-breadcrumb-item v-for="(matched, idx) in routeMatched" :key="idx">{{ matched.meta.title }}</el-breadcrumb-item>
+    <el-breadcrumb-item v-for="(matched, idx) in routeMatched" :key="idx"><b style="font-size: 16px;">{{ matched.meta.title }}</b></el-breadcrumb-item>
   </el-breadcrumb>
 </template>
 
