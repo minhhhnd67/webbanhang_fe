@@ -4,6 +4,7 @@ import axios from 'axios'
 import store from './../store'
 import ManagerLayout from "@/layouts/manager/Index.vue"
 import CustomerLayout from "@/layouts/customer/Index.vue"
+import { getRoles } from "@/utils/helper.js"
 Vue.use(VueRouter)
 
 const routes = [
@@ -149,7 +150,7 @@ const routes = [
         name: 'm-home',
         component: () => import('./../components/manager/Home.vue'),
         meta: {
-          role: ["admin", "manger-branch", "manager-store", "manager-warehouse"],
+          role: ["admin", "manage_store", "manage_warehouse", "staff"],
           title: "Trang chủ",
           showMenu: true,
           icon: "el-icon-s-home"
@@ -203,7 +204,7 @@ const routes = [
       name: 'm-user',
       component: ManagerLayout,
       meta: {
-        role: ["admin"],
+        role: ["admin", 'manage_store'],
         title: "Quản lý tài khoản",
         showMenu: true,
         icon: "el-icon-user-solid"
@@ -214,7 +215,7 @@ const routes = [
           name: 'm-user-list',
           component: () => import('./../components/manager/user/Index.vue'),
           meta: {
-            role: ["admin"],
+            role: ["admin", "manage_store"],
             title: 'Danh sách tài khoản',
             showMenu: true,
           },
@@ -224,7 +225,7 @@ const routes = [
           name: 'm-user-create',
           component: () => import('./../components/manager/user/Create.vue'),
           meta: {
-            role: ["admin"],
+            role: ["admin", "manage_store"],
             title: 'Thêm tài khoản mới',
             showMenu: true,
           },
@@ -234,7 +235,7 @@ const routes = [
           name: 'm-user-profile',
           component: () => import('./../components/manager/user/Profile.vue'),
           meta: {
-            role: ["admin"],
+            role: ["admin", "manage_store"],
             title: 'Thông tin tài khoản',
             showMenu: false,
           },
@@ -244,7 +245,7 @@ const routes = [
           name: 'm-user-update',
           component: () => import('./../components/manager/user/Update.vue'),
           meta: {
-            role: ["admin"],
+            role: ["admin", "manage_store"],
             title: 'Cập nhật thông tin tài khoản',
             showMenu: false,
           },
@@ -299,7 +300,7 @@ const routes = [
       name: 'm-product',
       component: ManagerLayout,
       meta: {
-        role: ["admin"],
+        role: ["admin", "manage_store", "manage_warehouse", "staff"],
         title: "Quản lý sản phẩm",
         showMenu: true,
         icon: "el-icon-s-cooperation"
@@ -310,7 +311,7 @@ const routes = [
           name: 'm-product-list',
           component: () => import('./../components/manager/product/Index.vue'),
           meta: {
-            role: ["admin"],
+            role: ["admin", "manage_store", "manage_warehouse", "staff"],
             title: 'Danh sách sản phẩm',
             showMenu: true,
           },
@@ -320,7 +321,7 @@ const routes = [
           name: 'm-product-create',
           component: () => import('./../components/manager/product/Create.vue'),
           meta: {
-            role: ["admin"],
+            role: ["admin", "manage_store", "manage_warehouse"],
             title: 'Thêm sản phẩm mới',
             showMenu: true,
           },
@@ -330,7 +331,7 @@ const routes = [
           name: 'm-product-update',
           component: () => import('./../components/manager/product/Update.vue'),
           meta: {
-            role: ["admin"],
+            role: ["admin", "manage_store", "manage_warehouse"],
             title: 'Cập nhật thông tin sản phẩm',
             showMenu: false,
           },
@@ -342,7 +343,7 @@ const routes = [
       name: 'm-order',
       component: ManagerLayout,
       meta: {
-        role: ["admin"],
+        role: ["admin", "manage_store", "manage_warehouse", "staff"],
         title: "Quản lý đơn hàng",
         showMenu: true,
         icon: "el-icon-shopping-cart-2"
@@ -353,7 +354,7 @@ const routes = [
           name: 'm-order-list',
           component: () => import('./../components/manager/order/Index.vue'),
           meta: {
-            role: ["admin"],
+            role: ["admin", "manage_store","manage_warehouse", "staff"],
             title: 'Danh sách đơn hàng',
             showMenu: true,
           },
@@ -363,7 +364,7 @@ const routes = [
           name: 'm-order-create',
           component: () => import('./../components/manager/order/Create.vue'),
           meta: {
-            role: ["admin"],
+            role: ["admin", "manage_store", "staff"],
             title: 'Thêm đơn hàng mới',
             showMenu: true,
           },
@@ -373,7 +374,7 @@ const routes = [
           name: 'm-order-update',
           component: () => import('./../components/manager/order/Update.vue'),
           meta: {
-            role: ["admin"],
+            role: ["admin", "manage_store", "manage_warehouse", "staff"],
             title: 'Cập nhật thông tin đơn hàng',
             showMenu: false,
           },
@@ -400,8 +401,15 @@ router.beforeEach((to, from, next) => {
               'Accept': 'application/json'
             },
           }).then((response) => {
-            if (response.status === 200) {
-              store.state.role = 'admin';
+            console.log(1234, response);
+            if (response.data.code === 200) {
+              let listRole = getRoles();
+              console.log(555, listRole);
+              let mRole = listRole.find((item) => {
+                return item.id == response.data.data.role;
+              });
+              store.state.mRole = mRole.code;
+              console.log(666, mRole);
               store.state.is_login_manager = false;
               next();
               console.log("Da xac thuc");
@@ -424,8 +432,8 @@ router.beforeEach((to, from, next) => {
               'Accept': 'application/json'
             },
           }).then((response) => {
-            if (response.status === 200) {
-              store.state.role = 'admin';
+            if (response.data.code === 200) {
+              store.state.mRole = 'admin';
               store.state.is_login_manager = false;
               next('/manager/home');
               console.log("Da xac thuc");

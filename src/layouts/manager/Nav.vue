@@ -8,7 +8,7 @@
       active-text-color="#ffd04b"
     >
     <template v-for="(route, index) in routes">
-      <el-submenu :index="index" v-if="route.meta.role.includes('admin') && route.children !== undefined" :key="index">
+      <el-submenu :index="index" v-if="route.meta.role.includes(mRole) && route.children !== undefined" :key="index">
         <template slot="title">
           <i :class="route.meta.icon"></i>
           <span>{{ route.meta.title }}</span>
@@ -16,7 +16,7 @@
         <el-menu-item-group>
           <!-- <el-menu-item :index="routeChild.path" v-for="(routeChild, idx) of route.children" :key="idx"><a :href="routeChild.path">{{ routeChild.meta.title }}</a></el-menu-item> -->
           <div :index="`${index}-${idx}`" v-for="(routeChild, idx) of route.children" :key="idx">
-            <el-menu-item v-if="routeChild.meta.showMenu">
+            <el-menu-item v-if="routeChild.meta.showMenu && routeChild.meta.role.includes(mRole)">
               <router-link :to="routeChild.path" style="width: 100%;">
                 {{ routeChild.meta.title }}
               </router-link>
@@ -24,7 +24,7 @@
           </div>
         </el-menu-item-group>
       </el-submenu>
-      <el-menu-item :index="index" v-if="route.meta.role.includes('admin') && route.meta.showMenu && route.children === undefined" :key="index">
+      <el-menu-item :index="index" v-if="route.meta.role.includes(mRole) && route.meta.showMenu && route.children === undefined" :key="index">
         <router-link :to="route.path" style="width: 100%;">
           <i :class="route.meta.icon"></i>
           <span>{{ route.meta.title }}</span>
@@ -37,6 +37,7 @@
 </template>
 <script>
 import router from './../../router'
+import store from "@/store";
 import { routes } from './../../router'
 
 export default {
@@ -44,6 +45,7 @@ export default {
   data() {
     return {
       routes: routes,
+      mRole: "",
     }
   },
   computed: {
@@ -52,6 +54,12 @@ export default {
     }
   }, 
   components: {  },
+  beforeCreate() {
+    
+  },
+  created() {
+    this.mRole = store.state.mRole;
+  },
   mounted() {
   },
   methods: {

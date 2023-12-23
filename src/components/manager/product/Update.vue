@@ -278,12 +278,12 @@ export default {
           const attributes = data.attributes;
           this.listAttribute.forEach((attribute, index) => {
             var attr = attributes.filter((obj) => {
-              return (obj.pivot.attribute_id == attribute.id);
+              return (obj?.pivot?.attribute_id == attribute.id);
             });
             this.ruleForm.attributes[index].attribute_option_id =
-              String(attr[0].pivot.attribute_option_id);
+              String(attr[0]?.pivot?.attribute_option_id);
             this.ruleForm.attributes[index].attribute_option_value =
-              attr[0].pivot.attribute_option_value;
+              attr[0]?.pivot?.attribute_option_value;
           });
         }, 500);
       }

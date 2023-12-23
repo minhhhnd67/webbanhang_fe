@@ -8,6 +8,7 @@ const store = new Vuex.Store({
         cUser: {},
         cStoreId: "",
         mUser: {},
+        mRole: "",
         tokenBE: '',
         is_login_manager: true
       }
