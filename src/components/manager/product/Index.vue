@@ -85,6 +85,7 @@ export default {
   },
   created() {
     this.storeId = store.state.mUser.store_id;
+    console.log(6688, this.storeId);
     this.mRole = store.state.mRole;
     if (this.roleCreate.includes(this.mRole)) {
       this.checkCreate = 1;

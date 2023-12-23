@@ -401,9 +401,14 @@ router.beforeEach((to, from, next) => {
               'Accept': 'application/json'
             },
           }).then((response) => {
+            console.log(12345, store.state.mUser);
             console.log(1234, response);
             if (response.data.code === 200) {
-              store.state.mUser = response.data.data;
+              if (!(store.state?.mUser?.store_id > 0)) {
+                console.log(6666);
+                store.state.mUser = response.data.data;
+              }
+              
               let listRole = getRoles();
               console.log(555, listRole);
               let mRole = listRole.find((item) => {
