@@ -67,7 +67,7 @@ export default {
       checkCreate: 0,
       roleCreate: ["admin", "manage_store"],
       mRole: "",
-      storeId: 4,
+      storeId: "",
       tableData: [],
       current_page: 1,
       page_size: 10,
@@ -84,6 +84,7 @@ export default {
     
   },
   created() {
+    this.storeId = store.state.mUser.store_id;
     this.mRole = store.state.mRole;
     if (this.roleCreate.includes(this.mRole)) {
       this.checkCreate = 1;

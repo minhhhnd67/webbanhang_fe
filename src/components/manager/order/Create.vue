@@ -162,6 +162,7 @@
 
 <script>
 import router from "@/router";
+import store from "@/store";
 import { getProvinces, getDistricts, getWards } from "@/api/common/ghn.js";
 import { getStatusOrder } from "@/utils/helper.js";
 import { allProduct } from "@/api/manager/product.js";
@@ -173,11 +174,11 @@ export default {
   },
   data() {
     return {
-      store_id: 4,
+      store_id: "",
       tableData: [],
       search: "",
       ruleForm: {
-        store_id: 4,
+        store_id: "",
         user_id: 0,
         status: 4,
         total_money: 0,
@@ -212,6 +213,8 @@ export default {
     },
   },
   created() {
+    this.store_id = store.state.mUser.store_id;
+    this.ruleForm.store_id = store.state.mUser.store_id;
     this.listStatus = getStatusOrder();
     this.listProduct = this.getAllProduct({storeId: this.store_id});
     this.getListProvinces();

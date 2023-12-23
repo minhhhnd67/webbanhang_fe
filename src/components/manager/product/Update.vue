@@ -164,6 +164,7 @@ import { Result } from 'element-ui';
 import config from "@/config/config.dev.json";
 import { showProduct, updateProduct } from "@/api/manager/product.js";
 import router from "@/router";
+import store from "@/store";
 import { listCategory } from "@/api/manager/category.js";
 import { VueEditor } from "vue2-editor";
 import { getTokenBE } from "@/utils/helper.js";
@@ -177,7 +178,7 @@ export default {
       tableData: [],
       search: "",
       ruleForm: {
-        store_id: 4,
+        store_id: "",
         category_id: "",
         code: "",
         name: "",
@@ -206,6 +207,7 @@ export default {
     },
   },
   created() {
+    this.ruleForm.store_id = store.state.mUser.store_id;
     this.baseURL = config.BASE_BE_API;
     this.urlUploadImage = config.BASE_BE_API + "/api/upload-image";
     this.tokenBE = getTokenBE();

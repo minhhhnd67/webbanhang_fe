@@ -403,6 +403,7 @@ router.beforeEach((to, from, next) => {
           }).then((response) => {
             console.log(1234, response);
             if (response.data.code === 200) {
+              store.state.mUser = response.data.data;
               let listRole = getRoles();
               console.log(555, listRole);
               let mRole = listRole.find((item) => {

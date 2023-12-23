@@ -152,6 +152,7 @@ import { Result } from 'element-ui';
 <script>
 import { showOrder, updateOrder } from "@/api/manager/order.js";
 import router from "@/router";
+import store from "@/store";
 import { getProvinces, getDistricts, getWards } from "@/api/common/ghn.js";
 import { getStatusOrder, getTypeOrder } from "@/utils/helper.js"
 export default {
@@ -161,11 +162,11 @@ export default {
   },
   data() {
     return {
-      store_id: 4,
+      store_id: "",
       tableData: [],
       search: "",
       ruleForm: {
-        store_id: 4,
+        store_id: "",
         user_id: 0,
         status: 4,
         total_money: 0,
@@ -202,6 +203,8 @@ export default {
     },
   },
   created() {
+    this.store_id = store.state.mUser.store_id;
+    this.ruleForm.store_id = store.state.mUser.store_id;
     this.getListProvinces();
     this.listStatus = getStatusOrder();
     this.listTypeOrder = getTypeOrder();
