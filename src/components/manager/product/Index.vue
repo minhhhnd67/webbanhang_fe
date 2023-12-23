@@ -3,7 +3,7 @@
     <el-main>
       <el-row type="flex" justify="end">
         <el-col :span="4"
-          ><el-button type="success" @click="addProduct()">Thêm mới</el-button></el-col
+          ><el-button type="success" v-if="checkCreate" @click="addProduct()">Thêm mới</el-button></el-col
         >
       </el-row>
       <el-table
@@ -55,6 +55,7 @@
 
 <script>
 import route from "@/router";
+import store from "@/store";
 import { listProduct, deleteProduct } from "@/api/manager/product.js";
 export default {
   name: "M-Product-Index",
@@ -63,6 +64,9 @@ export default {
   },
   data() {
     return {
+      checkCreate: 0,
+      roleCreate: ["admin", "manage_store"],
+      mRole: "",
       storeId: 4,
       tableData: [],
       current_page: 1,
@@ -76,7 +80,17 @@ export default {
       return this.$route;
     },
   },
+  beforeCreate() {
+    
+  },
   created() {
+    this.mRole = store.state.mRole;
+    if (this.roleCreate.includes(this.mRole)) {
+      this.checkCreate = 1;
+    } else {
+      this.checkCreate = 0;
+    }
+    console.log(567, this.mRole);
     this.getListProduct({storeId: this.storeId});
   },
   mounted() {},

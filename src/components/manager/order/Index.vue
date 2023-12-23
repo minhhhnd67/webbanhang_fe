@@ -3,7 +3,7 @@
     <el-main>
       <el-row type="flex" justify="end">
         <el-col :span="4">
-          <el-button type="success" @click="addOrder()">Thêm mới</el-button>
+          <el-button type="success" v-if="checkCreate" @click="addOrder()">Thêm mới</el-button>
         </el-col>
       </el-row>
 
@@ -76,6 +76,7 @@
 
 <script>
 import route from "@/router";
+import store from "@/store";
 import { listOrder, deleteOrder } from "@/api/manager/order.js";
 import { getStatusOrder, getTypeOrder } from "@/utils/helper.js";
 export default {
@@ -83,6 +84,9 @@ export default {
   components: {},
   data() {
     return {
+      checkCreate: 0,
+      roleCreate: ["admin", "manage_store", "staff"],
+      mRole: "",
       storeId: 4,
       tableData: [],
       current_page: 1,
@@ -99,6 +103,12 @@ export default {
     },
   },
   created() {
+    this.mRole = store.state.mRole;
+    if (this.roleCreate.includes(this.mRole)) {
+      this.checkCreate = 1;
+    } else {
+      this.checkCreate = 0;
+    }
     this.listStatus = getStatusOrder();
     this.listTypeOrder = getTypeOrder();
     this.getListOrder({ storeId: this.storeId });
