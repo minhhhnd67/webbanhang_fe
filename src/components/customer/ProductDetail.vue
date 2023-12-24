@@ -57,12 +57,46 @@
         <el-col :span="20" v-html="product.description">
         </el-col>
       </el-row>
+      <el-row
+          type="flex"
+          justify="center"
+        >
+          <el-col :span="4">
+            <h2>Sản phẩm tương tự</h2>
+          </el-col>
+        </el-row>
+        <el-row class="row-bg">
+          <el-col
+            :xs="24"
+            :sm="12"
+            :md="8"
+            :lg="6"
+            :xl="6"
+            v-for="(item, index) in listProductSuggest"
+            :key="index"
+          >
+            <el-card :body-style="{ padding: '10px 20px', margin: '5px' }">
+              <el-button @click="productDetail(item.id)">
+                <img style="width: 100%" :src="item.image" class="image" />
+                <div style="padding: 14px">
+                  <span>{{ item.name }}</span>
+                  <div class="bottom clearfix">
+                    <el-button type="text" style="color: #ff7300" class="button">{{
+                      item.price
+                    }}</el-button>
+                  </div>
+                </div>
+              </el-button>
+            </el-card>
+          </el-col>
+        </el-row>
     </el-main>
   </el-container>
 </template>
 <script>
+import route from "@/router";
 import EventBus from "@/utils/EventBus.js";
-import { showProduct } from "@/api/customer/product.js";
+import { showProduct, getListProductSuggest } from "@/api/customer/product.js";
 import { formatMoney } from "@/utils/helper.js";
 import config from "@/config/config.dev.json";
 
@@ -88,6 +122,7 @@ export default {
         amount: 1,
       },
       skus: [],
+      listProductSuggest: [],
     }
   },
   created() {
@@ -96,6 +131,7 @@ export default {
     this.addCart.product_id = this.$route.params.id;
     console.log(1234);
     this.getProductDetail();
+    this.listProductSuggestById();
     console.log(12345);
   },
   methods: {
@@ -122,6 +158,19 @@ export default {
           });
         });
         console.log(333, this.skus);
+      }
+    },
+    productDetail(id) {
+      route.push({ name: "c-product-detail", params: { id: id } });
+    },
+    async listProductSuggestById() {
+      const response = await getListProductSuggest(this.$route.params.id);
+      if (response.data.code == 200) {
+        this.listProductSuggest = response.data.data;
+        this.listProductSuggest.forEach((item) => {
+          item.image = this.baseURL + "/storage/" + item.image;
+          item.price = formatMoney(item.price);
+        });
       }
     },
     addToCart() {

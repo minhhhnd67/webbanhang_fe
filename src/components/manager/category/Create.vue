@@ -40,6 +40,16 @@ import { Result } from 'element-ui';
                       <el-input v-model="attribute.name"> </el-input>
                     </el-col>
                   </el-row>
+                  <el-row>
+                    <el-col :span="24">
+                      <span class="demo-input-label">Điểm tương tự thuộc tính</span>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="24">
+                      <el-input-number v-model="attribute.suggest_point" :min="1" :max="10"></el-input-number>
+                    </el-col>
+                  </el-row>
                 </el-col>
                 <el-col :span="15">
                   <el-row>
@@ -113,6 +123,7 @@ export default {
         attributes: [
           {
             name: "",
+            suggest_point: 1,
             attributeOptions: [
               {
                 name: "",
@@ -183,6 +194,7 @@ export default {
     addAttribute() {
       this.ruleForm.attributes.push({
         name: "",
+        suggest_point: 1,
         attributeOptions: [
           {
             name: "",
