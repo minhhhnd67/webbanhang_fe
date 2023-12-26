@@ -94,7 +94,7 @@
   </el-container>
 </template>
 <script>
-import route from "@/router";
+// import route from "@/router";
 import EventBus from "@/utils/EventBus.js";
 import { showProduct, getListProductSuggest } from "@/api/customer/product.js";
 import { formatMoney } from "@/utils/helper.js";
@@ -161,7 +161,7 @@ export default {
       }
     },
     productDetail(id) {
-      route.push({ name: "c-product-detail", params: { id: id } });
+      window.location.href = `/product/${id}/show`;
     },
     async listProductSuggestById() {
       const response = await getListProductSuggest(this.$route.params.id);
