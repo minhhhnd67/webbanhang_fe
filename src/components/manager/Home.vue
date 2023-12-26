@@ -202,8 +202,8 @@ export default {
   methods: {
     async totalOrderByDate() {
       let parameters = {
-        start_date: this.start_date,
-        end_date: this.end_date,
+        start_date: new Date(this.start_date).toISOString().slice(0, 10),
+        end_date: new Date(this.end_date).toISOString().slice(0, 10),
       };
       const response = await getTotalOrderByDate(parameters);
       if (response.data.code == 200) {
@@ -214,8 +214,8 @@ export default {
     },
     async dataForLineChart() {
       let parameters = {
-        start_date: this.start_date,
-        end_date: this.end_date,
+        start_date: new Date(this.start_date).toISOString().slice(0, 10),
+        end_date: new Date(this.end_date).toISOString().slice(0, 10),
       };
       const response = await getDataForLineChart(parameters);
       if (response.data.code == 200) {
