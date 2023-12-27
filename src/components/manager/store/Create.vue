@@ -167,10 +167,10 @@ export default {
     },
   },
   beforeCreate() {
-    this.getListProvinces();
+    
   },
   created() {
-    
+    this.getListProvinces();
   },
   mounted() {},
   watch: {
