@@ -395,7 +395,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     document.title = "Mobi Store";
     if (to.path.includes("manager") && !to.path.includes("login") && !to.path.includes("register")) {
-        axios.get('http://127.0.0.1:8000/api/me', {
+        axios.get('http://44.211.203.195/api/me', {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('tokenBE')}`,
               'Accept': 'application/json'
@@ -432,7 +432,7 @@ router.beforeEach((to, from, next) => {
           });
     } else {
       if (to.path.includes("manager") && (to.path.includes("login") || to.path.includes("register"))) {
-        axios.get('http://127.0.0.1:8000/api/me', {
+        axios.get('http://44.211.203.195/api/me', {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('tokenBE')}`,
               'Accept': 'application/json'
