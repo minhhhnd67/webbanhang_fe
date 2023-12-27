@@ -1,9 +1,8 @@
 <template>
-  <el-container>
-    <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-    <div v-if="!is_manager">
+  <el-row>
+    <el-row v-if="!is_manager">
       <div>
-        <CHeader v-show="true" />
+        <CHeader/>
       </div>
       <div>
         <router-view></router-view>
@@ -11,28 +10,37 @@
       <div>
         <CFooter />
       </div>
-    </div>
-    <el-container v-if="is_manager">
-      <MNav v-if="!getIsLoginManager" />
-      <el-container>
-        <!-- <MHeader v-if="!getIsLoginManager" /> -->
-        <router-view></router-view>
-      </el-container>
-      <!-- <MFooter v-if="!getIsLoginManager"/> -->
-    </el-container>
+    </el-row>
 
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
-  </el-container>
+    <el-row v-if="is_manager && !getIsLoginManager">
+      <el-col :span="5">
+        <MNav v-if="!getIsLoginManager" />
+      </el-col>
+      <el-col
+        :span="19"
+      >
+        <el-row>
+          <MHeader v-if="!getIsLoginManager" />
+        </el-row>
+        <el-row>
+          <router-view></router-view>
+        </el-row>
+      </el-col>
+    </el-row>
+
+    <el-row v-if="getIsLoginManager && is_manager">
+      <router-view></router-view>
+    </el-row>
+  </el-row>
 </template>
 
 <script>
 import { routeGuard } from "./utils/routeGuard";
 import CHeader from "./layouts/customer/Header.vue";
 import CFooter from "./layouts/customer/Footer.vue";
-// import MHeader from "./layouts/manager/Header.vue";
+import MHeader from "./layouts/manager/Header.vue";
 // import MFooter from './layouts/manager/Footer.vue'
 import MNav from "./layouts/manager/Nav.vue";
-import router from './router'
 import store from "./store";
 import { mapGetters } from "vuex";
 export default {
@@ -43,7 +51,7 @@ export default {
   components: {
     CHeader,
     CFooter,
-    // MHeader,
+    MHeader,
     // MFooter,
     MNav,
   },
@@ -51,6 +59,7 @@ export default {
     return {
       is_manager: false,
       is_login_manager: store.state.is_login_manager,
+      loading: true
     };
   },
   computed: {
@@ -69,7 +78,6 @@ export default {
       //   this.is_login_manager = false
       // }
     }
-    console.log(router.getRoutes())
   },
 };
 </script>

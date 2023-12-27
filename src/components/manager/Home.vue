@@ -1,88 +1,232 @@
 <template>
   <el-container>
-    <el-header class="navbar" style="padding: 25px 10px; font-size: 12px; background-color: rgb(255, 255, 255);box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);">
-      <el-row :span="24">
-        <el-col :span="8"><MBreadcrumb :routeMatched="thisRoute.matched" /></el-col>
-        <el-col :span="13">
-          
-          <!-- <div class="bg-blue-800 p-4">
-            <span v-for="(matched, idx) in thisRoute.matched" :key="idx">
-              <a :href="matched.path">
-                {{ matched.meta.breadcrumb }}
-              </a>
-              <span v-if="idx != Object.keys(thisRoute.matched).length - 1"> / </span>
-            </span>
-          </div> -->
+    <el-main style="color: #606266;">
+      <el-row>
+        <el-col :span="6">
+          <div class="block">
+            <span class="demonstration">Từ ngày</span>
+            <el-date-picker
+              v-model="start_date"
+              type="date"
+              placeholder="Pick a day">
+            </el-date-picker>
+          </div>
         </el-col>
-        <el-col :span="15" class="right">
-          <el-dropdown placement="right-start">
-            <i class="el-icon-setting" style="margin-right: 15px"></i>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>
-                <!-- <div class="bg-blue-800 p-4">
-                  <span v-for="(matched, idx) in routeMatched()" :key="idx">
-                    <a :href="matched.path">
-                      {{ matched.name }}
-                    </a>
-                    <span v-if="idx != Object.keys(routeMatched()).length - 1"> / </span>
-                  </span>
-                </div> -->
-              </el-dropdown-item>
-              <el-dropdown-item>Add</el-dropdown-item>
-              <el-dropdown-item>Delete</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <span>Tom</span>
+        <el-col :span="6">
+          <div class="block">
+            <span class="demonstration">Đến ngày</span>
+            <el-date-picker
+              v-model="end_date"
+              type="date"
+              placeholder="Pick a day">
+            </el-date-picker>
+          </div>
         </el-col>
       </el-row>
-    </el-header>
-
-    <el-main>
-      <el-table :data="tableData">
-        <el-table-column prop="date" label="Date" width="140"> </el-table-column>
-        <el-table-column prop="name" label="Name" width="120"> </el-table-column>
-        <el-table-column prop="address" label="Address"> </el-table-column>
-      </el-table>
+      <el-row type="flex" justify="space-around">
+        <el-col :span="5" style="text-align: center;">
+          <h3>Tổng số đơn hàng</h3> 
+          <h2>{{ dataTotal.total_orders }}</h2>
+        </el-col>
+        <el-col :span="5" style="text-align: center;">
+          <h3>Đơn hàng online</h3>
+          <h2>{{ dataTotal.total_order_online }}</h2>
+        </el-col>
+        <el-col :span="5" style="text-align: center;">
+          <h3>Đơn hàng offline</h3>
+          <h2>{{ dataTotal.total_order_offline }}</h2>
+        </el-col>
+      </el-row> 
+      <!-- <LineChart/> -->
+      <LineChartGenerator
+        :chart-options="chartOptions"
+        :chart-data="chartData"
+        :chart-id="chartId"
+        :dataset-id-key="datasetIdKey"
+        :plugins="plugins"
+        :css-classes="cssClasses"
+        :styles="styles"
+        :width="width"
+        :height="height"
+      />
     </el-main>
   </el-container>
 </template>
 
 <script>
-// import router from "./../../router";
-import MBreadcrumb from "./../../layouts/manager/Breadcrumb.vue";
+// import LineChart from '@/components/manager/charts/Line.vue';
+import { getTotalOrderByDate, getDataForLineChart } from '@/api/manager/statistic.js';
+import { Line as LineChartGenerator } from 'vue-chartjs/legacy';
+
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  LinearScale,
+  CategoryScale,
+  PointElement
+} from 'chart.js'
+
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  LinearScale,
+  CategoryScale,
+  PointElement
+)
+
 export default {
   name: "M-Helloword",
-  components: { MBreadcrumb },
+  components: {
+    LineChartGenerator
+  },
+  props: {
+    chartId: {
+      type: String,
+      default: 'line-chart'
+    },
+    datasetIdKey: {
+      type: String,
+      default: 'label'
+    },
+    width: {
+      type: Number,
+      default: 400
+    },
+    height: {
+      type: Number,
+      default: 400
+    },
+    cssClasses: {
+      default: '',
+      type: String
+    },
+    styles: {
+      type: Object,
+      default: () => {}
+    },
+    plugins: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
-    return {};
+    return {
+      start_date: "",
+      end_date: "",
+      dataTotal: {
+        total_orders: 0,
+        total_order_offline: 0,
+        total_order_online: 0,
+      },
+      datasets: [],
+      chartData: {
+        labels: [
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July'
+        ],
+        datasets: [
+          {
+            label: "Tổng số đơn hàng",
+            backgroundColor: '#11ff00',
+            borderColor: "#11ff00",
+            data: [40, 39, 50, 40, 39, 80, 40]
+          },
+          {
+            label: "Đơn hàng online",
+            backgroundColor: '#ffe100',
+            borderColor: "#ffe100",
+            data: [14, 24, 24, 36, 22, 55, 16]
+          },
+          {
+            label: "Đơn hàng offline",
+            backgroundColor: '#ff4000',
+            borderColor: "#ff4000",
+            data: [26, 15, 16, 16, 18, 35, 24]
+          }
+        ]
+      },
+      chartOptions: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    };
+  },
+  watch: {
+    "start_date": {
+      handler: function () {
+        this.totalOrderByDate();
+        this.dataForLineChart();
+      },
+      deep: false,
+    },
+    "end_date": {
+      handler: function () {
+        this.totalOrderByDate();
+        this.dataForLineChart();
+      },
+      deep: false,
+    },
   },
   computed: {
     thisRoute() {
       return this.$route;
     },
-    breadcrumbs() {
-      var breadcrumbs = [];
-      var currentRoute = this.$route;
-      console.log(666, currentRoute);
-
-      while (currentRoute.parent) {
-        console.log(currentRoute.parent);
-        breadcrumbs.push({
-          name: currentRoute.parent.meta.breadcrumb,
-        });
-        currentRoute = currentRoute.parent;
-      }
-      return breadcrumbs;
-    },
   },
   created() {
-    console.log(this.$route.name);
+    // get end date
+    let currentDate = new Date();
+    this.end_date = currentDate.toISOString().slice(0, 10);
+
+    // get start date
+    const today = new Date();
+    const fourDaysAgo = new Date();
+    fourDaysAgo.setDate(today.getDate() - 20);
+    this.start_date = fourDaysAgo.toISOString().slice(0, 10);
+
+    // get data total
+    this.totalOrderByDate();
+
+    // get data for line chart
+    this.dataForLineChart();
   },
   methods: {
-    routeMatched() {
-      console.log(123, this.$route.matched);
-      return this.$route.matched;
+    async totalOrderByDate() {
+      let parameters = {
+        start_date: new Date(this.start_date).toISOString().slice(0, 10),
+        end_date: new Date(this.end_date).toISOString().slice(0, 10),
+      };
+      const response = await getTotalOrderByDate(parameters);
+      if (response.data.code == 200) {
+        this.dataTotal.total_orders = response.data.data.total_orders;
+        this.dataTotal.total_order_offline = response.data.data.total_order_offline;
+        this.dataTotal.total_order_online = response.data.data.total_order_online;
+      }
     },
+    async dataForLineChart() {
+      let parameters = {
+        start_date: new Date(this.start_date).toISOString().slice(0, 10),
+        end_date: new Date(this.end_date).toISOString().slice(0, 10),
+      };
+      const response = await getDataForLineChart(parameters);
+      if (response.data.code == 200) {
+        this.chartData.labels = response.data.data.labels;
+        this.chartData.datasets[0].data = response.data.data.data_total_order;
+        this.chartData.datasets[1].data = response.data.data.data_order_online;
+        this.chartData.datasets[2].data = response.data.data.data_order_offline;
+
+      }
+    },
+
   },
 };
 </script>
