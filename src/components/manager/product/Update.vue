@@ -43,6 +43,11 @@ import { Result } from 'element-ui';
                 <el-input v-model="ruleForm.price"></el-input>
               </el-col>
             </el-form-item>
+            <el-form-item label="Số lượng" prop="amount">
+              <el-col :span="12">
+                <el-input-number v-model="ruleForm.amount" :min="1" :max="100000"></el-input-number>
+              </el-col>
+            </el-form-item>
             <el-form-item label="Ảnh" prop="image">
               <el-upload
                 class="avatar-uploader"
@@ -184,6 +189,7 @@ export default {
         name: "",
         title: "",
         price: "",
+        amount: "",
         image: "",
         description: "",
         attributes: [],
@@ -258,6 +264,7 @@ export default {
         this.ruleForm.title = data.title;
         this.ruleForm.description = data.description;
         this.ruleForm.price = data.price;
+        this.ruleForm.amount = data.amount;
         this.ruleForm.image = data.image;
         this.ruleForm.category_id = data.category_id;
         this.ruleForm.category_id = data.category_id;
