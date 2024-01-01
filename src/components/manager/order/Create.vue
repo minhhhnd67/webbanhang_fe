@@ -180,7 +180,7 @@ export default {
       ruleForm: {
         store_id: "",
         user_id: 0,
-        status: 4,
+        status: 5,
         total_money: 0,
         type: 1,
         name: "",
