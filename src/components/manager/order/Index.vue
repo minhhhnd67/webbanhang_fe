@@ -7,6 +7,34 @@
         </el-col>
       </el-row>
 
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <el-input placeholder="Mã đơn hàng" v-model="search_code"></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-select v-model="search_type" placeholder="Loại đơn hàng">
+            <el-option
+              v-for="item in listTypeOrder"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="4">
+          <el-select v-model="search_status" placeholder="Trạng thái">
+            <el-option
+              v-for="item in listStatus"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="2">
+          <el-button type="success" @click="searchListOrder" icon="el-icon-search"></el-button>
+        </el-col>
+      </el-row> 
       <el-table
         :data="
           tableData.filter(
@@ -95,6 +123,9 @@ export default {
       search: "",
       listStatus: [],
       listTypeOrder: [],
+      search_status: "",
+      search_type: "",
+      search_code: "",
     };
   },
   computed: {
@@ -112,7 +143,15 @@ export default {
       this.checkCreate = 0;
     }
     this.listStatus = getStatusOrder();
+    this.listStatus.unshift({
+      id: 0,
+      name: "Tất cả"
+    });
     this.listTypeOrder = getTypeOrder();
+    this.listTypeOrder.unshift({
+      id: 0,
+      name: "Tất cả"
+    });
     this.getListOrder({ storeId: this.storeId });
   },
   mounted() {},
@@ -128,6 +167,23 @@ export default {
       route.push({ name: "m-order-create" });
     },
     async getListOrder(parameters = {}) {
+      const response = await listOrder(parameters);
+      if (response.data.code == 200) {
+        this.tableData = response.data.data.data;
+        this.current_page = response.data.data.current_page;
+        this.page_size = response.data.data.per_page;
+        this.total = response.data.data.total;
+      } else {
+        this.tableData = [];
+      }
+    },
+    async searchListOrder() {
+      let parameters = {
+        storeId: this.storeId,
+        search_status: this.search_status,
+        search_type: this.search_type,
+        search_code: this.search_code,
+      };
       const response = await listOrder(parameters);
       if (response.data.code == 200) {
         this.tableData = response.data.data.data;
