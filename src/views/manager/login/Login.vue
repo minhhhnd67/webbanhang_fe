@@ -13,11 +13,11 @@
     
         <br />
     
-        <input type="button" @click="handleLogin()" value="Login" class="button" id="login" :style="inputStyle" />
+        <input type="button" @click="handleLogin()" style="background-color: rgb(255, 81, 0);" value="Login" class="button" id="login" :style="inputStyle" />
     
         <br />
     
-        <input type="button" @click="register()" value="Chưa có tài khoản" class="button" id="register" :style="inputStyle" />
+        <input type="button" @click="register()" style="background-color: rgb(149 140 136);" value="Chưa có tài khoản" class="button" id="register" :style="inputStyle" />
     
         <br />
     
@@ -53,11 +53,17 @@ export default {
         };
     },
     mounted() {
+        
+    },
+    created() {
         // Tạo một kênh
-        const channel = new BroadcastChannel("my-channel");
+        console.log(6666);
+        const channel = new BroadcastChannel("login-channel");
+        console.log(6688);
         // Đăng ký nhận dữ liệu
         channel.onmessage = function(event) {
             // Nhận dữ liệu
+            console.log(12345, event);
             const data = event.data;
             this.login_google = data.login_google
             this.token = data.token
@@ -66,10 +72,10 @@ export default {
             store.state.tokenBE = this.token
             store.state.is_login_manager = false
             // Xử lý dữ liệu
-            router.push({ name: "m-home" })
+            // router.push({ name: "m-home" })
+            location.reload();
         };
     },
-    created() {},
     watch: {},
     methods: {
         async loginWithGoogle() {
@@ -105,7 +111,9 @@ export default {
                 store.state.tokenBE = response.data.data.token
                 localStorage.setItem('tokenBE', response.data.data.token)
                 store.state.is_login_manager = false
-                router.push({ name: "m-home" })
+                // router.push({ name: "m-home" })
+                location.reload();
+                
             }
         },
         register() {
@@ -115,12 +123,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* Import Poppins font: */
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 .main {
-    background: rgba(255, 255, 255, 0.4);
+    background-color: #ffd400;
     position: absolute;
     margin: 30px !important;
     top: 20%;
@@ -147,7 +155,7 @@ input {
     text-align: center;
     outline: none;
     margin: 10px;
-    width: 30%;
+    width: 70%;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
     font-weight: 400;

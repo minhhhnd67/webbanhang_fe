@@ -74,7 +74,7 @@
     <el-row style="padding: 10px" :gutter="10" type="flex" justify="center">
       <el-col :span="3" v-for="(item, index) in allCategory" :key="index">
         <el-button @click="productCategory(item.id)" style="background-color: #ffd400; border: 0px;">
-          <i class="el-icon-mobile-phone"></i> {{ item.name }}
+          <i :class="item.icon"></i> {{ item.name }}
         </el-button>
       </el-col>
       <!-- <el-col :span="3"><el-button style="background-color: #ffd400; border: 0px;"><i class="el-icon-monitor"></i> Laptop</el-button></el-col>

@@ -15,6 +15,7 @@
         style="width: 100%"
       >
         <el-table-column prop="name" label="Tên danh mục sản phẩm"> </el-table-column>
+        <el-table-column prop="icon" label="Icon"> </el-table-column>
         <el-table-column align="right">
           <template slot="header" slot-scope="scope">
             <el-input

@@ -263,7 +263,7 @@ export default {
       ruleForm: {
         store_id: "",
         user_id: 0,
-        status: 0,
+        status: 2,
         total_money: 0,
         type: 2,
         name: "",

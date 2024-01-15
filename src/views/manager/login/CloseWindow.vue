@@ -15,8 +15,9 @@ export default {
         token: this.$route.query.token
     };
     // Tạo kênh
-    const channel = new BroadcastChannel("my-channel");
+    const channel = new BroadcastChannel("login-channel");
     // Gửi dữ liệu
+    console.log(1234, data);
     channel.postMessage(data);
     this.closeWindow();
   },

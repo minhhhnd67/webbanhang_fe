@@ -17,6 +17,11 @@ import { Result } from 'element-ui';
                 <el-input v-model="ruleForm.name"></el-input>
               </el-col>
             </el-form-item>
+            <el-form-item label="Icon" prop="icon">
+              <el-col :span="12">
+                <el-input v-model="ruleForm.icon"></el-input>
+              </el-col>
+            </el-form-item>
             <el-form-item label="Thuộc tính danh mục sản phẩm" prop="name">
               <el-button @click="addAttribute()" type="success">+</el-button>
             </el-form-item>
@@ -120,6 +125,7 @@ export default {
       search: "",
       ruleForm: {
         name: "",
+        icon: "",
         attributes: [
           {
             name: "",

@@ -30,7 +30,7 @@
           <el-row style="margin-top: 20px;">
             <el-col :span="4">Số lượng:</el-col>
             <el-col :span="20">
-              <el-input-number v-model="addCart.amount" :min="1" :max="10"></el-input-number>
+              <el-input-number v-model="addCart.amount" :min="1" :max="product.amount"></el-input-number>
             </el-col>
           </el-row>
           <el-row style="margin-top: 50px;">

@@ -57,6 +57,7 @@
 // import LineChart from '@/components/manager/charts/Line.vue';
 import { getTotalOrderByDate, getDataForLineChart } from '@/api/manager/statistic.js';
 import { Line as LineChartGenerator } from 'vue-chartjs/legacy';
+import store from "@/store";
 
 import {
   Chart as ChartJS,
@@ -116,6 +117,7 @@ export default {
   },
   data() {
     return {
+      store_id: "",
       start_date: "",
       end_date: "",
       dataTotal: {
@@ -183,6 +185,8 @@ export default {
     },
   },
   created() {
+    this.store_id = store.state.mUser.store_id;
+
     // get end date
     let currentDate = new Date();
     this.end_date = currentDate.toISOString().slice(0, 10);
@@ -202,6 +206,7 @@ export default {
   methods: {
     async totalOrderByDate() {
       let parameters = {
+        store_id: this.store_id,
         start_date: new Date(this.start_date).toISOString().slice(0, 10),
         end_date: new Date(this.end_date).toISOString().slice(0, 10),
       };
@@ -214,6 +219,7 @@ export default {
     },
     async dataForLineChart() {
       let parameters = {
+        store_id: this.store_id,
         start_date: new Date(this.start_date).toISOString().slice(0, 10),
         end_date: new Date(this.end_date).toISOString().slice(0, 10),
       };
