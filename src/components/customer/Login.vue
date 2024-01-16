@@ -89,7 +89,7 @@ export default {
   },
   mounted() {
     // Tạo một kênh
-    const channel = new BroadcastChannel("my-channel");
+    const channel = new BroadcastChannel("login-channel");
     // Đăng ký nhận dữ liệu
     channel.onmessage = function (event) {
       // Nhận dữ liệu
