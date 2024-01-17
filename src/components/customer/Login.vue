@@ -1,24 +1,37 @@
 <template>
   <el-container>
     <el-main>
-      <el-row type="flex" justify="center" style="height: 450px">
+      <el-row type="flex" justify="center" style="height: 500px">
         <el-col :span="12" style="background-color: #ffd400; border-radius: 30px">
           <el-row type="flex" justify="center">
             <el-col :span="6">
               <p style="font-size: 32px; tex-align: center"><b>Đăng nhập</b></p>
             </el-col>
           </el-row>
-          <el-row style="margin-top: 10px" type="flex" justify="center">
-            <el-col :span="16">
-              <el-input placeholder="Email" v-model="email"></el-input>
-            </el-col>
-          </el-row>
-          <el-row style="margin-top: 20px" type="flex" justify="center">
-            <el-col :span="16">
-              <el-input placeholder="Password" v-model="password" show-password>
-              </el-input>
-            </el-col>
-          </el-row>
+          <el-form
+            :model="ruleForm"
+            status-icon
+            :rules="rules"
+            ref="ruleForm"
+            label-width="0px"
+            class="demo-ruleForm"
+          >
+            <el-row style="margin-top: 10px" type="flex" justify="center">
+              <el-col :span="16">
+                <el-form-item prop="email">
+                  <el-input placeholder="Email" v-model="ruleForm.email"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row style="margin-top: 20px" type="flex" justify="center">
+              <el-col :span="16">
+                <el-form-item prop="password">
+                  <el-input placeholder="Password" v-model="ruleForm.password" show-password>
+                  </el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
           <el-row style="margin-top: 20px" type="flex" justify="center">
             <el-col :span="16">
               <el-button
@@ -79,8 +92,19 @@ export default {
   name: "C-Login",
   data() {
     return {
-      email: "",
-      password: "",
+      ruleForm: {
+        email: "",
+        password: "",
+      },
+      rules: {
+        email: [
+          { required: true, message: "Không được bỏ trống", trigger: "blur" },
+          { type: 'email', message: 'Email không đúng định dạng', trigger: ['blur', 'change'] }
+        ],
+        password: [
+          { required: true, message: "Không được bỏ trống", trigger: "blur" },
+        ],
+      },
       data: null,
       token: "",
       login_google: false,
@@ -122,21 +146,32 @@ export default {
       window.open(response.data.url);
     },
     async handleLogin() {
-      const data = {
-        email: this.email,
-        password: this.password,
-      };
-      const response = await login(data);
-      if (response.data.code == 200) {
-        store.state.permission = 1;
-        store.state.tokenBE = response.data.data.token;
-        localStorage.setItem("tokenBE", response.data.data.token);
-        store.state.is_login_manager = false;
-        EventBus.$emit("emit-auth", {
-          isLogin: true,
-        });
-        router.push({ name: "c-home" });
-      }
+      this.$refs.ruleForm.validate(async (valid) => {
+        if (valid) {
+          const data = {
+            email: this.ruleForm.email,
+            password: this.ruleForm.password,
+          };
+          const response = await login(data);
+          if (response.data.code == 200) {
+            store.state.permission = 1;
+            store.state.tokenBE = response.data.data.token;
+            localStorage.setItem("tokenBE", response.data.data.token);
+            store.state.is_login_manager = false;
+            EventBus.$emit("emit-auth", {
+              isLogin: true,
+            });
+            router.push({ name: "c-home" });
+          } else {
+            this.$message.error('Thông tin đăng nhập không chính xác');
+          }
+          return;
+        } else {
+          console.log('error submit!!');
+          return;
+        }
+      });
+      
     },
     register() {
       router.push({ name: "c-register" });
