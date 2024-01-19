@@ -1,9 +1,6 @@
 <template>
   <el-row>
     <el-row v-if="!is_manager">
-      <div id="fb-root"></div>
-      <div id="fb-customer-chat" class="fb-customerchat">
-      </div>
       <div>
         <CHeader/>
       </div>
@@ -80,6 +77,12 @@ export default {
       // } else {
       //   this.is_login_manager = false
       // }
+    }
+    if (this.is_manager) {
+      const fbRoot = document.getElementById("fb-root");
+      const fbCustomerChat = document.getElementById("fb-customer-chat");
+      fbRoot.setAttribute("style", "display: none;");
+      fbCustomerChat.setAttribute("style", "display: none;");
     }
   },
 };
