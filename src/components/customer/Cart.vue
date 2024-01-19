@@ -6,7 +6,7 @@
         status-icon
         :rules="rules"
         ref="ruleForm"
-        label-width="200px"
+        label-width="0px"
         class="demo-ruleForm"
       >
         <el-row type="flex" justify="center">
@@ -138,78 +138,88 @@
               <el-col :span="16">
                 <el-row style="margin-top: 20px">
                   <el-col :span="10">
-                    <el-input placeholder="Họ tên" v-model="ruleForm.name">
-                      <template slot="prepend">Họ tên</template>
-                    </el-input>
+                    <el-form-item prop="name">
+                      <el-input placeholder="Họ tên" v-model="ruleForm.name">
+                        <template slot="prepend">Họ tên</template>
+                      </el-input>
+                    </el-form-item>
                   </el-col>
                   <el-col :span="1">
                     <el-link></el-link>
                   </el-col>
                   <el-col :span="10">
-                    <el-input placeholder="Số điện thoại" v-model="ruleForm.phone">
-                      <template slot="prepend">Số điện thoại</template>
-                    </el-input>
+                    <el-form-item prop="phone">
+                      <el-input placeholder="Điện thoại" v-model="ruleForm.phone">
+                        <template slot="prepend">Điện thoại</template>
+                      </el-input>
+                    </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row style="margin-top: 10px">
                   <el-col :span="21" style="width: 100%">
-                    <el-select
-                      v-model="ruleForm.province_id"
-                      filterable
-                      placeholder="Tỉnh / Thành phố"
-                    >
-                      <el-option
-                        v-for="item in listProvinces"
-                        :key="item.ProvinceID"
-                        :label="item.ProvinceName"
-                        :value="item.ProvinceID"
+                    <el-form-item prop="province_id">
+                      <el-select
+                        v-model="ruleForm.province_id"
+                        filterable
+                        placeholder="Tỉnh / Thành phố"
                       >
-                      </el-option>
-                    </el-select>
+                        <el-option
+                          v-for="item in listProvinces"
+                          :key="item.ProvinceID"
+                          :label="item.ProvinceName"
+                          :value="item.ProvinceID"
+                        >
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row style="margin-top: 10px">
                   <el-col :span="21" style="width: 100%">
-                    <el-select
-                      v-model="ruleForm.district_id"
-                      filterable
-                      placeholder="Quận / Huyện"
-                    >
-                      <el-option
-                        v-for="item in listDistricts"
-                        :key="item.DistrictID"
-                        :label="item.DistrictName"
-                        :value="item.DistrictID"
+                    <el-form-item prop="district_id">
+                      <el-select
+                        v-model="ruleForm.district_id"
+                        filterable
+                        placeholder="Quận / Huyện"
                       >
-                      </el-option>
-                    </el-select>
+                        <el-option
+                          v-for="item in listDistricts"
+                          :key="item.DistrictID"
+                          :label="item.DistrictName"
+                          :value="item.DistrictID"
+                        >
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row style="margin-top: 10px">
                   <el-col :span="21" style="width: 100%">
-                    <el-select
-                      v-model="ruleForm.ward_id"
-                      filterable
-                      placeholder="Xã / Phường"
-                    >
-                      <el-option
-                        v-for="item in listWards"
-                        :key="item.WardCode"
-                        :label="item.WardName"
-                        :value="item.WardCode"
+                    <el-form-item prop="ward_id">
+                      <el-select
+                        v-model="ruleForm.ward_id"
+                        filterable
+                        placeholder="Xã / Phường"
                       >
-                      </el-option>
-                    </el-select>
+                        <el-option
+                          v-for="item in listWards"
+                          :key="item.WardCode"
+                          :label="item.WardName"
+                          :value="item.WardCode"
+                        >
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    
                   </el-col>
                 </el-row>
                 <el-row style="margin-top: 10px">
                   <el-col :span="21">
-                    <el-input
-                      placeholder="Địa chỉ chi tiết"
-                      v-model="ruleForm.address_detail"
-                    >
-                      <template slot="prepend">Địa chỉ chi tiết</template>
-                    </el-input>
+                    <el-form-item prop="address_detail">
+                      <el-input placeholder="Địa chỉ chi tiết" v-model="ruleForm.address_detail">
+                        <template slot="prepend">Địa chỉ chi tiết</template>
+                      </el-input>
+                    </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row style="margin-top: 10px">
@@ -277,6 +287,26 @@ export default {
         address_detail: "",
         note: "",
         order_details: [],
+      },
+      rules: {
+        name: [
+          { required: true, message: "Không được bỏ trống", trigger: "blur" },
+        ],
+        phone: [
+          { required: true, message: "Không được bỏ trống", trigger: "blur" },
+        ],
+        address_detail: [
+          { required: true, message: "Không được bỏ trống", trigger: "blur" },
+        ],
+        province_id: [
+          { required: true, message: "Không được bỏ trống", trigger: 'change' }
+        ],
+        district_id: [
+          { required: true, message: "Không được bỏ trống", trigger: 'change' }
+        ],
+        ward_id: [
+          { required: true, message: "Không được bỏ trống", trigger: 'change' }
+        ],
       },
 
       isSubmitForm: false,
@@ -429,7 +459,7 @@ export default {
     this.listProducts = dataProducts.filter((obj) => {
       return obj.store_id == this.ruleForm.store_id;
     });
-    
+
     // thêm thông tin check vận chuyển
     if (this.listProducts != []) {
       this.listProducts.forEach((product) => {
@@ -497,19 +527,31 @@ export default {
       return formatMoney(money);
     },
     async handlePaymentVNPAY() {
-      let data = {
-        total_money: this.ruleForm.total_money,
-      };
-      const response = await paymentVNPAY(data);
-      if (response.data.code == "00") {
-        let urlPayment = response.data.data;
-        this.submitForm("ruleForm");
-        window.open(urlPayment);
-      }
+      console.log(666, this.$refs['ruleForm']);
+      this.$refs.ruleForm.validate(async (valid) => {
+        console.log(valid);
+        if (valid) {
+          let data = {
+            total_money: this.ruleForm.total_money,
+          };
+          const response = await paymentVNPAY(data);
+          if (response.data.code == "00") {
+            let urlPayment = response.data.data;
+            this.submitForm("ruleForm");
+            window.open(urlPayment);
+          }
+          return;
+        } else {
+          console.log('error submit!!');
+          return;
+        }
+      });
+      
     },
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
+
           //   alert("submit!");
           var province = this.listProvinces.filter((obj) => {
             return obj.ProvinceID == this.ruleForm.province_id;
@@ -579,3 +621,6 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+</style>

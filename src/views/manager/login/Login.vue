@@ -5,21 +5,25 @@
     
         <p v-if="data">Data trả về từ cửa sổ mới: {{ data }}</p>
     
-        <input type="text" v-model="email" name="email" id="email" placeholder="Email" :style="input" />
-    
-        <br />
-    
-        <input type="password" v-model="password" name="password" id="password" placeholder="Password" :style="input" />
-    
-        <br />
-    
+        <el-form
+            :model="ruleForm"
+            status-icon
+            :rules="rules"
+            ref="ruleForm"
+            label-width="0px"
+            class="demo-ruleForm"
+        >
+        <el-form-item prop="email">
+            <input type="text" v-model="ruleForm.email" name="email" id="email" placeholder="Email" :style="input" />
+        </el-form-item>
+
+        <el-form-item prop="password">
+            <input type="password" v-model="ruleForm.password" name="password" id="password" placeholder="Password" :style="input" />
+        </el-form-item>
         <input type="button" @click="handleLogin()" style="background-color: rgb(255, 81, 0);" value="Login" class="button" id="login" :style="inputStyle" />
-    
-        <br />
-    
         <input type="button" @click="register()" style="background-color: rgb(149 140 136);" value="Chưa có tài khoản" class="button" id="register" :style="inputStyle" />
+        </el-form>
     
-        <br />
     
         <img src="../../../icons/google.svg" @click="loginWithGoogle()" alt="Login using Google" />
     
@@ -44,12 +48,23 @@ export default {
     },
     data() {
         return {
-            email: "",
-            password: "",
+            ruleForm: {
+                email: "",
+                password: "",
+            },
             data: null,
             token: "",
             login_google: false,
             login_facebook: false,
+            rules: {
+                email: [
+                    { required: true, message: "Không được bỏ trống", trigger: "blur" },
+                    { type: 'email', message: 'Email không đúng định dạng', trigger: ['blur', 'change'] }
+                ],
+                password: [
+                    { required: true, message: "Không được bỏ trống", trigger: "blur" },
+                ],
+            },
         };
     },
     mounted() {
@@ -101,9 +116,13 @@ export default {
             //   });
         },
         async handleLogin() {
+            if (!this.ruleForm.email || !this.ruleForm.password) {
+                this.$message.error('Vui lòng nhập đầy đủ thông tin');
+                return;
+            }
             const data = {
-                email: this.email,
-                password: this.password
+                email: this.ruleForm.email,
+                password: this.ruleForm.password
             }
             const response = await login(data)
             if (response.data.code == 200) {
@@ -114,6 +133,8 @@ export default {
                 // router.push({ name: "m-home" })
                 location.reload();
                 
+            } else {
+                this.$message.error('Thông tin đăng nhập không chính xác');
             }
         },
         register() {
