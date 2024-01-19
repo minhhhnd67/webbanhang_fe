@@ -1,6 +1,9 @@
 <template>
   <el-row>
     <el-row v-if="!is_manager">
+      <div id="fb-root"></div>
+      <div id="fb-customer-chat" class="fb-customerchat">
+      </div>
       <div>
         <CHeader/>
       </div>
