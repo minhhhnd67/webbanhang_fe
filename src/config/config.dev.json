@@ -1,5 +1,5 @@
 {
-    "BASE_BE_API": "http://44.211.203.195",
+    "BASE_BE_API": "https://mobistoreapi.click",
     "BASE_GHN_API": "https://dev-online-gateway.ghn.vn",
     "TOKEN_GHN": "70643634-7811-11ee-b1d4-92b443b7a897",
     "ShopId": "190229"
