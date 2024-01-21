@@ -260,6 +260,7 @@ import {
 import { formatMoney } from "@/utils/helper.js";
 import { paymentVNPAY } from "@/api/common/vnpay.js";
 import store from "@/store";
+import router from "@/router";
 // import router from "@/router";
 import { createOrder, updateOrder } from "@/api/customer/order.js";
 
@@ -616,7 +617,16 @@ export default {
         });
         console.log(8899, res);
         if (res.data.code == 200) {
-          alert("Tạo đơn hàng mới thành công");
+          // alert("Tạo đơn hàng mới thành công");
+          this.$confirm('Đặt hàng thành công !!!', 'Success', {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'success'
+          }).then(() => {
+            router.push({ name: "c-home" });
+          }).catch(() => {
+            router.push({ name: "c-home" });     
+          });
         }
       }
     },
