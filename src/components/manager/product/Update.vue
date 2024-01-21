@@ -228,7 +228,8 @@ export default {
           var category = this.listCategory.filter((obj) => {
             return obj.id == newValue;
           });
-          this.listAttribute = category[0].attributes;
+          console.log(9999, category);
+          this.listAttribute = category[0]?.attributes;
 
           this.ruleForm.attributes = [];
           this.listAttribute.forEach((object) => {
