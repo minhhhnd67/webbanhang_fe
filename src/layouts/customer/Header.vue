@@ -46,7 +46,7 @@
             <!-- <el-button v-if="isLogin" icon="el-icon-user" style="width: 100%; background-color: rgba(255,172,10,.6);">Tài khoản</el-button> -->
             <el-row v-if="isLogin">
               <el-col :span="18" style="padding-top: 10px;">
-                <span>Ngo Duc Minh</span>
+                <span>{{ cUser?.name }}</span>
               </el-col>
               <el-col :span="6">
                 <el-dropdown>
