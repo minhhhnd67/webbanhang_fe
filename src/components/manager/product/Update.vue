@@ -13,7 +13,7 @@ import { Result } from 'element-ui';
             class="demo-ruleForm"
           >
             <el-form-item label="Danh mục sản phẩm" prop="category_id">
-              <el-select v-model="ruleForm.category_id" placeholder="Danh mục sản phẩm">
+              <el-select v-model="ruleForm.category_id" placeholder="Danh mục sản phẩm" :disabled="true">
                 <el-option
                   v-for="item in listCategory"
                   :key="item.id"
@@ -222,28 +222,28 @@ export default {
   },
   mounted() {},
   watch: {
-    "ruleForm.category_id": {
-      handler: function (newValue) {
-        if (newValue != "") {
-          var category = this.listCategory.filter((obj) => {
-            return obj.id == newValue;
-          });
-          console.log(9999, category);
-          this.listAttribute = category[0]?.attributes;
-          if (this.listAttribute) {
-            this.ruleForm.attributes = [];
-            this.listAttribute.forEach((object) => {
-              this.ruleForm.attributes.push({
-                attribute_id: object.id,
-                attribute_option_id: "",
-                attribute_option_value: "",
-              });
-            });
-          }
-        }
-      },
-      deep: true,
-    },
+    // "ruleForm.category_id": {
+    //   handler: function (newValue) {
+    //     if (newValue != "") {
+    //       var category = this.listCategory.filter((obj) => {
+    //         return obj.id == newValue;
+    //       });
+    //       console.log(9999, category);
+    //       this.listAttribute = category[0]?.attributes;
+    //       if (this.listAttribute) {
+    //         this.ruleForm.attributes = [];
+    //         this.listAttribute.forEach((object) => {
+    //           this.ruleForm.attributes.push({
+    //             attribute_id: object.id,
+    //             attribute_option_id: "",
+    //             attribute_option_value: "",
+    //           });
+    //         });
+    //       }
+    //     }
+    //   },
+    //   deep: true,
+    // },
   },
   methods: {
     backToListProduct() {
@@ -263,6 +263,7 @@ export default {
         
         setTimeout(() => {
           this.ruleForm.category_id = data.category_id;
+          this.showAttribute(data.category_id);
           this.ruleForm.code = data.code;
           this.ruleForm.name = data.name;
           this.ruleForm.title = data.title;
@@ -286,7 +287,7 @@ export default {
             });
             this.ruleForm.skus.push(dataSku);
           });
-        }, 300);
+        }, 50);
         
 
         setTimeout(() => {
@@ -364,6 +365,23 @@ export default {
         this.$message.error('Avatar picture size can not exceed 10MB!');
       }
       return isLt10M;
+    },
+    showAttribute(category_id) {
+      var category = this.listCategory.filter((obj) => {
+        return obj.id == category_id;
+      });
+      console.log(9999, category);
+      this.listAttribute = category[0]?.attributes;
+      if (this.listAttribute) {
+        this.ruleForm.attributes = [];
+        this.listAttribute.forEach((object) => {
+          this.ruleForm.attributes.push({
+            attribute_id: object.id,
+            attribute_option_id: "",
+            attribute_option_value: "",
+          });
+        });
+      }
     }
   },
 };
