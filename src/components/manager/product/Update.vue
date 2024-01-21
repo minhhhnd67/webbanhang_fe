@@ -259,30 +259,34 @@ export default {
 
       if (response.data.code == 200) {
         const data = response.data.data;
-        this.ruleForm.category_id = data.category_id;
-        this.ruleForm.code = data.code;
-        this.ruleForm.name = data.name;
-        this.ruleForm.title = data.title;
-        this.ruleForm.description = data.description;
-        this.ruleForm.price = data.price;
-        this.ruleForm.amount = data.amount;
-        this.ruleForm.image = data.image;
-        this.ruleForm.category_id = data.category_id;
-        this.ruleForm.category_id = data.category_id;
+        
+        setTimeout(() => {
+          this.ruleForm.category_id = data.category_id;
+          this.ruleForm.code = data.code;
+          this.ruleForm.name = data.name;
+          this.ruleForm.title = data.title;
+          this.ruleForm.description = data.description;
+          this.ruleForm.price = data.price;
+          this.ruleForm.amount = data.amount;
+          this.ruleForm.image = data.image;
+          this.ruleForm.category_id = data.category_id;
+          this.ruleForm.category_id = data.category_id;
 
-        this.imageUrl = this.baseURL + "/storage/" + this.ruleForm.image;
+          this.imageUrl = this.baseURL + "/storage/" + this.ruleForm.image;
 
-        const skus = data.skus;
-        skus.forEach((sku) => {
-          var dataSku = {
-            name: sku.name,
-            skuOptions: []
-          };
-          sku.sku_options.forEach((skuOption) => {
-            dataSku.skuOptions.push({name: skuOption.name});
+          const skus = data.skus;
+          skus.forEach((sku) => {
+            var dataSku = {
+              name: sku.name,
+              skuOptions: []
+            };
+            sku.sku_options.forEach((skuOption) => {
+              dataSku.skuOptions.push({name: skuOption.name});
+            });
+            this.ruleForm.skus.push(dataSku);
           });
-          this.ruleForm.skus.push(dataSku);
-        });
+        }, 300);
+        
 
         setTimeout(() => {
           const attributes = data.attributes;
