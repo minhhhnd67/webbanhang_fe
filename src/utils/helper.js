@@ -38,8 +38,8 @@ export function getStatusUser() {
 
 export function getStatusOrder() {
     return [
-        {id: 1, name: "Chưa thanh toán"},
-        {id: 2, name: "Đã thanh toán"},
+        // {id: 1, name: "Chưa thanh toán"},
+        {id: 2, name: "Chờ xác nhận"},
         {id: 3, name: "Đã xác nhận"},
         {id: 4, name: "Chuẩn bị hàng"},
         {id: 5, name: "Đang giao hàng"},
