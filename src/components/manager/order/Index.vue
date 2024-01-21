@@ -55,6 +55,7 @@
             {{ showStatus(scope.row.status) }}
           </template> </el-table-column
         >el-table>
+        <el-table-column prop="code_shipping" label="Mã vận chuyển"> </el-table-column>
         <el-table-column prop="name" label="Tên"> </el-table-column>
         <el-table-column prop="total_money" label="Tổng tiền"> </el-table-column>
         <el-table-column label="Địa chỉ">

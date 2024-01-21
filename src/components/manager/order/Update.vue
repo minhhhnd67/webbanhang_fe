@@ -295,7 +295,7 @@ export default {
               message: "Cập nhật thông tin tài khoản thành công!",
               type: "success",
             });
-            router.push({ name: "m-user-list" });
+            router.push({ name: "m-order-list" });
           }
         } else {
           console.log("error submit!!");
