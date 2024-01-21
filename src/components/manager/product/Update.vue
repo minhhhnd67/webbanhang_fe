@@ -230,15 +230,16 @@ export default {
           });
           console.log(9999, category);
           this.listAttribute = category[0]?.attributes;
-
-          this.ruleForm.attributes = [];
-          this.listAttribute.forEach((object) => {
-            this.ruleForm.attributes.push({
-              attribute_id: object.id,
-              attribute_option_id: "",
-              attribute_option_value: "",
+          if (this.listAttribute) {
+            this.ruleForm.attributes = [];
+            this.listAttribute.forEach((object) => {
+              this.ruleForm.attributes.push({
+                attribute_id: object.id,
+                attribute_option_id: "",
+                attribute_option_value: "",
+              });
             });
-          });
+          }
         }
       },
       deep: true,
