@@ -533,6 +533,8 @@ export default {
         if (valid) {
           let data = {
             total_money: this.ruleForm.total_money,
+            name: this.ruleForm.name,
+            phone: this.ruleForm.phone,
           };
           const response = await paymentVNPAY(data);
           if (response.data.code == "00") {
